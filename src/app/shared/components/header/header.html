@@ -1,0 +1,57 @@
+<header class="header">
+  <div class="header__inner">
+    <a class="header__logo" routerLink="/" (click)="closeMenu()">Filmistry</a>
+
+    <button
+      type="button"
+      class="header__burger"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="menuOpen()"
+      aria-label="Toggle menu"
+    >
+      <span class="header__burger-line"></span>
+      <span class="header__burger-line"></span>
+      <span class="header__burger-line"></span>
+    </button>
+
+    <nav class="header__nav" [class.header__nav--open]="menuOpen()">
+      <a
+        routerLink="/"
+        routerLinkActive="header__link--active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="header__link"
+        (click)="closeMenu()"
+      >
+        Home
+      </a>
+      <a
+        routerLink="/movies"
+        routerLinkActive="header__link--active"
+        class="header__link"
+        (click)="closeMenu()"
+      >
+        Movies
+      </a>
+      <a
+        routerLink="/tv"
+        routerLinkActive="header__link--active"
+        class="header__link"
+        (click)="closeMenu()"
+      >
+        TV Shows
+      </a>
+      <a
+        routerLink="/people"
+        routerLinkActive="header__link--active"
+        class="header__link"
+        (click)="closeMenu()"
+      >
+        People
+      </a>
+    </nav>
+
+    <div class="header__actions">
+      <app-theme-toggle />
+    </div>
+  </div>
+</header>
