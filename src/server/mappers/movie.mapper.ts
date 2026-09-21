@@ -5,7 +5,6 @@ export interface TmdbMovieRaw {
   id: number;
   title: string;
   poster_path: string | null;
-  release_date: string;
 }
 
 export interface TmdbMovieListRaw {
@@ -27,15 +26,14 @@ function toMovieListItemDto(raw: TmdbMovieRaw): MovieListItemDto {
   return {
     id: raw.id,
     title: raw.title,
-    posterUrl: buildPosterUrl(raw.poster_path),
-    releaseYear: extractYear(raw.release_date),
+    posterUrl: buildPosterUrl(raw.poster_path)
   };
 }
 
 export function toMovieListDto(raw: TmdbMovieListRaw): MovieListDto {
   return {
     page: raw.page,
-    totalPages: raw.total_pages,
+    totalPages: Math.min(raw.total_pages, 500),
     results: raw.results.map(toMovieListItemDto),
   };
 }

@@ -1,4 +1,4 @@
-<a class="movie-card" [routerLink]="['/movie', movie().id]">
+<a class="movie-card" [routerLink]="['/movies', movie().id]">
   <div class="movie-card__poster">
     @if (movie().posterUrl) {
       <img [src]="movie().posterUrl" [alt]="movie().title" loading="lazy" />
@@ -7,7 +7,6 @@
     }
     <div class="movie-card__overlay">
       <span class="movie-card__title">{{ movie().title }}</span>
-      <span class="movie-card__year">{{ movie().releaseYear }}</span>
     </div>
   </div>
 </a>

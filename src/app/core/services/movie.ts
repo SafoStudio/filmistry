@@ -8,9 +8,9 @@ export class MovieService {
   private http = inject(HttpClient);
   private apiUrl = '/api';
 
-  getPopular(lang: string = 'en-US'): Observable<MovieListResponse> {
+  getPopular(page: number = 1, lang: string = 'en-US'): Observable<MovieListResponse> {
     return this.http.get<MovieListResponse>(`${this.apiUrl}/movies/popular`, {
-      params: { lang },
+      params: { lang, page: String(page) },
     });
   }
 }

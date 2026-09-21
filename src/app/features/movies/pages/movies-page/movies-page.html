@@ -9,5 +9,11 @@
         <app-movie-card [movie]="movie" />
       }
     </div>
+
+    <app-pagination
+      [currentPage]="currentPage()"
+      [totalPages]="totalPages()"
+      (pageChange)="onPageChange($event)"
+    />
   }
 </div>

@@ -10,7 +10,12 @@ moviesRouter.get(
   '/popular',
   handleApi(async (req) => {
     const lang = (req.query['lang'] as string) || DEFAULT_LANGUAGE;
-    const raw = await tmdbFetch<TmdbMovieListRaw>('/movie/popular', { language: lang });
+    const requestedPage = Number(req.query['page']) || 1;
+    const page = Math.max(1, Math.min(requestedPage, 500));
+    const raw = await tmdbFetch<TmdbMovieListRaw>('/movie/popular', {
+      language: lang,
+      page,
+    });
     return toMovieListDto(raw);
   }),
 );
