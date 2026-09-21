@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { MovieListResponse } from '../models/movie.model';
 
 @Service()
-export class Movie {
+export class MovieService {
   private http = inject(HttpClient);
   private apiUrl = '/api';
 

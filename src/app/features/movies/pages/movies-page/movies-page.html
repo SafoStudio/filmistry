@@ -1,0 +1,13 @@
+<div class="container">
+  @if (loading()) {
+    <p class="status">Loading...</p>
+  } @else if (error()) {
+    <p class="status status--error">{{ error() }}</p>
+  } @else {
+    <div class="movie-gallery">
+      @for (movie of movies(); track movie.id) {
+        <app-movie-card [movie]="movie" />
+      }
+    </div>
+  }
+</div>
