@@ -7,6 +7,8 @@ import {
 import express from 'express';
 import { join } from 'node:path';
 import 'dotenv/config';
+import { API_PREFIX } from './server/constants';
+import { moviesRouter } from './server/routes/movies'
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -14,48 +16,9 @@ const app = express();
 const angularApp = new AngularNodeAppEngine();
 
 /**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/{*splat}', (req, res) => {
- *   // Handle API request
- * });
- * ```
+ * API routes
  */
-
-app.get('/api/movies/popular', async (req, res) => {
-  const lang = (req.query['lang'] as string) || 'en-US';
-  const token = process.env['TMDB_ACCESS_TOKEN'];
-
-  if (!token) {
-    res.status(500).json({ error: 'TMDB token not configured' });
-    return;
-  }
-
-  try {
-    const response = await fetch(
-      `https://api.themoviedb.org/3/movie/popular?language=${lang}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          accept: 'application/json',
-        },
-      }
-    );
-
-    if (!response.ok) {
-      res.status(response.status).json({ error: 'TMDB request failed' });
-      return;
-    }
-
-    const data = await response.json();
-    res.json(data);
-  } catch (err) {
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+app.use(`${API_PREFIX}/movies`, moviesRouter);
 
 /**
  * Serve static files from /browser
