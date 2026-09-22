@@ -9,5 +9,27 @@ export const moviesRoutes: Routes = [
     path: ':id',
     loadComponent: () =>
       import('./pages/movie-detail-page/movie-detail-page').then((m) => m.MovieDetailPage),
+    children: [
+      { path: '', redirectTo: 'cast', pathMatch: 'full' },
+      {
+        path: 'cast',
+        loadComponent: () =>
+          import('./pages/movie-detail-page/sections/cast/cast-section').then((m) => m.CastSection),
+      },
+      {
+        path: 'gallery',
+        loadComponent: () =>
+          import('./pages/movie-detail-page/sections/gallery/gallery-section').then(
+            (m) => m.GallerySection,
+          ),
+      },
+      {
+        path: 'reviews',
+        loadComponent: () =>
+          import('./pages/movie-detail-page/sections/reviews/reviews-section').then(
+            (m) => m.ReviewsSection,
+          ),
+      },
+    ],
   },
 ];

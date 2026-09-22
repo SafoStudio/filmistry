@@ -1,4 +1,69 @@
-<div class="container">
-  <p class="placeholder">Movie details: {{ id() }}</p>
-  <a routerLink="/movies" class="back-link">← Back to movies</a>
-</div>
+@if (loading()) {
+  <p class="status">Loading...</p>
+} @else if (error()) {
+  <p class="status status--error">{{ error() }}</p>
+} @else if (movie(); as m) {
+  <section
+    class="detail backgroundImageContainer"
+    [style.backgroundImage]="m.backdropUrl ? 'url(' + m.backdropUrl + ')' : 'none'"
+  >
+    <div class="movieCard">
+      <div class="posterImage">
+        @if (m.posterUrl) {
+          <img [src]="m.posterUrl" [alt]="m.title" class="posterImage" />
+        }
+      </div>
+
+      <div class="description">
+        <div>
+          <div class="info">
+            <div class="titleBox">
+              <h1>{{ m.title }}</h1>
+              <a class="goBackLink" routerLink="/movies">✖</a>
+              <div class="decorLine"></div>
+            </div>
+          </div>
+          <div>
+            <div class="ratingBox">
+              <app-rating-bar [rating]="m.voteAverage" />
+              <p class="releaseYear">
+                {{ m.releaseYear }}
+                <span class="releaseYearText">release year</span>
+              </p>
+              <div class="genresBox">
+                <p>{{ m.genres.join(', ') }}</p>
+              </div>
+            </div>
+            <p class="overview">{{ m.overview }}</p>
+          </div>
+        </div>
+
+        <div class="addInfo">
+          <div class="linkBox">
+            <a class="linkPage" routerLink="cast">👥</a>
+          </div>
+          <div class="linkBox">
+            <a class="linkPage" routerLink="reviews">💬</a>
+          </div>
+          <div class="linkBox">
+            <a class="linkPage" routerLink="gallery">🖼</a>
+          </div>
+          <button type="button" class="button" (click)="openTrailer()">▶</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sections">
+    <router-outlet />
+  </div>
+
+  @if (isTrailerOpen() && trailerUrl(); as url) {
+    <div class="trailer-modal" (click)="closeTrailer()">
+      <div class="trailer-modal__content" (click)="$event.stopPropagation()">
+        <button type="button" class="trailer-modal__close" (click)="closeTrailer()">✖</button>
+        <iframe [src]="url" title="Trailer" allowfullscreen></iframe>
+      </div>
+    </div>
+  }
+}
