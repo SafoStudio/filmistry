@@ -23,14 +23,21 @@
   width: 100%;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 568px) {
   .movie-gallery {
     grid-template-columns: repeat(3, 160px);
+    gap: 16px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .movie-gallery {
+    grid-template-columns: repeat(4, 160px);
     gap: 18px;
   }
 }
 
-@media screen and (min-width: 1440px) {
+@media screen and (min-width: 920px) {
   .movie-gallery {
     grid-template-columns: repeat(5, 160px);
     gap: 20px;

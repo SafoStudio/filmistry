@@ -30,9 +30,9 @@
   }
 
   &--active {
-    background: var(--color-accent);
+    background: var(--color-bg);
     border-color: var(--color-accent);
-    color: var(--color-bg);
+    color: var(--color-accent);
     font-weight: 600;
   }
 }

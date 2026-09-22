@@ -20,5 +20,12 @@ body {
 
 .app-main {
   display: block;
+  margin: 200px 0 0;
   min-height: calc(100vh - 65px);
+}
+
+@media screen and (max-width: 768px) {
+  .app-main {
+    margin: 0;
+  }
 }
