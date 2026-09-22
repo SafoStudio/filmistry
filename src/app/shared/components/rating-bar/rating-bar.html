@@ -1,0 +1,22 @@
+<div class="rating-bar">
+  <svg class="rating-circle" viewBox="0 0 48 48">
+    <circle
+      class="rating-circle__background"
+      cx="24"
+      cy="24"
+      [attr.r]="20"
+    ></circle>
+    <circle
+      class="rating-circle__fill"
+      cx="24"
+      cy="24"
+      [attr.r]="20"
+      [attr.stroke-dasharray]="circumference"
+      [attr.stroke-dashoffset]="offset()"
+    ></circle>
+  </svg>
+  <div class="rating-text">{{ rating().toFixed(1) }}</div>
+  <div>
+    <p class="accent-text">user <br /> score</p>
+  </div>
+</div>

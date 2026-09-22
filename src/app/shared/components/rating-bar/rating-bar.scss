@@ -1,0 +1,53 @@
+$background-color: #ddd;
+$fill-color: #21d4e8ad;
+$text-color: #e5e1e1;
+$accent-text-color: #dddddd86;
+
+.rating-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 105px;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.rating-circle {
+  position: relative;
+  width: 48px;
+  height: 48px;
+
+  &__background {
+    fill: none;
+    stroke: $background-color;
+    stroke-width: 4;
+  }
+
+  &__fill {
+    fill: none;
+    stroke: $fill-color;
+    stroke-width: 4;
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    transition: stroke-dashoffset 0.4s ease;
+  }
+}
+
+.rating-text {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  font-weight: bold;
+  color: $text-color;
+}
+
+.accent-text {
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  color: $accent-text-color;
+  margin: 0;
+}
