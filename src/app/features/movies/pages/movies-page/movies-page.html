@@ -1,12 +1,19 @@
 <div class="container">
-  @if (loading()) {
-    <p class="status">Loading...</p>
-  } @else if (error()) {
+  @if (error()) {
     <p class="status status--error">{{ error() }}</p>
+  } @else if (loading() && movies().length === 0) {
+    <p class="status">Loading...</p>
   } @else {
-    <div class="movie-gallery">
-      @for (movie of movies(); track movie.id) {
-        <app-movie-card [movie]="movie" />
+    <div
+      class="movie-gallery"
+      [class.movie-gallery--leaving]="isLeaving()"
+    >
+      @for (movie of movies(); track movie.id; let i = $index) {
+        <app-movie-card
+          class="movie-gallery__item"
+          [style.--i]="i"
+          [movie]="movie"
+        />
       }
     </div>
 

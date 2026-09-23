@@ -5,10 +5,25 @@
 } @else if (movie(); as m) {
   <section
     class="backgroundImageContainer"
+    [class.backgroundImageContainer--closing]="isClosing()"
     [style.backgroundImage]="m.backdropUrl ? 'url(' + m.backdropUrl + ')' : 'none'"
   >
-    <div class="movieCard">
-      <div class="posterImage">
+    <button
+      type="button"
+      class="pageCurl"
+      [class.pageCurl--closing]="isClosing()"
+      (click)="closeDetail()"
+      aria-label="Close"
+    >
+      <span class="pageCurl__fold"></span>
+      <span class="pageCurl__shadow"></span>
+      <span class="pageCurl__hint">
+        <app-icon name="close" [size]="16" />
+      </span>
+    </button>
+
+    <div class="movieCard movieCard--visible">
+      <div class="posterImage fade-item" style="--i: 0">
         @if (m.posterUrl) {
           <img [src]="m.posterUrl" [alt]="m.title" />
         }
@@ -16,14 +31,11 @@
 
       <div class="description">
         <div class="info">
-          <div class="titleBox">
+          <div class="titleBox fade-item" style="--i: 1">
             <h1>{{ m.title }}</h1>
-            <a class="goBackLink" routerLink="/movies">
-              <app-icon name="close" [size]="22" />
-            </a>
           </div>
 
-          <div class="ratingBox">
+          <div class="ratingBox fade-item" style="--i: 2">
             <app-rating-bar [rating]="m.voteAverage" />
             <p class="releaseYear">
               {{ m.releaseYear }}
@@ -34,10 +46,10 @@
             </div>
           </div>
 
-          <p class="overview">{{ m.overview }}</p>
+          <p class="overview fade-item" style="--i: 3">{{ m.overview }}</p>
         </div>
 
-        <div class="addInfo">
+        <div class="addInfo fade-item" style="--i: 4">
           <div class="linkBox" [class.linkBox--active]="activeSection() === 'cast'">
             <button type="button" class="linkPage" (click)="toggleSection('cast')" aria-label="Cast">
               <app-icon name="users" [size]="22" />

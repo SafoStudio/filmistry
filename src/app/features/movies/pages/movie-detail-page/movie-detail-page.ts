@@ -1,6 +1,6 @@
 import { Component, inject, signal, effect, computed, input } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { RouterLink, RouterOutlet, Router, NavigationEnd } from '@angular/router';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
 import { MovieService } from '../../../../core/services/movie';
@@ -12,7 +12,7 @@ type DetailSection = 'cast' | 'gallery' | 'reviews' | null;
 
 @Component({
   selector: 'app-movie-detail-page',
-  imports: [RouterLink, RouterOutlet, RatingBar, Icon],
+  imports: [RouterOutlet, RatingBar, Icon],
   templateUrl: './movie-detail-page.html',
   styleUrl: './movie-detail-page.scss',
 })
@@ -27,6 +27,7 @@ export class MovieDetailPage {
   loading = signal(true);
   error = signal<string | null>(null);
   isTrailerOpen = signal(false);
+  isClosing = signal(false);
 
   private readonly url = toSignal(
     this.router.events.pipe(
@@ -88,5 +89,20 @@ export class MovieDetailPage {
 
   closeTrailer(): void {
     this.isTrailerOpen.set(false);
+  }
+
+  closeDetail(): void {
+    if (this.isClosing()) return;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducedMotion) {
+      this.router.navigate(['/movies']);
+      return;
+    }
+
+    this.isClosing.set(true);
+    setTimeout(() => {
+      this.router.navigate(['/movies']);
+    }, 700);
   }
 }
