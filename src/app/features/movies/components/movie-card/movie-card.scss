@@ -1,8 +1,8 @@
 .movie-card {
   position: relative;
   display: block;
-  width: 160px;
-  height: 228px;
+  width: 100%;
+  aspect-ratio: 160 / 228;
   border-radius: 4px;
   background-color: var(--color-surface);
   text-decoration: none;
@@ -83,10 +83,10 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 150px;
-      height: 150px;
+      width: 60%;
+      height: 60%;
       background: url('/img/play.png') no-repeat center center;
-      background-size: 80px 80px;
+      background-size: contain;
       z-index: 11;
       pointer-events: none;
     }
@@ -94,18 +94,8 @@
 }
 
 .movie-card__title {
-  font-size: 13px;
+  font-size: clamp(11px, 1.2vw, 15px);
   line-height: 1.2;
   position: relative;
   z-index: 11;
-}
-
-@media screen and (min-width: 1440px) {
-  .movie-card {
-    width: 160px;
-  }
-
-  .movie-card__poster {
-    width: 160px;
-  }
 }

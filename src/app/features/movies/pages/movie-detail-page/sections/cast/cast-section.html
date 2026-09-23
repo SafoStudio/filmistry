@@ -6,35 +6,56 @@
   } @else if (cast().length === 0) {
     <p class="text-sms">No credits available for this movie</p>
   } @else {
-    <div class="actor-slider">
-      @for (member of cast(); track member.id) {
-        @if (member.profileUrl) {
-          <a
-            class="actor-link"
-            [routerLink]="['/person', member.id]"
-          >
-            <div class="actor-box">
-              <img
-                class="actor-image"
-                [src]="member.profileUrl"
-                [alt]="member.name"
-              />
-              <div class="actor-info">
-                <p class="actor-name">{{ member.name }}</p>
-                <p class="actor-role">
-                  Role: {{ member.character || 'minor' }}
-                </p>
+    <div
+      class="actor-slider-wrap"
+      [class.actor-slider-wrap--left]="canScrollLeft()"
+      [class.actor-slider-wrap--right]="canScrollRight()"
+    >
+      <div class="actor-slider" #slider (scroll)="onScroll()">
+        @for (member of cast(); track member.id) {
+          @if (member.profileUrl) {
+            <a
+              class="actor-link"
+              [routerLink]="['/person', member.id]"
+            >
+              <div class="actor-box">
+                <img
+                  class="actor-image"
+                  [src]="member.profileUrl"
+                  [alt]="member.name"
+                />
+                <div class="actor-info">
+                  <p class="actor-name">{{ member.name }}</p>
+                  <p class="actor-role">
+                    Role: {{ member.character || 'minor' }}
+                  </p>
+                </div>
               </div>
-            </div>
-          </a>
+            </a>
+          }
         }
-      }
+      </div>
+    </div>
 
-      @if (cast().length % 2 !== 0) {
-        <div class="actor-card">
-          <div class="actor-image-placeholder"></div>
-        </div>
-      }
+    <div class="actor-nav-row">
+      <button
+        type="button"
+        class="actor-nav"
+        [disabled]="!canScrollLeft()"
+        (click)="scrollLeft()"
+        aria-label="Scroll left"
+      >
+        ‹
+      </button>
+      <button
+        type="button"
+        class="actor-nav"
+        [disabled]="!canScrollRight()"
+        (click)="scrollRight()"
+        aria-label="Scroll right"
+      >
+        ›
+      </button>
     </div>
   }
 </div>

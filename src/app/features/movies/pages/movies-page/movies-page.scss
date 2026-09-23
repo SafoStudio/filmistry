@@ -17,29 +17,31 @@
 
 .movie-gallery {
   display: grid;
-  grid-template-columns: repeat(2, 160px);
-  gap: 16px;
+  grid-template-columns: repeat(2, minmax(120px, 1fr));
+  gap: clamp(10px, 2.5vw, 20px);
   justify-content: center;
   width: 100%;
+  max-width: 1060px;
+  margin: 0 auto;
 }
 
 @media screen and (min-width: 568px) {
   .movie-gallery {
-    grid-template-columns: repeat(3, 160px);
+    grid-template-columns: repeat(3, minmax(140px, 1fr));
     gap: 16px;
   }
 }
 
 @media screen and (min-width: 768px) {
   .movie-gallery {
-    grid-template-columns: repeat(4, 160px);
+    grid-template-columns: repeat(4, minmax(150px, 1fr));
     gap: 18px;
   }
 }
 
-@media screen and (min-width: 920px) {
+@media screen and (min-width: 1100px) {
   .movie-gallery {
-    grid-template-columns: repeat(5, 160px);
+    grid-template-columns: repeat(5, 196px);
     gap: 20px;
   }
 }

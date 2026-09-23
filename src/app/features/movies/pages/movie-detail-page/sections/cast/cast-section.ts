@@ -1,4 +1,4 @@
-import { Component, inject, input, signal, effect } from '@angular/core';
+import { Component, inject, input, signal, effect, viewChild, ElementRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MovieService } from '../../../../../../core/services/movie';
 import { CastMember } from '../../../../../../core/models/movie-credits.model';
@@ -16,6 +16,12 @@ export class CastSection {
   cast = signal<CastMember[]>([]);
   loading = signal(true);
 
+  slider = viewChild<ElementRef<HTMLDivElement>>('slider');
+  canScrollLeft = signal(false);
+  canScrollRight = signal(false);
+
+  private readonly CARD_WIDTH = 155; // 145px карточка + 10px gap
+
   constructor() {
     effect(() => {
       const movieId = this.id();
@@ -24,10 +30,36 @@ export class CastSection {
           next: (data) => {
             this.cast.set(data.cast);
             this.loading.set(false);
+            setTimeout(() => this.updateArrows());
           },
           error: () => this.loading.set(false),
         });
       }
     });
+  }
+
+  scrollLeft(): void {
+    const el = this.slider()?.nativeElement;
+    if (!el) return;
+    el.scrollBy({ left: -this.CARD_WIDTH, behavior: 'smooth' });
+    setTimeout(() => this.updateArrows(), 350);
+  }
+
+  scrollRight(): void {
+    const el = this.slider()?.nativeElement;
+    if (!el) return;
+    el.scrollBy({ left: this.CARD_WIDTH, behavior: 'smooth' });
+    setTimeout(() => this.updateArrows(), 350);
+  }
+
+  onScroll(): void {
+    this.updateArrows();
+  }
+
+  private updateArrows(): void {
+    const el = this.slider()?.nativeElement;
+    if (!el) return;
+    this.canScrollLeft.set(el.scrollLeft > 0);
+    this.canScrollRight.set(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
   }
 }
