@@ -10,7 +10,6 @@ export const moviesRoutes: Routes = [
     loadComponent: () =>
       import('./pages/movie-detail-page/movie-detail-page').then((m) => m.MovieDetailPage),
     children: [
-      { path: '', redirectTo: 'cast', pathMatch: 'full' },
       {
         path: 'cast',
         loadComponent: () =>

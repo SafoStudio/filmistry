@@ -3,9 +3,6 @@ $secondary-color: #467288;
 $text-color: rgb(234, 240, 240);
 $border-color: bisque;
 $background-color: rgba($primary-color, 0.5);
-$scrollbar-background-color: #f1f1f1;
-$scrollbar-thumb-color: #888;
-$scrollbar-thumb-hover-color: #555;
 $author-box-background-color: rgba($secondary-color, 0.6);
 $content-box-background-color: rgba($primary-color, 0.62);
 $no-review-text-color: bisque;
@@ -34,21 +31,11 @@ $title-color: rgba(255, 228, 196, 0.7);
   max-height: 300px;
   overflow-y: auto;
 
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
   &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: $scrollbar-background-color;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: $scrollbar-thumb-color;
-    border-radius: 6px;
-
-    &:hover {
-      background: $scrollbar-thumb-hover-color;
-    }
+    display: none;
   }
 
   &.has-reviews {
@@ -57,7 +44,11 @@ $title-color: rgba(255, 228, 196, 0.7);
 }
 
 .comment-box {
-  margin: 0 auto;
+  margin: 0 auto 16px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .author-box {

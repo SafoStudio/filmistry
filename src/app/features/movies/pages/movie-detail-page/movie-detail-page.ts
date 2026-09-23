@@ -1,9 +1,13 @@
 import { Component, inject, signal, effect, computed, input } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet, Router, NavigationEnd } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { filter, map } from 'rxjs';
 import { MovieService } from '../../../../core/services/movie';
 import { MovieDetail } from '../../../../core/models/movie-detail.model';
 import { RatingBar } from '../../../../shared/components/rating-bar/rating-bar';
+
+type DetailSection = 'cast' | 'gallery' | 'reviews' | null;
 
 @Component({
   selector: 'app-movie-detail-page',
@@ -14,6 +18,7 @@ import { RatingBar } from '../../../../shared/components/rating-bar/rating-bar';
 export class MovieDetailPage {
   private movieService = inject(MovieService);
   private sanitizer = inject(DomSanitizer);
+  private router = inject(Router);
 
   id = input.required<string>();
 
@@ -21,6 +26,22 @@ export class MovieDetailPage {
   loading = signal(true);
   error = signal<string | null>(null);
   isTrailerOpen = signal(false);
+
+  private readonly url = toSignal(
+    this.router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+      map((e) => e.urlAfterRedirects),
+    ),
+    { initialValue: this.router.url },
+  );
+
+  activeSection = computed<DetailSection>(() => {
+    const url = this.url();
+    if (url.includes('/cast')) return 'cast';
+    if (url.includes('/gallery')) return 'gallery';
+    if (url.includes('/reviews')) return 'reviews';
+    return null;
+  });
 
   trailerUrl = computed<SafeResourceUrl | null>(() => {
     const key = this.movie()?.trailerKey;
@@ -48,6 +69,14 @@ export class MovieDetailPage {
         this.loading.set(false);
       },
     });
+  }
+
+  toggleSection(section: Exclude<DetailSection, null>): void {
+    if (this.activeSection() === section) {
+      this.router.navigate(['/movies', this.id()]);
+    } else {
+      this.router.navigate(['/movies', this.id(), section]);
+    }
   }
 
   openTrailer(): void {
