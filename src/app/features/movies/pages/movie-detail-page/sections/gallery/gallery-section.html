@@ -18,8 +18,12 @@
         </div>
       }
 
-      <button type="button" class="gallery-left-btn" (click)="prev()">‹</button>
-      <button type="button" class="gallery-right-btn" (click)="next()">›</button>
+      <button type="button" class="gallery-left-btn" (click)="prev()">
+        <app-icon name="chevron-left" [size]="22" />
+      </button>
+      <button type="button" class="gallery-right-btn" (click)="next()">
+        <app-icon name="chevron-right" [size]="22" />
+      </button>
     </div>
   </section>
 }

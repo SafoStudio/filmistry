@@ -1,10 +1,11 @@
 import { Component, signal, HostListener, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ThemeToggle } from '../theme-toggle/theme-toggle';
+import { Icon } from '../icon/icon';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, RouterLinkActive, ThemeToggle],
+  imports: [RouterLink, RouterLinkActive, ThemeToggle, Icon],
   templateUrl: './header.html',
   styleUrl: './header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

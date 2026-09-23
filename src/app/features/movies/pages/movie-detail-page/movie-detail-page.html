@@ -18,7 +18,9 @@
         <div class="info">
           <div class="titleBox">
             <h1>{{ m.title }}</h1>
-            <a class="goBackLink" routerLink="/movies">✖</a>
+            <a class="goBackLink" routerLink="/movies">
+              <app-icon name="close" [size]="22" />
+            </a>
           </div>
 
           <div class="ratingBox">
@@ -37,15 +39,23 @@
 
         <div class="addInfo">
           <div class="linkBox" [class.linkBox--active]="activeSection() === 'cast'">
-            <button type="button" class="linkPage" (click)="toggleSection('cast')" aria-label="Cast">👥</button>
+            <button type="button" class="linkPage" (click)="toggleSection('cast')" aria-label="Cast">
+              <app-icon name="users" [size]="22" />
+            </button>
           </div>
           <div class="linkBox" [class.linkBox--active]="activeSection() === 'reviews'">
-            <button type="button" class="linkPage" (click)="toggleSection('reviews')" aria-label="Reviews">💬</button>
+            <button type="button" class="linkPage" (click)="toggleSection('reviews')" aria-label="Reviews">
+              <app-icon name="comments" [size]="22" />
+            </button>
           </div>
           <div class="linkBox" [class.linkBox--active]="activeSection() === 'gallery'">
-            <button type="button" class="linkPage" (click)="toggleSection('gallery')" aria-label="Gallery">🖼</button>
+            <button type="button" class="linkPage" (click)="toggleSection('gallery')" aria-label="Gallery">
+              <app-icon name="images" [size]="22" />
+            </button>
           </div>
-          <button type="button" class="button" (click)="openTrailer()" aria-label="Play trailer">▶</button>
+          <button type="button" class="button" (click)="openTrailer()" aria-label="Play trailer">
+            <app-icon name="play" [size]="32" />
+          </button>
         </div>
       </div>
     </div>

@@ -6,12 +6,13 @@ import { filter, map } from 'rxjs';
 import { MovieService } from '../../../../core/services/movie';
 import { MovieDetail } from '../../../../core/models/movie-detail.model';
 import { RatingBar } from '../../../../shared/components/rating-bar/rating-bar';
+import { Icon } from '../../../../shared/components/icon/icon';
 
 type DetailSection = 'cast' | 'gallery' | 'reviews' | null;
 
 @Component({
   selector: 'app-movie-detail-page',
-  imports: [RouterLink, RouterOutlet, RatingBar],
+  imports: [RouterLink, RouterOutlet, RatingBar, Icon],
   templateUrl: './movie-detail-page.html',
   styleUrl: './movie-detail-page.scss',
 })

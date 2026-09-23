@@ -1,0 +1,27 @@
+import { Component, input } from '@angular/core';
+
+export type IconName =
+  | 'play'
+  | 'users'
+  | 'comments'
+  | 'images'
+  | 'chevron-left'
+  | 'chevron-right'
+  | 'close'
+  | 'star'
+  | 'sun'
+  | 'moon'
+  | 'home'
+  | 'film'
+  | 'tv';
+
+@Component({
+  selector: 'app-icon',
+  imports: [],
+  templateUrl: './icon.html',
+  styleUrl: './icon.scss',
+})
+export class Icon {
+  name = input.required<IconName>();
+  size = input<number>(20);
+}

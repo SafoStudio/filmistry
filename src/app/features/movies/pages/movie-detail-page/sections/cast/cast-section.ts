@@ -2,10 +2,11 @@ import { Component, inject, input, signal, effect, viewChild, ElementRef } from 
 import { RouterLink } from '@angular/router';
 import { MovieService } from '../../../../../../core/services/movie';
 import { CastMember } from '../../../../../../core/models/movie-credits.model';
+import { Icon } from '../../../../../../shared/components/icon/icon';
 
 @Component({
   selector: 'app-cast-section',
-  imports: [RouterLink],
+  imports: [RouterLink, Icon],
   templateUrl: './cast-section.html',
   styleUrl: './cast-section.scss',
 })
