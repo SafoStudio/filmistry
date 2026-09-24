@@ -9,6 +9,7 @@ import { join } from 'node:path';
 import 'dotenv/config';
 import { API_PREFIX } from './server/constants';
 import { moviesRouter } from './server/routes/movies'
+import { trendingRouter } from './server/routes/trending';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -19,6 +20,7 @@ const angularApp = new AngularNodeAppEngine();
  * API routes
  */
 app.use(`${API_PREFIX}/movies`, moviesRouter);
+app.use(`${API_PREFIX}/trending`, trendingRouter);
 
 /**
  * Serve static files from /browser

@@ -1,0 +1,21 @@
+<div class="container">
+  @if (loading()) {
+    <div class="loader">
+      <app-loader />
+    </div>
+  } @else if (randomItem(); as item) {
+    <div class="poster-box">
+      <a [routerLink]="detailLink()">
+        <img
+          class="poster"
+          [class.poster--tv]="item.mediaType === 'tv'"
+          [src]="item.backdropUrl"
+          [alt]="item.title"
+        />
+      </a>
+      <div class="poster-title">
+        <p>{{ item.title }}</p>
+      </div>
+    </div>
+  }
+</div>

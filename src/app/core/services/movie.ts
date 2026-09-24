@@ -6,6 +6,7 @@ import { MovieDetail } from '../models/movie-detail.model';
 import { MovieCredits } from '../models/movie-credits.model';
 import { MovieImages } from '../models/movie-images.model';
 import { MovieReviews } from '../models/movie-reviews.model';
+import { Trending } from '../models/trending.model';
 
 @Service()
 export class MovieService {
@@ -36,6 +37,12 @@ export class MovieService {
 
   getMovieReviews(id: string, lang: string = 'en-US'): Observable<MovieReviews> {
     return this.http.get<MovieReviews>(`${this.apiUrl}/movies/${id}/reviews`, {
+      params: { lang },
+    });
+  }
+
+  getTrending(lang: string = 'en-US'): Observable<Trending> {
+    return this.http.get<Trending>(`${this.apiUrl}/trending`, {
       params: { lang },
     });
   }

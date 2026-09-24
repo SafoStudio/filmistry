@@ -1,0 +1,81 @@
+$primary-color: #111;
+$secondary-color: #1c1b1b;
+$text-color: rgb(162, 162, 53);
+$poster-border-color: #292929;
+$poster-title-bg-color: #111;
+$poster-title-text-color: bisque;
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+.poster-box {
+  position: relative;
+}
+
+.poster {
+  width: 100%;
+  height: auto;
+  max-width: 355px;
+  border-radius: 8px;
+  border: 2px solid $poster-border-color;
+  filter: grayscale(100%);
+  display: block;
+}
+
+.poster-title {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  padding: 8px;
+  font-size: 14px;
+  font-weight: normal;
+  color: $poster-title-text-color;
+  background-color: $poster-title-bg-color;
+  border-radius: 15px;
+
+  p {
+    margin: 0;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .poster-box {
+    width: 748px;
+    height: 425px;
+  }
+
+  .poster {
+    max-width: 748px;
+    filter: grayscale(100%);
+  }
+
+  .poster-title {
+    right: 5px;
+    font-size: 34px;
+    font-weight: bold;
+    color: $text-color;
+    background-color: transparent;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .poster-box {
+    width: 1020px;
+    height: 578px;
+  }
+
+  .poster {
+    max-width: 1020px;
+  }
+}
