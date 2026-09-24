@@ -1,10 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MovieService } from '../../../../core/services/movie';
-import { Movie } from '../../../../core/models/movie.model';
+import { MovieService } from '@core/services/movie';
+import { Movie } from '@core/models/movie.model';
 import { MovieCard } from '../../components/movie-card/movie-card';
-import { Pagination } from '../../../../shared/components/pagination/pagination';
-import { Loader } from '../../../../shared/components/loader/loader';
+import { Pagination } from '@shared/components/pagination/pagination';
+import { Loader } from '@shared/components/loader/loader';
 
 @Component({
   selector: 'app-movies-page',

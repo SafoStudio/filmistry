@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Movie } from '../../../../core/models/movie.model';
+import { Movie } from '@core/models/movie.model';
 
 @Component({
   selector: 'app-movie-card',

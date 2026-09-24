@@ -3,11 +3,11 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
-import { MovieService } from '../../../../core/services/movie';
-import { MovieDetail } from '../../../../core/models/movie-detail.model';
-import { RatingBar } from '../../../../shared/components/rating-bar/rating-bar';
-import { Icon } from '../../../../shared/components/icon/icon';
-import { Loader } from '../../../../shared/components/loader/loader';
+import { MovieService } from '@core/services/movie';
+import { MovieDetail } from '@core/models/movie-detail.model';
+import { RatingBar } from '@shared/components/rating-bar/rating-bar';
+import { Icon } from '@shared/components/icon/icon';
+import { Loader } from '@shared/components/loader/loader';
 
 type DetailSection = 'cast' | 'gallery' | 'reviews' | null;
 

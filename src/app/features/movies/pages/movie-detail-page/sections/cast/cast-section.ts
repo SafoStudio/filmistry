@@ -1,9 +1,9 @@
 import { Component, inject, input, signal, effect, viewChild, ElementRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MovieService } from '../../../../../../core/services/movie';
-import { CastMember } from '../../../../../../core/models/movie-credits.model';
-import { Icon } from '../../../../../../shared/components/icon/icon';
-import { Loader } from '../../../../../../shared/components/loader/loader';
+import { MovieService } from '@core/services/movie';
+import { CastMember } from '@core/models/movie-credits.model';
+import { Icon } from '@shared/components/icon/icon';
+import { Loader } from '@shared/components/loader/loader';
 
 @Component({
   selector: 'app-cast-section',

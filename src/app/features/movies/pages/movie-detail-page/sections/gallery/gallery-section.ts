@@ -1,8 +1,8 @@
 import { Component, inject, input, signal, effect, computed } from '@angular/core';
-import { MovieService } from '../../../../../../core/services/movie';
-import { MovieImage } from '../../../../../../core/models/movie-images.model';
-import { Icon } from '../../../../../../shared/components/icon/icon';
-import { Loader } from '../../../../../../shared/components/loader/loader';
+import { MovieService } from '@core/services/movie';
+import { MovieImage } from '@core/models/movie-images.model';
+import { Icon } from '@shared/components/icon/icon';
+import { Loader } from '@shared/components/loader/loader';
 
 @Component({
   selector: 'app-gallery-section',
