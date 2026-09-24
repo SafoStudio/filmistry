@@ -4,10 +4,11 @@ import { MovieService } from '../../../../core/services/movie';
 import { Movie } from '../../../../core/models/movie.model';
 import { MovieCard } from '../../components/movie-card/movie-card';
 import { Pagination } from '../../../../shared/components/pagination/pagination';
+import { Loader } from '../../../../shared/components/loader/loader';
 
 @Component({
   selector: 'app-movies-page',
-  imports: [MovieCard, Pagination],
+  imports: [MovieCard, Pagination, Loader],
   templateUrl: './movies-page.html',
   styleUrl: './movies-page.scss',
 })

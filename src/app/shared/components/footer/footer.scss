@@ -106,7 +106,7 @@ $shadow-color: #111;
   max-width: 300px;
   margin: 0;
   text-align: center;
-  color: $text-color;
+  color: var(--color-text);
 }
 
 .copyright {

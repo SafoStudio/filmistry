@@ -1,10 +1,11 @@
 import { Component, inject, input, signal, effect } from '@angular/core';
 import { MovieService } from '../../../../../../core/services/movie';
 import { Review } from '../../../../../../core/models/movie-reviews.model';
+import { Loader } from '../../../../../../shared/components/loader/loader';
 
 @Component({
   selector: 'app-reviews-section',
-  imports: [],
+  imports: [Loader],
   templateUrl: './reviews-section.html',
   styleUrl: './reviews-section.scss',
 })

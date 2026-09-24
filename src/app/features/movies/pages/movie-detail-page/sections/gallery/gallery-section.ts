@@ -2,10 +2,11 @@ import { Component, inject, input, signal, effect, computed } from '@angular/cor
 import { MovieService } from '../../../../../../core/services/movie';
 import { MovieImage } from '../../../../../../core/models/movie-images.model';
 import { Icon } from '../../../../../../shared/components/icon/icon';
+import { Loader } from '../../../../../../shared/components/loader/loader';
 
 @Component({
   selector: 'app-gallery-section',
-  imports: [Icon],
+  imports: [Icon, Loader],
   templateUrl: './gallery-section.html',
   styleUrl: './gallery-section.scss',
 })

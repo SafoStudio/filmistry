@@ -1,5 +1,5 @@
 @if (loading()) {
-  <p class="status">Loading...</p>
+  <app-loader />
 } @else if (error()) {
   <p class="status status--error">{{ error() }}</p>
 } @else if (movie(); as m) {

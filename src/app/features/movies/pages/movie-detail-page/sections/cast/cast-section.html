@@ -2,7 +2,7 @@
   <h2 class="title">Actors</h2>
 
   @if (loading()) {
-    <p class="text-sms">Loading...</p>
+    <app-loader />
   } @else if (cast().length === 0) {
     <p class="text-sms">No credits available for this movie</p>
   } @else {

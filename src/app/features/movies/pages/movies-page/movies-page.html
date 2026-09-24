@@ -2,7 +2,7 @@
   @if (error()) {
     <p class="status status--error">{{ error() }}</p>
   } @else if (loading() && movies().length === 0) {
-    <p class="status">Loading...</p>
+    <app-loader />
   } @else {
     <div
       class="movie-gallery"

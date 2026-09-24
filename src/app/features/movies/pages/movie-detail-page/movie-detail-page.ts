@@ -7,12 +7,13 @@ import { MovieService } from '../../../../core/services/movie';
 import { MovieDetail } from '../../../../core/models/movie-detail.model';
 import { RatingBar } from '../../../../shared/components/rating-bar/rating-bar';
 import { Icon } from '../../../../shared/components/icon/icon';
+import { Loader } from '../../../../shared/components/loader/loader';
 
 type DetailSection = 'cast' | 'gallery' | 'reviews' | null;
 
 @Component({
   selector: 'app-movie-detail-page',
-  imports: [RouterOutlet, RatingBar, Icon],
+  imports: [RouterOutlet, RatingBar, Icon, Loader],
   templateUrl: './movie-detail-page.html',
   styleUrl: './movie-detail-page.scss',
 })
