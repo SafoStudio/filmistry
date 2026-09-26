@@ -2,11 +2,11 @@ import { Router } from 'express';
 import { tmdbFetch } from '../tmdb-client';
 import { handleApi } from '../api-helpers';
 import { DEFAULT_LANGUAGE } from '../constants';
-import { toMovieListDto, TmdbMovieListRaw } from '../mappers/movie.mapper';
-import { toMovieDetailDto, TmdbMovieDetailRaw } from '../mappers/movie-detail.mapper';
-import { toMovieCreditsDto, TmdbCreditsRaw } from '../mappers/movie-credits.mapper';
-import { toMovieImagesDto, TmdbImagesRaw } from '../mappers/movie-images.mapper';
-import { toMovieReviewsDto, TmdbReviewsRaw } from '../mappers/movie-reviews.mapper';
+import { toMediaListDto, TmdbMediaListRaw } from '../mappers/media-list.mapper';
+import { toMediaDetailDto, TmdbMediaDetailRaw } from '../mappers/media-detail.mapper';
+import { toMediaCreditsDto, TmdbMediaCreditsRaw } from '../mappers/media-credits.mapper';
+import { toMediaImagesDto, TmdbMediaImagesRaw } from '../mappers/media-images.mapper';
+import { toMediaReviewsDto, TmdbMediaReviewsRaw } from '../mappers/media-reviews.mapper';
 
 export const moviesRouter = Router();
 
@@ -16,11 +16,11 @@ moviesRouter.get(
     const lang = (req.query['lang'] as string) || DEFAULT_LANGUAGE;
     const requestedPage = Number(req.query['page']) || 1;
     const page = Math.max(1, Math.min(requestedPage, 500));
-    const raw = await tmdbFetch<TmdbMovieListRaw>('/movie/popular', {
+    const raw = await tmdbFetch<TmdbMediaListRaw>('/movie/popular', {
       language: lang,
       page,
     });
-    return toMovieListDto(raw);
+    return toMediaListDto(raw);
   }),
 );
 
@@ -29,11 +29,11 @@ moviesRouter.get(
   handleApi(async (req) => {
     const id = req.params['id'];
     const lang = (req.query['lang'] as string) || DEFAULT_LANGUAGE;
-    const raw = await tmdbFetch<TmdbMovieDetailRaw>(`/movie/${id}`, {
+    const raw = await tmdbFetch<TmdbMediaDetailRaw>(`/movie/${id}`, {
       language: lang,
       append_to_response: 'videos',
     });
-    return toMovieDetailDto(raw);
+    return toMediaDetailDto(raw);
   }),
 );
 
@@ -42,10 +42,10 @@ moviesRouter.get(
   handleApi(async (req) => {
     const id = req.params['id'];
     const lang = (req.query['lang'] as string) || DEFAULT_LANGUAGE;
-    const raw = await tmdbFetch<TmdbCreditsRaw>(`/movie/${id}/credits`, {
+    const raw = await tmdbFetch<TmdbMediaCreditsRaw>(`/movie/${id}/credits`, {
       language: lang,
     });
-    return toMovieCreditsDto(raw);
+    return toMediaCreditsDto(raw);
   }),
 );
 
@@ -53,10 +53,10 @@ moviesRouter.get(
   '/:id/images',
   handleApi(async (req) => {
     const id = req.params['id'];
-    const raw = await tmdbFetch<TmdbImagesRaw>(`/movie/${id}/images`, {
+    const raw = await tmdbFetch<TmdbMediaImagesRaw>(`/movie/${id}/images`, {
       include_image_language: 'en,null',
     });
-    return toMovieImagesDto(raw);
+    return toMediaImagesDto(raw);
   }),
 );
 
@@ -65,9 +65,9 @@ moviesRouter.get(
   handleApi(async (req) => {
     const id = req.params['id'];
     const lang = (req.query['lang'] as string) || DEFAULT_LANGUAGE;
-    const raw = await tmdbFetch<TmdbReviewsRaw>(`/movie/${id}/reviews`, {
+    const raw = await tmdbFetch<TmdbMediaReviewsRaw>(`/movie/${id}/reviews`, {
       language: lang,
     });
-    return toMovieReviewsDto(raw);
+    return toMediaReviewsDto(raw);
   }),
 );
