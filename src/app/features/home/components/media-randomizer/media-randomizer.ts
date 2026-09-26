@@ -1,6 +1,6 @@
 import { Component, inject, signal, effect, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MovieService } from '@core/services/movie';
+import { MediaService } from '@core/services/media.service';
 import { TrendingItem } from '@core/models/trending.model';
 import { Loader } from '@shared/components/loader/loader';
 
@@ -11,7 +11,7 @@ import { Loader } from '@shared/components/loader/loader';
   styleUrl: './media-randomizer.scss',
 })
 export class MediaRandomizer {
-  private movieService = inject(MovieService);
+  private mediaService = inject(MediaService);
 
   trending = signal<TrendingItem[]>([]);
   loading = signal(true);
@@ -30,7 +30,7 @@ export class MediaRandomizer {
 
   constructor() {
     effect(() => {
-      this.movieService.getTrending().subscribe({
+      this.mediaService.getTrending().subscribe({
         next: (data) => {
           this.trending.set(data.results);
           this.loading.set(false);

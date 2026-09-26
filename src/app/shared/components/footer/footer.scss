@@ -11,7 +11,11 @@ $shadow-color: #111;
   display: flex;
   flex-direction: column-reverse;
   justify-content: space-between;
-  background-color: var(--color-surface);
+  background: linear-gradient(
+    to top,
+    var(--color-bg) 30%,
+    var(--color-surface) 100%
+  );
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   box-sizing: border-box;
