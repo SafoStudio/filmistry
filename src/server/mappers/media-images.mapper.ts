@@ -1,5 +1,5 @@
 import { TMDB_IMAGE_BASE_URL, GALLERY_SIZE } from '../constants';
-import { MovieImageDto, MovieImagesDto } from '../dto/movie-images.dto';
+import { MediaImageDto, MediaImagesDto } from '../dto/media-images.dto';
 
 interface TmdbImageRaw {
   file_path: string;
@@ -7,15 +7,15 @@ interface TmdbImageRaw {
   height: number;
 }
 
-export interface TmdbImagesRaw {
+export interface TmdbMediaImagesRaw {
   backdrops: TmdbImageRaw[];
 }
 
 const MAX_BACKDROPS = 20;
 
-export function toMovieImagesDto(raw: TmdbImagesRaw): MovieImagesDto {
+export function toMediaImagesDto(raw: TmdbMediaImagesRaw): MediaImagesDto {
   return {
-    backdrops: raw.backdrops.slice(0, MAX_BACKDROPS).map((img): MovieImageDto => ({
+    backdrops: raw.backdrops.slice(0, MAX_BACKDROPS).map((img): MediaImageDto => ({
       url: `${TMDB_IMAGE_BASE_URL}/${GALLERY_SIZE}${img.file_path}`,
       width: img.width,
       height: img.height,

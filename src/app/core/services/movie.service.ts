@@ -1,11 +1,11 @@
 import { Service, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { MovieListResponse } from '../models/movie.model';
-import { MovieDetail } from '../models/movie-detail.model';
-import { MovieCredits } from '../models/movie-credits.model';
-import { MovieImages } from '../models/movie-images.model';
-import { MovieReviews } from '../models/movie-reviews.model';
+import { MovieListResponse } from '../models/media.model';
+import { MovieDetail } from '../models/media-detail.model';
+import { MovieCredits } from '../models/media-credits.model';
+import { MovieImages } from '../models/media-images.model';
+import { MovieReviews } from '../models/media-reviews.model';
 import { Trending } from '../models/trending.model';
 
 @Service()

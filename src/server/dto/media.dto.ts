@@ -1,11 +1,11 @@
-export interface MovieListItemDto {
+export interface MediaListItemDto {
   id: number;
   title: string;
   posterUrl: string | null;
 }
 
-export interface MovieListDto {
+export interface MediaListDto {
   page: number;
   totalPages: number;
-  results: MovieListItemDto[];
+  results: MediaListItemDto[];
 }

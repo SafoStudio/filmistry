@@ -1,23 +1,25 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MovieService } from '@core/services/movie';
-import { Movie } from '@core/models/movie.model';
-import { MovieCard } from '../../components/movie-card/movie-card';
+import { MediaService, MediaType } from '@core/services/media.service';
+import { Media } from '@core/models/media.model';
+import { MediaCard } from '../../components/media-card/media-card';
 import { Pagination } from '@shared/components/pagination/pagination';
 import { Loader } from '@shared/components/loader/loader';
 
 @Component({
-  selector: 'app-movies-page',
-  imports: [MovieCard, Pagination, Loader],
-  templateUrl: './movies-page.html',
-  styleUrl: './movies-page.scss',
+  selector: 'app-media-page',
+  imports: [MediaCard, Pagination, Loader],
+  templateUrl: './media-page.html',
+  styleUrl: './media-page.scss',
 })
-export class MoviesPage {
-  private movieService = inject(MovieService);
+export class MediaPage {
+  private mediaService = inject(MediaService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
-  movies = signal<Movie[]>([]);
+  mediaType = input.required<MediaType>();
+
+  items = signal<Media[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
   currentPage = signal(1);
@@ -28,7 +30,7 @@ export class MoviesPage {
     this.route.queryParamMap.subscribe((params) => {
       const page = Number(params.get('page')) || 1;
 
-      if (page === this.currentPage() && this.movies().length > 0) {
+      if (page === this.currentPage() && this.items().length > 0) {
         return;
       }
 
@@ -38,12 +40,12 @@ export class MoviesPage {
   }
 
   private loadPage(page: number): void {
-    const isFirstLoad = this.movies().length === 0;
+    const isFirstLoad = this.items().length === 0;
 
     if (isFirstLoad) {
       this.loading.set(true);
       this.error.set(null);
-      this.movieService.getPopular(page).subscribe({
+      this.mediaService.getList(this.mediaType(), page).subscribe({
         next: (response) => this.applyResponse(response),
         error: () => this.applyError(),
       });
@@ -53,7 +55,7 @@ export class MoviesPage {
     this.isLeaving.set(true);
 
     setTimeout(() => {
-      this.movieService.getPopular(page).subscribe({
+      this.mediaService.getList(this.mediaType(), page).subscribe({
         next: (response) => {
           this.applyResponse(response);
           requestAnimationFrame(() => this.isLeaving.set(false));
@@ -66,15 +68,15 @@ export class MoviesPage {
     }, 260);
   }
 
-  private applyResponse(response: { results: Movie[]; totalPages: number }): void {
-    this.movies.set(response.results);
+  private applyResponse(response: { results: Media[]; totalPages: number }): void {
+    this.items.set(response.results);
     this.totalPages.set(response.totalPages);
     this.loading.set(false);
     this.error.set(null);
   }
 
   private applyError(): void {
-    this.error.set('Failed to load movies');
+    this.error.set(`Failed to load ${this.mediaType() === 'movie' ? 'movies' : 'TV shows'}`);
     this.loading.set(false);
   }
 

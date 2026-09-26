@@ -5,6 +5,6 @@ export interface CastMemberDto {
   profileUrl: string | null;
 }
 
-export interface MovieCreditsDto {
+export interface MediaCreditsDto {
   cast: CastMemberDto[];
 }

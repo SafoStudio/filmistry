@@ -1,5 +1,5 @@
 import { TMDB_IMAGE_BASE_URL, POSTER_SIZE_DETAIL, BACKDROP_SIZE } from '../constants';
-import { MovieDetailDto } from '../dto/movie-detail.dto';
+import { MediaDetailDto } from '../dto/media-detail.dto';
 
 interface TmdbVideoRaw {
   key: string;
@@ -12,16 +12,19 @@ interface TmdbGenreRaw {
   name: string;
 }
 
-export interface TmdbMovieDetailRaw {
+export interface TmdbMediaDetailRaw {
   id: number;
-  title: string;
+  title?: string;
+  name?: string;
   overview: string;
   poster_path: string | null;
   backdrop_path: string | null;
-  release_date: string;
-  runtime: number;
+  release_date?: string;
+  first_air_date?: string;
+  runtime?: number;
+  episode_run_time?: number[];
   vote_average: number;
-  genres: TmdbGenreRaw[];
+  genres?: TmdbGenreRaw[];
   videos?: {
     results: TmdbVideoRaw[];
   };
@@ -38,15 +41,18 @@ function findTrailerKey(videos: TmdbVideoRaw[] | undefined): string | null {
   return trailer?.key ?? null;
 }
 
-export function toMovieDetailDto(raw: TmdbMovieDetailRaw): MovieDetailDto {
+export function toMediaDetailDto(raw: TmdbMediaDetailRaw): MediaDetailDto {
+  const releaseDate = raw.release_date ?? raw.first_air_date ?? '';
+  const runtime = raw.runtime ?? raw.episode_run_time?.[0] ?? 0;
+
   return {
     id: raw.id,
-    title: raw.title,
+    title: raw.title ?? raw.name ?? '',
     overview: raw.overview,
     posterUrl: buildUrl(raw.poster_path, POSTER_SIZE_DETAIL),
     backdropUrl: buildUrl(raw.backdrop_path, BACKDROP_SIZE),
-    releaseYear: raw.release_date?.slice(0, 4) ?? '',
-    runtime: raw.runtime ?? 0,
+    releaseYear: releaseDate.slice(0, 4),
+    runtime,
     voteAverage: raw.vote_average ?? 0,
     genres: raw.genres?.map((g) => g.name) ?? [],
     trailerKey: findTrailerKey(raw.videos?.results),

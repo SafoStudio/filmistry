@@ -6,6 +6,6 @@ export interface ReviewDto {
   rating: number | null;
 }
 
-export interface MovieReviewsDto {
+export interface MediaReviewsDto {
   reviews: ReviewDto[];
 }

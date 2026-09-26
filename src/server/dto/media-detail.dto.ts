@@ -1,4 +1,4 @@
-export interface MovieDetailDto {
+export interface MediaDetailDto {
   id: number;
   title: string;
   overview: string;

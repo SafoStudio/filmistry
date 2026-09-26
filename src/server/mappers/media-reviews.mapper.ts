@@ -1,4 +1,4 @@
-import { ReviewDto, MovieReviewsDto } from '../dto/movie-reviews.dto';
+import { ReviewDto, MediaReviewsDto } from '../dto/media-reviews.dto';
 
 interface TmdbReviewRaw {
   id: string;
@@ -10,13 +10,13 @@ interface TmdbReviewRaw {
   };
 }
 
-export interface TmdbReviewsRaw {
+export interface TmdbMediaReviewsRaw {
   results: TmdbReviewRaw[];
 }
 
 const MAX_REVIEWS = 10;
 
-export function toMovieReviewsDto(raw: TmdbReviewsRaw): MovieReviewsDto {
+export function toMediaReviewsDto(raw: TmdbMediaReviewsRaw): MediaReviewsDto {
   return {
     reviews: raw.results.slice(0, MAX_REVIEWS).map((r): ReviewDto => ({
       id: r.id,

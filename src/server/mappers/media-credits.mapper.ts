@@ -1,5 +1,5 @@
 import { TMDB_IMAGE_BASE_URL, PROFILE_SIZE } from '../constants';
-import { CastMemberDto, MovieCreditsDto } from '../dto/movie-credits.dto';
+import { CastMemberDto, MediaCreditsDto } from '../dto/media-credits.dto';
 
 interface TmdbCastRaw {
   id: number;
@@ -8,7 +8,7 @@ interface TmdbCastRaw {
   profile_path: string | null;
 }
 
-export interface TmdbCreditsRaw {
+export interface TmdbMediaCreditsRaw {
   cast: TmdbCastRaw[];
 }
 
@@ -19,7 +19,7 @@ function buildProfileUrl(path: string | null): string | null {
   return `${TMDB_IMAGE_BASE_URL}/${PROFILE_SIZE}${path}`;
 }
 
-export function toMovieCreditsDto(raw: TmdbCreditsRaw): MovieCreditsDto {
+export function toMediaCreditsDto(raw: TmdbMediaCreditsRaw): MediaCreditsDto {
   return {
     cast: raw.cast.slice(0, MAX_CAST).map((c): CastMemberDto => ({
       id: c.id,
