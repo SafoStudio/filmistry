@@ -1,9 +1,9 @@
-export interface MovieImage {
+export interface MediaImage {
   url: string;
   width: number;
   height: number;
 }
 
-export interface MovieImages {
-  backdrops: MovieImage[];
+export interface MediaImages {
+  backdrops: MediaImage[];
 }

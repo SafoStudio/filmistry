@@ -6,6 +6,6 @@ export interface Review {
   rating: number | null;
 }
 
-export interface MovieReviews {
+export interface MediaReviews {
   reviews: Review[];
 }
