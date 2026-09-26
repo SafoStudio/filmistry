@@ -7,18 +7,16 @@ export const routes: Routes = [
   },
   {
     path: 'movies',
-    loadChildren: () => import('./features/movies/movies.routes').then((m) => m.moviesRoutes),
+    loadChildren: () => import('./features/media/media.routes').then((m) => m.movieRoutes),
   },
   {
     path: 'tv',
-    loadChildren: () => import('./features/tv/tv.routes').then((m) => m.tvRoutes),
+    loadChildren: () => import('./features/media/media.routes').then((m) => m.tvRoutes),
   },
   {
     path: 'people',
-    loadChildren: () => import('./features/people/people.routes').then((m) => m.peopleRoutes),
+    loadComponent: () =>
+      import('./features/people/pages/people-page/people-page').then((m) => m.PeoplePage),
   },
-  {
-    path: '**',
-    redirectTo: '',
-  },
+  { path: '**', redirectTo: '' },
 ];

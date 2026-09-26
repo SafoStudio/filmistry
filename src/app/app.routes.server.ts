@@ -8,6 +8,10 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'movies/:id/gallery', renderMode: RenderMode.Server },
   { path: 'movies/:id/reviews', renderMode: RenderMode.Server },
   { path: 'tv', renderMode: RenderMode.Server },
+  { path: 'tv/:id', renderMode: RenderMode.Server },
+  { path: 'tv/:id/cast', renderMode: RenderMode.Server },
+  { path: 'tv/:id/gallery', renderMode: RenderMode.Server },
+  { path: 'tv/:id/reviews', renderMode: RenderMode.Server },
   { path: 'people', renderMode: RenderMode.Server },
   { path: '**', renderMode: RenderMode.Server },
 ];

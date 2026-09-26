@@ -1,0 +1,53 @@
+import { Routes } from '@angular/router';
+
+const mediaChildren: Routes = [
+  {
+    path: 'cast',
+    loadComponent: () =>
+      import('./pages/media-detail-page/sections/cast/cast-section').then((m) => m.CastSection),
+  },
+  {
+    path: 'gallery',
+    loadComponent: () =>
+      import('./pages/media-detail-page/sections/gallery/gallery-section').then(
+        (m) => m.GallerySection,
+      ),
+  },
+  {
+    path: 'reviews',
+    loadComponent: () =>
+      import('./pages/media-detail-page/sections/reviews/reviews-section').then(
+        (m) => m.ReviewsSection,
+      ),
+  },
+];
+
+export const movieRoutes: Routes = [
+  {
+    path: '',
+    loadComponent: () => import('./pages/media-page/media-page').then((m) => m.MediaPage),
+    data: { mediaType: 'movie' },
+  },
+  {
+    path: ':id',
+    loadComponent: () =>
+      import('./pages/media-detail-page/media-detail-page').then((m) => m.MediaDetailPage),
+    data: { mediaType: 'movie' },
+    children: mediaChildren,
+  },
+];
+
+export const tvRoutes: Routes = [
+  {
+    path: '',
+    loadComponent: () => import('./pages/media-page/media-page').then((m) => m.MediaPage),
+    data: { mediaType: 'tv' },
+  },
+  {
+    path: ':id',
+    loadComponent: () =>
+      import('./pages/media-detail-page/media-detail-page').then((m) => m.MediaDetailPage),
+    data: { mediaType: 'tv' },
+    children: mediaChildren,
+  },
+];
