@@ -11,6 +11,7 @@ import { API_PREFIX } from './server/constants';
 import { moviesRouter } from './server/routes/movies'
 import { trendingRouter } from './server/routes/trending';
 import { tvRouter } from './server/routes/tv';
+import { peopleRouter } from './server/routes/people';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -23,6 +24,7 @@ const angularApp = new AngularNodeAppEngine();
 app.use(`${API_PREFIX}/movies`, moviesRouter);
 app.use(`${API_PREFIX}/tv`, tvRouter);
 app.use(`${API_PREFIX}/trending`, trendingRouter);
+app.use(`${API_PREFIX}/people`, peopleRouter);
 
 /**
  * Serve static files from /browser
