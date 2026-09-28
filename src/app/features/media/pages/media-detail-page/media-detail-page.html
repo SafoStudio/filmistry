@@ -8,19 +8,10 @@
     [class.backgroundImageContainer--closing]="isClosing()"
     [style.backgroundImage]="m.backdropUrl ? 'url(' + m.backdropUrl + ')' : 'none'"
   >
-    <button
-      type="button"
-      class="pageCurl"
-      [class.pageCurl--closing]="isClosing()"
-      (click)="closeDetail()"
-      aria-label="Close"
-    >
-      <span class="pageCurl__fold"></span>
-      <span class="pageCurl__shadow"></span>
-      <span class="pageCurl__hint">
-        <app-icon name="close" [size]="16" />
-      </span>
-    </button>
+    <app-page-curl
+      [closing]="isClosing()"
+      (close)="closeDetail()"
+    />
 
     <div class="movieCard movieCard--visible">
       <div class="posterImage fade-item" style="--i: 0">

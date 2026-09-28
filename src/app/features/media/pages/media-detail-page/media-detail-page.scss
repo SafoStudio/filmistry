@@ -95,122 +95,6 @@ $background-color: rgba(69, 78, 83, 0.6);
   word-break: break-word;
 }
 
-.pageCurl {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 64px;
-  height: 64px;
-  padding: 0;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  overflow: visible;
-  z-index: 5;
-  border-top-right-radius: $border-radius;
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      225deg,
-      rgba(109, 164, 192, 0.95) 0%,
-      rgba(109, 164, 192, 0.5) 55%,
-      transparent 55.5%
-    );
-    border-top-right-radius: $border-radius;
-    transition: opacity 0.5s ease;
-  }
-
-  &:focus-visible {
-    outline: 2px solid $primary-color;
-    outline-offset: 2px;
-    border-radius: $border-radius;
-  }
-}
-
-.pageCurl__fold {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    225deg,
-    #f4f1f1 0%,
-    #cfd6d8 45%,
-    #9aa4a8 100%
-  );
-  clip-path: polygon(100% 0, 0 0, 100% 100%);
-  transform-origin: top right;
-  transform: scale(1);
-  transition: transform 0.55s cubic-bezier(0.33, 1, 0.68, 1),
-  filter 0.55s ease;
-  box-shadow: -2px 2px 6px rgba(0, 0, 0, 0.35);
-  z-index: 2;
-}
-
-.pageCurl__shadow {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 75%;
-  height: 75%;
-  background: radial-gradient(
-    circle at 100% 0%,
-    rgba(0, 0, 0, 0.55) 0%,
-    transparent 70%
-  );
-  opacity: 0.4;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.pageCurl__hint {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  color: #2b3236;
-  opacity: 0;
-  transform: translate(4px, -4px) scale(0.8);
-  transition: opacity 0.35s ease, transform 0.35s ease;
-  z-index: 3;
-  pointer-events: none;
-}
-
-.pageCurl:hover .pageCurl__fold {
-  transform: scale(1.08);
-  filter: brightness(1.05);
-}
-
-.pageCurl:hover .pageCurl__shadow {
-  opacity: 0.7;
-}
-
-.pageCurl:hover .pageCurl__hint,
-.pageCurl:focus-visible .pageCurl__hint {
-  opacity: 1;
-  transform: translate(0, 0) scale(1);
-}
-
-.pageCurl--closing .pageCurl__fold {
-  transform: scale(14) rotate(-2deg);
-  filter: brightness(1.15);
-  transition: transform 0.7s cubic-bezier(0.55, 0, 0.55, 1),
-  filter 0.7s ease;
-}
-
-.pageCurl--closing .pageCurl__shadow {
-  opacity: 0;
-}
-
-.pageCurl--closing .pageCurl__hint {
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
 .ratingBox {
   display: flex;
   flex-wrap: wrap;
@@ -456,10 +340,6 @@ $background-color: rgba(69, 78, 83, 0.6);
 
 @media (prefers-reduced-motion: reduce) {
   .backgroundImageContainer,
-  .pageCurl::before,
-  .pageCurl__fold,
-  .pageCurl__shadow,
-  .pageCurl__hint,
   .movieCard--visible,
   .fade-item {
     transition: none !important;

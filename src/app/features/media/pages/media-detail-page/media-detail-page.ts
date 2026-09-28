@@ -8,12 +8,13 @@ import { MediaDetail } from '@core/models/media-detail.model';
 import { RatingBar } from '@shared/components/rating-bar/rating-bar';
 import { Icon } from '@shared/components/icon/icon';
 import { Loader } from '@shared/components/loader/loader';
+import { PageCurl } from '@shared/components/page-curl/page-curl';
 
 type DetailSection = 'cast' | 'gallery' | 'reviews' | null;
 
 @Component({
   selector: 'app-media-detail-page',
-  imports: [RouterOutlet, RatingBar, Icon, Loader],
+  imports: [RouterOutlet, RatingBar, Icon, Loader, PageCurl],
   templateUrl: './media-detail-page.html',
   styleUrl: './media-detail-page.scss',
 })
