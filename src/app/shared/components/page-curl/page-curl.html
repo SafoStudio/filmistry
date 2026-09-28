@@ -1,0 +1,13 @@
+<button
+  type="button"
+  class="page-curl"
+  [class.page-curl--closing]="closing()"
+  (click)="close.emit()"
+  aria-label="Close"
+>
+  <span class="page-curl__fold"></span>
+  <span class="page-curl__shadow"></span>
+  <span class="page-curl__hint">
+    <app-icon name="close" [size]="16" />
+  </span>
+</button>
