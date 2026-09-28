@@ -1,0 +1,59 @@
+<section class="credits">
+  <h2 class="credits__title">Films & Series</h2>
+
+  @if (loading()) {
+    <app-loader />
+  } @else if (credits().length === 0) {
+    <p class="credits__empty">No credits available</p>
+  } @else {
+    <div
+      class="credits__slider-wrap"
+      [class.credits__slider-wrap--left]="canScrollLeft()"
+      [class.credits__slider-wrap--right]="canScrollRight()"
+    >
+      <div class="credits__slider" #slider (scroll)="onScroll()">
+        @for (credit of credits(); track credit.mediaType + '-' + credit.id) {
+          <a
+            class="credits__link"
+            [routerLink]="detailLink(credit)"
+          >
+            <div class="credits__slide">
+              @if (credit.posterUrl) {
+                <img
+                  class="credits__poster"
+                  [src]="credit.posterUrl"
+                  [alt]="credit.title"
+                  loading="lazy"
+                />
+              }
+              <div class="credits__overlay">
+                <span class="credits__name">{{ credit.title }}</span>
+              </div>
+            </div>
+          </a>
+        }
+      </div>
+    </div>
+
+    <div class="credits__nav-row">
+      <button
+        type="button"
+        class="credits__nav"
+        [disabled]="!canScrollLeft()"
+        (click)="scrollLeft()"
+        aria-label="Scroll left"
+      >
+        <app-icon name="chevron-left" [size]="22" />
+      </button>
+      <button
+        type="button"
+        class="credits__nav"
+        [disabled]="!canScrollRight()"
+        (click)="scrollRight()"
+        aria-label="Scroll right"
+      >
+        <app-icon name="chevron-right" [size]="22" />
+      </button>
+    </div>
+  }
+</section>

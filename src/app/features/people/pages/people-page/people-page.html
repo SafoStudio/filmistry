@@ -1,3 +1,15 @@
-<div class="container">
-  <p class="placeholder">People — coming soon</p>
-</div>
+<section class="people">
+  <h2 class="visually-hidden">Stars</h2>
+
+  @if (loading()) {
+    <app-loader />
+  } @else if (error()) {
+    <p class="people__error">{{ error() }}</p>
+  } @else {
+    <div class="people__grid">
+      @for (person of people(); track person.id) {
+        <app-person-card [person]="person" />
+      }
+    </div>
+  }
+</section>

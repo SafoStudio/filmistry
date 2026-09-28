@@ -1,0 +1,44 @@
+@if (loading()) {
+  <app-loader />
+} @else if (error()) {
+  <p class="status status--error">{{ error() }}</p>
+} @else if (person(); as p) {
+  <section
+    class="person"
+    [class.person--closing]="isClosing()"
+  >
+    <div
+      class="person__container"
+      [class.person__container--closing]="isClosing()"
+    >
+      <app-page-curl
+        [closing]="isClosing()"
+        (close)="closeDetail()"
+      />
+
+      <div class="person__profile">
+        <div class="person__photo-box">
+          @if (p.profileUrl) {
+            <img class="person__photo" [src]="p.profileUrl" [alt]="p.name" />
+          }
+        </div>
+
+        <div class="person__details">
+          <div class="person__title">
+            <h2>{{ p.name }}</h2>
+          </div>
+
+          <p>Birthday: {{ p.birthday || 'was born on one fine day' }}</p>
+          <p>Place of Birth: {{ p.placeOfBirth || 'on planet earth' }}</p>
+
+          <p class="person__biography">
+            Biography:
+            {{ p.biography || 'No biography available.' }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <app-credits-section [id]="id()" />
+  </section>
+}

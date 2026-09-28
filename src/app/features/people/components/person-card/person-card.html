@@ -1,0 +1,12 @@
+<a class="actor-card" [routerLink]="['/people', person().id]">
+  @if (person().profileUrl) {
+    <img [src]="person().profileUrl" [alt]="person().name" loading="lazy" />
+  }
+  <figcaption class="actor-card__caption">
+    <h3 class="actor-card__title">
+      <span class="actor-card__star">★</span>
+      <span class="actor-card__name">{{ person().name }}</span>
+    </h3>
+    <p class="actor-card__more">more details →</p>
+  </figcaption>
+</a>

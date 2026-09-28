@@ -1,12 +1,28 @@
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 48px 16px;
-  min-height: 60vh;
+.people {
+  padding: 24px 16px;
 }
 
-.placeholder {
-  color: var(--color-text-muted);
-  font-size: 18px;
+.people__error {
+  color: #c0392b;
+  text-align: center;
+}
+
+.people__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  max-width: 1060px;
+  margin: 0 auto;
+
+  @media screen and (min-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media screen and (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media screen and (min-width: 1440px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }

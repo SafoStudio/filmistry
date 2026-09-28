@@ -13,5 +13,6 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'tv/:id/gallery', renderMode: RenderMode.Server },
   { path: 'tv/:id/reviews', renderMode: RenderMode.Server },
   { path: 'people', renderMode: RenderMode.Server },
+  { path: 'people/:id', renderMode: RenderMode.Server },
   { path: '**', renderMode: RenderMode.Server },
 ];

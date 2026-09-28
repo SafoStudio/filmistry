@@ -15,8 +15,7 @@ export const routes: Routes = [
   },
   {
     path: 'people',
-    loadComponent: () =>
-      import('./features/people/pages/people-page/people-page').then((m) => m.PeoplePage),
+    loadChildren: () => import('./features/people/people.routes').then((m) => m.peopleRoutes),
   },
   { path: '**', redirectTo: '' },
 ];
