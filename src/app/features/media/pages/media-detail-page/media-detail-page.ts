@@ -1,6 +1,7 @@
 import { Component, inject, signal, effect, computed, input } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
+import { Location } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
 import { MediaService, MediaType } from '@core/services/media.service';
@@ -22,6 +23,7 @@ export class MediaDetailPage {
   private mediaService = inject(MediaService);
   private sanitizer = inject(DomSanitizer);
   private router = inject(Router);
+  private location = inject(Location);
 
   id = input.required<string>();
   mediaType = input.required<MediaType>();
@@ -84,9 +86,9 @@ export class MediaDetailPage {
   toggleSection(section: Exclude<DetailSection, null>): void {
     const base = this.basePath();
     if (this.activeSection() === section) {
-      this.router.navigate([base, this.id()]);
+      this.router.navigate([base, this.id()], { replaceUrl: true });
     } else {
-      this.router.navigate([base, this.id(), section]);
+      this.router.navigate([base, this.id(), section], { replaceUrl: true });
     }
   }
 
@@ -104,14 +106,22 @@ export class MediaDetailPage {
     if (this.isClosing()) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const hasHistory = window.history.length > 1;
+
     if (reducedMotion) {
-      this.router.navigate([this.basePath()]);
+      this.goBack(hasHistory);
       return;
     }
 
     this.isClosing.set(true);
-    setTimeout(() => {
+    setTimeout(() => this.goBack(hasHistory), 700);
+  }
+
+  private goBack(hasHistory: boolean): void {
+    if (hasHistory) {
+      this.location.back();
+    } else {
       this.router.navigate([this.basePath()]);
-    }, 700);
+    }
   }
 }

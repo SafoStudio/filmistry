@@ -9,6 +9,7 @@ import {
   afterNextRender,
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { PeopleService } from '@core/services/people.service';
 import { PersonDetail } from '@core/models/person-detail.model';
 import { Loader } from '@shared/components/loader/loader';
@@ -25,6 +26,7 @@ import { CreditsSection } from './sections/credits-section/credits-section';
 export class PersonDetailPage {
   private peopleService = inject(PeopleService);
   private router = inject(Router);
+  private location = inject(Location);
 
   id = input.required<string>();
 
@@ -98,14 +100,22 @@ export class PersonDetailPage {
     if (this.isClosing()) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const hasHistory = window.history.length > 1;
+
     if (reducedMotion) {
-      this.router.navigate(['/people']);
+      this.goBack(hasHistory);
       return;
     }
 
     this.isClosing.set(true);
-    setTimeout(() => {
+    setTimeout(() => this.goBack(hasHistory), 700);
+  }
+
+  private goBack(hasHistory: boolean): void {
+    if (hasHistory) {
+      this.location.back();
+    } else {
       this.router.navigate(['/people']);
-    }, 700);
+    }
   }
 }
