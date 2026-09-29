@@ -55,4 +55,10 @@ export class MediaService {
       params: { lang },
     });
   }
+
+  getTrendingMoviesDay(lang: string = 'en-US'): Observable<Trending> {
+    return this.http.get<Trending>('/api/trending/day', {
+      params: { lang },
+    });
+  }
 }
