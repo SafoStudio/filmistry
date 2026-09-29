@@ -1,52 +1,53 @@
 $primary-color: #33333570;
-$scrollbar-thumb-color: #888;
-$scrollbar-track-color: #eee;
 $text-color: bisque;
 
 .person {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 24px 16px;
 }
 
 .person__container {
   width: 100%;
   max-width: 320px;
-  padding: 10px;
+  padding: 14px;
   color: $text-color;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background-color: $primary-color;
   border-radius: 8px;
   box-sizing: border-box;
   position: relative;
   overflow: hidden;
+  transition:
+    transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
+    opacity 0.7s ease;
 }
 
-.person__profile {
+.person__container--closing {
+  transform: scale(0.96);
+  opacity: 0;
+}
+
+.person--closing {
+  transition: opacity 0.7s ease;
+  opacity: 0;
+}
+
+.person__columns {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  width: 100%;
 }
 
-.person__details {
+.person__left {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 10px 12px 10px 10px;
-}
-
-.person__details p {
-  margin: 0;
-  line-height: 1.4;
 }
 
 .person__photo-box {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
 }
 
 .person__photo {
@@ -57,41 +58,74 @@ $text-color: bisque;
   display: block;
 }
 
-.person__title {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 10px;
+.person__name {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.2;
+}
 
-  h2 {
-    margin: 0;
-    font-size: 20px;
-    line-height: 1.2;
-  }
+.person__meta {
+  margin: 0;
+  line-height: 1.4;
+  font-size: 14px;
+}
+
+.person__right {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
 }
 
 .person__biography {
-  max-height: 320px;
-  overflow-y: auto;
-  padding-right: 10px;
   margin: 0;
   line-height: 1.5;
+  font-size: 14px;
+  position: relative;
+  overflow: hidden;
+  transition: max-height 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
 
-  scrollbar-width: thin;
-  scrollbar-color: $scrollbar-thumb-color $scrollbar-track-color;
+.person__biography--clipped {
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 70px;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(51, 51, 53, 0.6) 60%,
+      rgba(51, 51, 53, 0.95) 100%
+    );
+    pointer-events: none;
+  }
+}
 
-  &::-webkit-scrollbar {
-    width: 10px;
+.person__bio-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin: 0 auto;
+  border: none;
+  background: transparent;
+  color: $text-color;
+  cursor: pointer;
+  transition: transform 0.4s ease, color 0.2s ease;
+  transform: rotate(-90deg);
+
+  &:hover {
+    color: #fff;
   }
 
-  &::-webkit-scrollbar-thumb {
-    background-color: $scrollbar-thumb-color;
-    border-radius: 5px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background-color: $scrollbar-track-color;
-    border-radius: 5px;
+  &--rotated {
+    transform: rotate(90deg);
   }
 }
 
@@ -111,24 +145,22 @@ $text-color: bisque;
     max-width: 700px;
   }
 
-  .person__profile {
+  .person__columns {
     flex-direction: row;
     align-items: flex-start;
-    max-width: 100%;
+    gap: 20px;
   }
 
-  .person__photo-box {
-    width: 280px;
-    flex-shrink: 0;
+  .person__left {
+    flex: 0 0 240px;
   }
 
-  .person__photo {
-    max-width: 280px;
+  .person__right {
+    padding-right: 32px;
   }
 
-  .person__details {
-    flex: 1;
-    padding: 0 0 0 16px;
+  .person__name {
+    font-size: 22px;
   }
 }
 
@@ -136,29 +168,25 @@ $text-color: bisque;
   .person__container {
     max-width: 980px;
   }
-}
 
-.person__container {
-  transition:
-    transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
-    opacity 0.7s ease;
-}
+  .person__left {
+    flex: 0 0 280px;
+  }
 
-.person__container--closing {
-  transform: scale(0.96);
-  opacity: 0;
-}
+  .person__photo {
+    max-width: 280px;
+  }
 
-.person--closing {
-  transition: opacity 0.7s ease;
-  opacity: 0;
+  .person__name {
+    font-size: 24px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .person__container,
-  .person--closing {
+  .person--closing,
+  .person__biography,
+  .person__bio-toggle {
     transition: none !important;
-    opacity: 1 !important;
-    transform: none !important;
   }
 }

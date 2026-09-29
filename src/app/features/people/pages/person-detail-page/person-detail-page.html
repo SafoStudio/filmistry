@@ -16,25 +16,48 @@
         (close)="closeDetail()"
       />
 
-      <div class="person__profile">
-        <div class="person__photo-box">
+      <div class="person__columns">
+        <div class="person__left" #leftCol>
           @if (p.profileUrl) {
-            <img class="person__photo" [src]="p.profileUrl" [alt]="p.name" />
+            <div class="person__photo-box">
+              <img
+                class="person__photo"
+                [src]="p.profileUrl"
+                [alt]="p.name"
+              />
+            </div>
           }
+
+          <h2 class="person__name">{{ p.name }}</h2>
+
+          <p class="person__meta">
+            Birthday: {{ p.birthday || 'was born on one fine day' }}
+          </p>
+          <p class="person__meta">
+            Place of Birth: {{ p.placeOfBirth || 'on planet earth' }}
+          </p>
         </div>
 
-        <div class="person__details">
-          <div class="person__title">
-            <h2>{{ p.name }}</h2>
-          </div>
-
-          <p>Birthday: {{ p.birthday || 'was born on one fine day' }}</p>
-          <p>Place of Birth: {{ p.placeOfBirth || 'on planet earth' }}</p>
-
-          <p class="person__biography">
-            Biography:
+        <div class="person__right">
+          <p
+            class="person__biography"
+            #bio
+            [class.person__biography--clipped]="isBioOverflowing() && !isBioExpanded()"
+          >
             {{ p.biography || 'No biography available.' }}
           </p>
+
+          @if (isBioOverflowing()) {
+            <button
+              type="button"
+              class="person__bio-toggle"
+              [class.person__bio-toggle--rotated]="isBioExpanded()"
+              (click)="toggleBio()"
+              aria-label="Toggle biography"
+            >
+              <app-icon name="chevron-left" [size]="20" />
+            </button>
+          }
         </div>
       </div>
     </div>

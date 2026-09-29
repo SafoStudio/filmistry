@@ -1,14 +1,24 @@
-import { Component, inject, signal, effect, input } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  effect,
+  input,
+  viewChild,
+  ElementRef,
+  afterNextRender,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { PeopleService } from '@core/services/people.service';
 import { PersonDetail } from '@core/models/person-detail.model';
 import { Loader } from '@shared/components/loader/loader';
 import { PageCurl } from '@shared/components/page-curl/page-curl';
+import { Icon } from '@shared/components/icon/icon';
 import { CreditsSection } from './sections/credits-section/credits-section';
 
 @Component({
   selector: 'app-person-detail-page',
-  imports: [Loader, PageCurl, CreditsSection],
+  imports: [Loader, PageCurl, Icon, CreditsSection],
   templateUrl: './person-detail-page.html',
   styleUrl: './person-detail-page.scss',
 })
@@ -22,11 +32,20 @@ export class PersonDetailPage {
   loading = signal(true);
   error = signal<string | null>(null);
   isClosing = signal(false);
+  isBioExpanded = signal(false);
+  isBioOverflowing = signal(false);
+
+  bioRef = viewChild<ElementRef<HTMLParagraphElement>>('bio');
+  leftColRef = viewChild<ElementRef<HTMLDivElement>>('leftCol');
 
   constructor() {
     effect(() => {
       const personId = this.id();
       if (personId) this.load(personId);
+    });
+
+    afterNextRender(() => {
+      this.checkBioOverflow();
     });
   }
 
@@ -37,12 +56,42 @@ export class PersonDetailPage {
       next: (data) => {
         this.person.set(data);
         this.loading.set(false);
+        setTimeout(() => this.checkBioOverflow());
       },
       error: () => {
         this.error.set('Failed to load person details');
         this.loading.set(false);
       },
     });
+  }
+
+  private checkBioOverflow(): void {
+    const bio = this.bioRef()?.nativeElement;
+    const leftCol = this.leftColRef()?.nativeElement;
+    if (!bio || !leftCol) return;
+
+    if (this.isBioExpanded()) {
+      bio.style.maxHeight = 'none';
+      this.isBioOverflowing.set(true);
+      return;
+    }
+
+    const leftHeight = leftCol.offsetHeight;
+    bio.style.maxHeight = 'none';
+    const bioHeight = bio.scrollHeight;
+
+    if (bioHeight > leftHeight) {
+      bio.style.maxHeight = `${leftHeight}px`;
+      this.isBioOverflowing.set(true);
+    } else {
+      bio.style.maxHeight = 'none';
+      this.isBioOverflowing.set(false);
+    }
+  }
+
+  toggleBio(): void {
+    this.isBioExpanded.update((v) => !v);
+    setTimeout(() => this.checkBioOverflow());
   }
 
   closeDetail(): void {
