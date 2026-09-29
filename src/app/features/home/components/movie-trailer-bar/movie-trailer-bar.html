@@ -1,0 +1,64 @@
+<section class="trailer-bar">
+  @if (loading()) {
+    <app-loader />
+  } @else {
+    <div class="trailer-bar__container">
+      <div class="trailer-bar__slides">
+        @for (item of visibleItems(); track item.id) {
+          <div class="trailer-bar__slide">
+            <div
+              class="trailer-bar__overlay"
+              (click)="openTrailer(item)"
+            >
+              <div class="trailer-bar__box">
+                @if (item.backdropUrl) {
+                  <img
+                    class="trailer-bar__img"
+                    [src]="item.backdropUrl"
+                    [alt]="item.title"
+                  />
+                }
+                <h3 class="trailer-bar__name">{{ item.title }}</h3>
+              </div>
+              <div class="trailer-bar__play"></div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="trailer-bar__nav">
+        <button
+          type="button"
+          class="trailer-bar__btn trailer-bar__btn--prev"
+          (click)="prev()"
+          aria-label="Previous"
+        >
+          ‹
+        </button>
+        <button
+          type="button"
+          class="trailer-bar__btn trailer-bar__btn--next"
+          (click)="next()"
+          aria-label="Next"
+        >
+          ›
+        </button>
+      </div>
+    </div>
+  }
+
+  @if (isModalOpen() && trailerUrl(); as url) {
+    <div class="trailer-bar__modal" (click)="closeTrailer()">
+      <div class="trailer-bar__modal-content" (click)="$event.stopPropagation()">
+        <button
+          type="button"
+          class="trailer-bar__modal-close"
+          (click)="closeTrailer()"
+        >
+          ✖
+        </button>
+        <iframe [src]="url" title="Trailer" allowfullscreen></iframe>
+      </div>
+    </div>
+  }
+</section>
