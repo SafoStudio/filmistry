@@ -1,6 +1,6 @@
 import { Service, signal, effect } from '@angular/core';
 
-export type Theme = 'light' | 'dark';
+export type Theme = 'sepia' | 'dark';
 
 const STORAGE_KEY = 'filmistry-theme';
 const DEFAULT_THEME: Theme = 'dark';
@@ -27,13 +27,13 @@ export class ThemeService {
   }
 
   toggle(): void {
-    this.setTheme(this._theme() === 'dark' ? 'light' : 'dark');
+    this.setTheme(this._theme() === 'dark' ? 'sepia' : 'dark');
   }
 
   init(): void {
     if (typeof localStorage === 'undefined') return;
     const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
-    if (stored === 'light' || stored === 'dark') {
+    if (stored === 'sepia' || stored === 'dark') {
       this._theme.set(stored);
     }
   }

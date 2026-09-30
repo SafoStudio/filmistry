@@ -2,7 +2,7 @@
   type="button"
   class="theme-toggle"
   (click)="themeService.toggle()"
-  [attr.aria-label]="themeService.theme() === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'"
+  [attr.aria-label]="themeService.theme() === 'dark' ? 'Switch to sepia theme' : 'Switch to dark theme'"
 >
   @if (themeService.theme() === 'dark') {
     <span class="theme-toggle__icon"><app-icon name="sun" [size]="22" /></span>

@@ -1,13 +1,13 @@
 :root,
-[data-theme='light'] {
-  --color-bg: #273f42;
-  --color-surface: #1e3134;
-  --color-border: #d6c9a8;
-  --color-text: #ede0c4;
-  --color-text-muted: #6b5d42;
-  --color-accent: #b8860b;
-  --color-accent-hover: #9a6f08;
-  --color-overlay: rgba(58, 47, 27, 0.5);
+[data-theme='sepia'] {
+  --color-bg: #1a1410;
+  --color-surface: #2a211a;
+  --color-border: #4a3a2a;
+  --color-text: #e8d5b5;
+  --color-text-muted: #8a7555;
+  --color-accent: #c9a227;
+  --color-accent-hover: #e6b422;
+  --color-overlay: rgba(20, 15, 10, 0.7);
 }
 
 [data-theme='dark'] {
