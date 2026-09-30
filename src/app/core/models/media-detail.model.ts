@@ -1,3 +1,5 @@
+import { Media } from './media.model';
+
 export interface MediaDetail {
   id: number;
   title: string;
@@ -9,4 +11,5 @@ export interface MediaDetail {
   voteAverage: number;
   genres: string[];
   trailerKey: string | null;
+  recommendations: Media[];
 }
