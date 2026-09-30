@@ -7,15 +7,21 @@ import {
   viewChild,
   ElementRef,
   afterNextRender,
+  OnDestroy,
 } from '@angular/core';
-import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 import { PeopleService } from '@core/services/people.service';
+import { NavigationStateService } from '@core/services/navigation-state.service';
 import { PersonDetail } from '@core/models/person-detail.model';
 import { Loader } from '@shared/components/loader/loader';
 import { PageCurl } from '@shared/components/page-curl/page-curl';
 import { Icon } from '@shared/components/icon/icon';
 import { CreditsSection } from './sections/credits-section/credits-section';
+
+interface PersonDetailState {
+  person: PersonDetail;
+}
 
 @Component({
   selector: 'app-person-detail-page',
@@ -23,10 +29,11 @@ import { CreditsSection } from './sections/credits-section/credits-section';
   templateUrl: './person-detail-page.html',
   styleUrl: './person-detail-page.scss',
 })
-export class PersonDetailPage {
+export class PersonDetailPage implements OnDestroy {
   private peopleService = inject(PeopleService);
   private router = inject(Router);
   private location = inject(Location);
+  private navState = inject(NavigationStateService);
 
   id = input.required<string>();
 
@@ -40,15 +47,47 @@ export class PersonDetailPage {
   bioRef = viewChild<ElementRef<HTMLParagraphElement>>('bio');
   leftColRef = viewChild<ElementRef<HTMLDivElement>>('leftCol');
 
+  private stateKey = '';
+
   constructor() {
     effect(() => {
       const personId = this.id();
-      if (personId) this.load(personId);
+      if (personId) {
+        this.isClosing.set(false);
+        this.tryLoad(personId);
+      }
     });
 
     afterNextRender(() => {
       this.checkBioOverflow();
     });
+  }
+
+  ngOnDestroy(): void {
+    const currentPerson = this.person();
+    if (!currentPerson) return;
+
+    this.navState.save<PersonDetailState>(this.stateKey, { person: currentPerson }, window.scrollY);
+  }
+
+  private tryLoad(id: string): void {
+    this.stateKey = `/people/${id}`;
+
+    const cached = this.navState.get<PersonDetailState>(this.stateKey);
+
+    if (cached) {
+      this.person.set(cached.data.person);
+      this.loading.set(false);
+      this.error.set(null);
+
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: cached.scrollTop, behavior: 'instant' });
+        setTimeout(() => this.checkBioOverflow());
+      });
+      return;
+    }
+
+    this.load(id);
   }
 
   private load(id: string): void {

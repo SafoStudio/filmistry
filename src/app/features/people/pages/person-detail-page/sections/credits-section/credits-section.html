@@ -12,7 +12,7 @@
       [class.credits__slider-wrap--right]="canScrollRight()"
     >
       <div class="credits__slider" #slider (scroll)="onScroll()">
-        @for (credit of credits(); track credit.mediaType + '-' + credit.id) {
+        @for (credit of credits(); track $index) {
           <a
             class="credits__link"
             [routerLink]="detailLink(credit)"
