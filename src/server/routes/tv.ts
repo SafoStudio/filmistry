@@ -31,7 +31,7 @@ tvRouter.get(
     const lang = (req.query['lang'] as string) || DEFAULT_LANGUAGE;
     const raw = await tmdbFetch<TmdbMediaDetailRaw>(`/tv/${id}`, {
       language: lang,
-      append_to_response: 'videos',
+      append_to_response: 'videos,recommendations',
     });
     return toMediaDetailDto(raw);
   }),

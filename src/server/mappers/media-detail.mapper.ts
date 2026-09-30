@@ -1,5 +1,6 @@
-import { TMDB_IMAGE_BASE_URL, POSTER_SIZE_DETAIL, BACKDROP_SIZE } from '../constants';
+import { TMDB_IMAGE_BASE_URL, POSTER_SIZE_DETAIL, BACKDROP_SIZE, POSTER_SIZE } from '../constants';
 import { MediaDetailDto } from '../dto/media-detail.dto';
+import { MediaListItemDto } from '../dto/media.dto';
 
 interface TmdbVideoRaw {
   key: string;
@@ -10,6 +11,13 @@ interface TmdbVideoRaw {
 interface TmdbGenreRaw {
   id: number;
   name: string;
+}
+
+interface TmdbRecommendationRaw {
+  id: number;
+  title?: string;
+  name?: string;
+  poster_path: string | null;
 }
 
 export interface TmdbMediaDetailRaw {
@@ -28,7 +36,12 @@ export interface TmdbMediaDetailRaw {
   videos?: {
     results: TmdbVideoRaw[];
   };
+  recommendations?: {
+    results: TmdbRecommendationRaw[];
+  };
 }
+
+const MAX_RECOMMENDATIONS = 12;
 
 function buildUrl(path: string | null, size: string): string | null {
   if (!path) return null;
@@ -39,6 +52,14 @@ function findTrailerKey(videos: TmdbVideoRaw[] | undefined): string | null {
   if (!videos) return null;
   const trailer = videos.find((v) => v.site === 'YouTube' && v.type === 'Trailer');
   return trailer?.key ?? null;
+}
+
+function toRecommendationDto(raw: TmdbRecommendationRaw): MediaListItemDto {
+  return {
+    id: raw.id,
+    title: raw.title ?? raw.name ?? '',
+    posterUrl: buildUrl(raw.poster_path, POSTER_SIZE),
+  };
 }
 
 export function toMediaDetailDto(raw: TmdbMediaDetailRaw): MediaDetailDto {
@@ -56,5 +77,10 @@ export function toMediaDetailDto(raw: TmdbMediaDetailRaw): MediaDetailDto {
     voteAverage: raw.vote_average ?? 0,
     genres: raw.genres?.map((g) => g.name) ?? [],
     trailerKey: findTrailerKey(raw.videos?.results),
+    recommendations:
+      raw.recommendations?.results
+        .filter((r) => r.poster_path)
+        .slice(0, MAX_RECOMMENDATIONS)
+        .map(toRecommendationDto) ?? [],
   };
 }

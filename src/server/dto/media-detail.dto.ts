@@ -1,3 +1,5 @@
+import { MediaListItemDto } from './media.dto';
+
 export interface MediaDetailDto {
   id: number;
   title: string;
@@ -9,4 +11,5 @@ export interface MediaDetailDto {
   voteAverage: number;
   genres: string[];
   trailerKey: string | null;
+  recommendations: MediaListItemDto[];
 }
