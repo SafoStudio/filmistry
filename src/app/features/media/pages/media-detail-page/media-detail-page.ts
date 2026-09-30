@@ -1,29 +1,36 @@
-import { Component, inject, signal, effect, computed, input } from '@angular/core';
+import { Component, inject, signal, effect, computed, input, OnDestroy } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { Location } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
 import { MediaService, MediaType } from '@core/services/media.service';
+import { NavigationStateService } from '@core/services/navigation-state.service';
 import { MediaDetail } from '@core/models/media-detail.model';
 import { RatingBar } from '@shared/components/rating-bar/rating-bar';
 import { Icon } from '@shared/components/icon/icon';
 import { Loader } from '@shared/components/loader/loader';
 import { PageCurl } from '@shared/components/page-curl/page-curl';
+import { RecommendationsSection } from './sections/recommendations/recommendations';
 
 type DetailSection = 'cast' | 'gallery' | 'reviews' | null;
 
+interface MediaDetailState {
+  item: MediaDetail;
+}
+
 @Component({
   selector: 'app-media-detail-page',
-  imports: [RouterOutlet, RatingBar, Icon, Loader, PageCurl],
+  imports: [RouterOutlet, RatingBar, Icon, Loader, PageCurl, RecommendationsSection],
   templateUrl: './media-detail-page.html',
   styleUrl: './media-detail-page.scss',
 })
-export class MediaDetailPage {
+export class MediaDetailPage implements OnDestroy {
   private mediaService = inject(MediaService);
   private sanitizer = inject(DomSanitizer);
   private router = inject(Router);
   private location = inject(Location);
+  private navState = inject(NavigationStateService);
 
   id = input.required<string>();
   mediaType = input.required<MediaType>();
@@ -33,6 +40,10 @@ export class MediaDetailPage {
   error = signal<string | null>(null);
   isTrailerOpen = signal(false);
   isClosing = signal(false);
+
+  hasTrailer = computed<boolean>(() => !!this.item()?.trailerKey);
+
+  private stateKey = '';
 
   private readonly url = toSignal(
     this.router.events.pipe(
@@ -64,8 +75,37 @@ export class MediaDetailPage {
     effect(() => {
       const itemId = this.id();
       const type = this.mediaType();
-      if (itemId && type) this.load(itemId, type);
+      if (itemId && type) {
+        this.isClosing.set(false);
+        this.tryLoad(itemId, type);
+      }
     });
+  }
+
+  ngOnDestroy(): void {
+    const currentItem = this.item();
+    if (!currentItem) return;
+
+    this.navState.save<MediaDetailState>(this.stateKey, { item: currentItem }, window.scrollY);
+  }
+
+  private tryLoad(id: string, mediaType: MediaType): void {
+    this.stateKey = mediaType === 'movie' ? `/movies/${id}` : `/tv/${id}`;
+
+    const cached = this.navState.get<MediaDetailState>(this.stateKey);
+
+    if (cached) {
+      this.item.set(cached.data.item);
+      this.loading.set(false);
+      this.error.set(null);
+
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: cached.scrollTop, behavior: 'instant' });
+      });
+      return;
+    }
+
+    this.load(id, mediaType);
   }
 
   private load(id: string, mediaType: MediaType): void {

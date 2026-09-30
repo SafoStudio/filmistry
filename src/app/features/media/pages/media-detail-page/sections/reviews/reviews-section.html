@@ -1,14 +1,14 @@
 <div>
-  <h2 class="title">Comments</h2>
   <div class="container">
     <div class="comments-wrapper" [class.has-reviews]="reviews().length === 0">
       @if (loading()) {
         <app-loader />
       } @else if (reviews().length === 0) {
         <div class="no-review-sms">
-          <p>No reviews for this movie</p>
+          <p>No reviews</p>
         </div>
       } @else {
+        <h2 class="title">Comments</h2>
         @for (review of reviews(); track review.id) {
           <div class="comment-box">
             <div class="author-box">

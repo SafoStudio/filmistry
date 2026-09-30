@@ -56,8 +56,18 @@
               <app-icon name="images" [size]="22" />
             </button>
           </div>
-          <button type="button" class="button" (click)="openTrailer()" aria-label="Play trailer">
+          <button
+            type="button"
+            class="button"
+            [class.button--disabled]="!hasTrailer()"
+            [disabled]="!hasTrailer()"
+            (click)="openTrailer()"
+            [attr.aria-label]="hasTrailer() ? 'Play trailer' : 'Trailer not available'"
+          >
             <app-icon name="play" [size]="32" />
+            @if (!hasTrailer()) {
+              <span class="button__tooltip">Trailer not available</span>
+            }
           </button>
         </div>
       </div>
@@ -65,9 +75,15 @@
   </section>
 
   @if (activeSection()) {
-    <div class="sections">
+    <div class="sections sections--enter">
       <router-outlet />
     </div>
+  } @else {
+    <app-recommendations-section
+      class="sections--enter"
+      [items]="m.recommendations"
+      [mediaType]="mediaType()"
+    />
   }
 
   @if (isTrailerOpen() && trailerUrl(); as url) {

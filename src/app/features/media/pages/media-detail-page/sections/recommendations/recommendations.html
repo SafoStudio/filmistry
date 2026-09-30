@@ -1,0 +1,53 @@
+<section class="recommendations">
+  <h2 class="recommendations__title">You may also like</h2>
+
+  @if (items().length === 0) {
+    <p class="recommendations__empty">No recommendations</p>
+  } @else {
+    <div class="recommendations__slider-wrap">
+      <div class="recommendations__slider" #slider (scroll)="onScroll()">
+        @for (item of items(); track item.id) {
+          <a
+            class="recommendations__link"
+            [routerLink]="detailLink(item.id)"
+          >
+            <div class="recommendations__slide">
+              @if (item.posterUrl) {
+                <img
+                  class="recommendations__poster"
+                  [src]="item.posterUrl"
+                  [alt]="item.title"
+                  loading="lazy"
+                />
+              }
+              <div class="recommendations__overlay">
+                <span class="recommendations__name">{{ item.title }}</span>
+              </div>
+            </div>
+          </a>
+        }
+      </div>
+    </div>
+
+    <div class="recommendations__nav-row">
+      <button
+        type="button"
+        class="recommendations__nav"
+        [disabled]="!canScrollLeft()"
+        (click)="scrollLeft()"
+        aria-label="Scroll left"
+      >
+        <app-icon name="chevron-left" [size]="22" />
+      </button>
+      <button
+        type="button"
+        class="recommendations__nav"
+        [disabled]="!canScrollRight()"
+        (click)="scrollRight()"
+        aria-label="Scroll right"
+      >
+        <app-icon name="chevron-right" [size]="22" />
+      </button>
+    </div>
+  }
+</section>

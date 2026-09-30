@@ -6,14 +6,15 @@ $background-color: rgba(69, 78, 83, 0.6);
 .backgroundImageContainer {
   width: 100%;
   max-width: 1025px;
-  margin: 24px auto;
+  margin: 10px auto;
   background-size: cover;
   background-position: center;
   border-radius: $border-radius;
   position: relative;
   overflow: hidden;
-  transition: transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
-  opacity 0.7s ease;
+  transition:
+    transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
+    opacity 0.7s ease;
 
   &--closing {
     transform: scale(0.96);
@@ -225,6 +226,7 @@ $background-color: rgba(69, 78, 83, 0.6);
 }
 
 .button {
+  position: relative;
   width: 76px;
   height: 44px;
   padding: 0;
@@ -242,11 +244,68 @@ $background-color: rgba(69, 78, 83, 0.6);
   &:hover {
     background-color: #cc0000;
   }
+
+  &--disabled {
+    background-color: #444;
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: #444;
+    }
+  }
+}
+
+.button__tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  pointer-events: none;
+  z-index: 10;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.85);
+  }
+}
+
+.button:hover .button__tooltip {
+  opacity: 1;
+  visibility: visible;
 }
 
 .sections {
   background: var(--color-bg);
   margin-top: 24px;
+}
+
+.sections--enter {
+  animation: fadeInUp 0.4s ease both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .trailer-modal {
@@ -340,6 +399,7 @@ $background-color: rgba(69, 78, 83, 0.6);
 
 @media (prefers-reduced-motion: reduce) {
   .backgroundImageContainer,
+  .sections--enter,
   .movieCard--visible,
   .fade-item {
     transition: none !important;
