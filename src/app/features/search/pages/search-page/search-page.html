@@ -1,0 +1,83 @@
+<div class="search-page">
+  <h1 class="search-page__title">
+    Search results for "<span class="search-page__query">{{ query() }}</span>"
+  </h1>
+
+  <div class="search-page__tabs">
+    <button
+      type="button"
+      class="search-page__tab"
+      [class.search-page__tab--active]="tab() === 'media'"
+      (click)="setTab('media')"
+    >
+      Media
+    </button>
+    <button
+      type="button"
+      class="search-page__tab"
+      [class.search-page__tab--active]="tab() === 'movie'"
+      (click)="setTab('movie')"
+    >
+      Movies
+    </button>
+    <button
+      type="button"
+      class="search-page__tab"
+      [class.search-page__tab--active]="tab() === 'tv'"
+      (click)="setTab('tv')"
+    >
+      TV Shows
+    </button>
+    <button
+      type="button"
+      class="search-page__tab"
+      [class.search-page__tab--active]="tab() === 'person'"
+      (click)="setTab('person')"
+    >
+      People
+    </button>
+  </div>
+
+  @if (loading()) {
+    <app-loader />
+  } @else if (error()) {
+    <p class="search-page__error">{{ error() }}</p>
+  } @else if (results().length === 0) {
+    <p class="search-page__empty">No results found</p>
+  } @else {
+    <div class="search-page__grid">
+      @for (result of results(); track result.mediaType + '-' + result.id) {
+        <a
+          class="search-page__card"
+          [class.search-page__card--person]="result.mediaType === 'person'"
+          [routerLink]="resultLink(result)"
+        >
+          @if (result.posterUrl) {
+            <img
+              class="search-page__poster"
+              [src]="result.posterUrl"
+              [alt]="result.title"
+              loading="lazy"
+            />
+          } @else {
+            <div class="search-page__poster search-page__poster--placeholder"></div>
+          }
+          <div class="search-page__info">
+            <span class="search-page__name">{{ result.title }}</span>
+            @if (result.releaseYear) {
+              <span class="search-page__year">{{ result.releaseYear }}</span>
+            }
+          </div>
+        </a>
+      }
+    </div>
+
+    @if (totalPages() > 1) {
+      <app-pagination
+        [currentPage]="currentPage()"
+        [totalPages]="totalPages()"
+        (pageChange)="onPageChange($event)"
+      />
+    }
+  }
+</div>
