@@ -12,6 +12,9 @@ import { moviesRouter } from './server/routes/movies'
 import { trendingRouter } from './server/routes/trending';
 import { tvRouter } from './server/routes/tv';
 import { peopleRouter } from './server/routes/people';
+import { searchRouter } from './server/routes/search';
+import { genresRouter } from './server/routes/genres';
+import { discoverRouter } from './server/routes/discover';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -25,6 +28,9 @@ app.use(`${API_PREFIX}/movies`, moviesRouter);
 app.use(`${API_PREFIX}/tv`, tvRouter);
 app.use(`${API_PREFIX}/trending`, trendingRouter);
 app.use(`${API_PREFIX}/people`, peopleRouter);
+app.use(`${API_PREFIX}/search`, searchRouter);
+app.use(`${API_PREFIX}/genres`, genresRouter);
+app.use(`${API_PREFIX}/discover`, discoverRouter);
 
 /**
  * Serve static files from /browser
