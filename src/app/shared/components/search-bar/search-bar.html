@@ -1,0 +1,126 @@
+<div class="search" #container>
+  <button
+    type="button"
+    class="search__toggle"
+    (click)="toggle()"
+    aria-label="Toggle search"
+  >
+    <app-icon name="search" [size]="22" />
+  </button>
+
+  @if (isOpen()) {
+    <div class="search__panel">
+      <div class="search__input-wrap">
+        <app-icon name="search" [size]="18" />
+        <input
+          #input
+          type="text"
+          class="search__input"
+          placeholder="Search movies, TV shows, people..."
+          [value]="query()"
+          (input)="onInput($event)"
+          (keydown.enter)="onEnter()"
+          autocomplete="off"
+        />
+        @if (query()) {
+          <button
+            type="button"
+            class="search__clear"
+            (click)="close()"
+            aria-label="Clear"
+          >
+            <app-icon name="close" [size]="16" />
+          </button>
+        }
+      </div>
+
+      @if (isLoading()) {
+        <div class="search__loading">Loading...</div>
+      } @else if (query().length >= 2 && !hasResults()) {
+        <div class="search__empty">No results found</div>
+      } @else if (hasResults()) {
+        <div class="search__results">
+          @if (movies().length > 0) {
+            <div class="search__group">
+              <div class="search__group-title">Movies</div>
+              @for (item of movies(); track item.id) {
+                <button
+                  type="button"
+                  class="search__item"
+                  (click)="onResultClick(item)"
+                >
+                  @if (item.posterUrl) {
+                    <img class="search__item-img" [src]="item.posterUrl" [alt]="item.title" loading="lazy" />
+                  } @else {
+                    <div class="search__item-img search__item-img--placeholder"></div>
+                  }
+                  <div class="search__item-info">
+                    <span class="search__item-title">{{ item.title }}</span>
+                    @if (item.releaseYear) {
+                      <span class="search__item-year">{{ item.releaseYear }}</span>
+                    }
+                  </div>
+                </button>
+              }
+            </div>
+          }
+
+          @if (tvs().length > 0) {
+            <div class="search__group">
+              <div class="search__group-title">TV Shows</div>
+              @for (item of tvs(); track item.id) {
+                <button
+                  type="button"
+                  class="search__item"
+                  (click)="onResultClick(item)"
+                >
+                  @if (item.posterUrl) {
+                    <img class="search__item-img" [src]="item.posterUrl" [alt]="item.title" loading="lazy" />
+                  } @else {
+                    <div class="search__item-img search__item-img--placeholder"></div>
+                  }
+                  <div class="search__item-info">
+                    <span class="search__item-title">{{ item.title }}</span>
+                    @if (item.releaseYear) {
+                      <span class="search__item-year">{{ item.releaseYear }}</span>
+                    }
+                  </div>
+                </button>
+              }
+            </div>
+          }
+
+          @if (people().length > 0) {
+            <div class="search__group">
+              <div class="search__group-title">People</div>
+              @for (item of people(); track item.id) {
+                <button
+                  type="button"
+                  class="search__item"
+                  (click)="onResultClick(item)"
+                >
+                  @if (item.posterUrl) {
+                    <img class="search__item-img search__item-img--round" [src]="item.posterUrl" [alt]="item.title" loading="lazy" />
+                  } @else {
+                    <div class="search__item-img search__item-img--placeholder search__item-img--round"></div>
+                  }
+                  <div class="search__item-info">
+                    <span class="search__item-title">{{ item.title }}</span>
+                  </div>
+                </button>
+              }
+            </div>
+          }
+
+          <button
+            type="button"
+            class="search__see-all"
+            (click)="onSeeAll()"
+          >
+            See all results for "{{ query() }}"
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

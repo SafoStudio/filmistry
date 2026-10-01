@@ -13,7 +13,9 @@ export type IconName =
   | 'moon'
   | 'home'
   | 'film'
-  | 'tv';
+  | 'tv'
+  | 'search'
+  | 'filter';
 
 @Component({
   selector: 'app-icon',
