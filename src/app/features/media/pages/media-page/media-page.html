@@ -1,15 +1,17 @@
 <div class="container">
-  <div class="container__filters">
-    <app-filters-panel
-      [mediaType]="mediaType() === 'movie' ? 'movie' : 'tv'"
-      [initialSort]="filterSort()"
-      [initialGenres]="filterGenres()"
-      [initialYear]="filterYear()"
-      [initialRating]="filterRating()"
-      (apply)="onFiltersApply($event)"
-      (reset)="onFiltersReset()"
-    />
-  </div>
+  <app-filters-panel
+    [title]="filterTitle()"
+    [filtersOpen]="filtersOpen()"
+    [mediaType]="mediaType() === 'movie' ? 'movie' : 'tv'"
+    [initialSort]="filterSort()"
+    [initialGenres]="filterGenres()"
+    [initialYear]="filterYear()"
+    [initialRating]="filterRating()"
+    (toggle)="toggleFilters()"
+    (apply)="onFiltersApply($event)"
+    (reset)="onFiltersReset()"
+    (close)="closeFilters()"
+  />
 
   @if (error()) {
     <p class="status status--error">{{ error() }}</p>

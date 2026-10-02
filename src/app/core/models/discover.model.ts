@@ -18,4 +18,5 @@ export interface DiscoverParams {
   genres?: string;
   year?: number;
   rating?: number;
+  country?: string;
 }

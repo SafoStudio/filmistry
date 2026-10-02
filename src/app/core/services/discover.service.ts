@@ -29,6 +29,7 @@ export class DiscoverService {
     if (params.genres) result['genres'] = params.genres;
     if (params.year) result['year'] = String(params.year);
     if (params.rating !== undefined) result['rating'] = String(params.rating);
+    if (params.country) result['country'] = params.country;
 
     return result;
   }

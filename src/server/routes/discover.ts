@@ -44,16 +44,17 @@ function buildBaseParams(req: any) {
   const sortBy = ALLOWED_SORT.has(sortRaw) ? sortRaw : 'popularity.desc';
 
   const genres = (req.query['genres'] as string) || '';
+  const country = (req.query['country'] as string) || '';
   const year = parseYear(req.query['year']);
   const ratingGte = parseRating(req.query['rating']);
 
-  return { lang, page, sortBy, genres, year, ratingGte };
+  return { lang, page, sortBy, genres, country, year, ratingGte };
 }
 
 discoverRouter.get(
   '/movie',
   handleApi(async (req) => {
-    const { lang, page, sortBy, genres, year, ratingGte } = buildBaseParams(req);
+    const { lang, page, sortBy, genres, country, year, ratingGte } = buildBaseParams(req);
 
     const params: Record<string, string | number> = {
       language: lang,
@@ -63,6 +64,7 @@ discoverRouter.get(
     };
 
     if (genres) params['with_genres'] = genres;
+    if (country && country !== 'foreign') params['with_origin_country'] = country;
     if (year) params['primary_release_year'] = year;
     if (ratingGte !== undefined) {
       params['vote_average.gte'] = ratingGte;
@@ -77,7 +79,7 @@ discoverRouter.get(
 discoverRouter.get(
   '/tv',
   handleApi(async (req) => {
-    const { lang, page, sortBy, genres, year, ratingGte } = buildBaseParams(req);
+    const { lang, page, sortBy, genres, country, year, ratingGte } = buildBaseParams(req);
 
     const params: Record<string, string | number> = {
       language: lang,
@@ -87,6 +89,7 @@ discoverRouter.get(
     };
 
     if (genres) params['with_genres'] = genres;
+    if (country && country !== 'foreign') params['with_origin_country'] = country;
     if (year) params['first_air_date_year'] = year;
     if (ratingGte !== undefined) {
       params['vote_average.gte'] = ratingGte;

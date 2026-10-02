@@ -96,6 +96,31 @@
   }
 }
 
+.header__link-wrap {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 24px;
+    pointer-events: auto;
+  }
+
+  @media screen and (max-width: 767px) {
+    height: auto;
+
+    &::after {
+      display: none;
+    }
+  }
+}
+
 .header__link {
   position: relative;
   display: flex;
@@ -103,8 +128,9 @@
   justify-content: center;
   color: var(--color-text);
   text-decoration: none;
-  padding: 8px 4px;
+  padding: 12px 8px;
   transition: color 0.2s;
+  height: 100%;
 
   &:hover {
     color: var(--color-accent);
@@ -112,6 +138,10 @@
 
   &--active {
     color: var(--color-accent);
+  }
+
+  @media screen and (max-width: 767px) {
+    height: auto;
   }
 }
 
@@ -141,4 +171,74 @@
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+/* Mega menu */
+.header__mega {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 99;
+  animation: megaSlideDown 0.25s ease both;
+}
+
+@keyframes megaSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header__mega-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header__mega-section {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-border);
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.header__mega-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+}
+
+.header__mega-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+
+.header__mega-link {
+  color: var(--color-text);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-accent);
+  }
 }

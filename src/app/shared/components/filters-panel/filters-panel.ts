@@ -1,4 +1,16 @@
-import { Component, inject, input, output, signal, effect, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  input,
+  output,
+  signal,
+  effect,
+  viewChild,
+  ElementRef,
+  OnInit,
+  OnDestroy,
+  afterNextRender,
+} from '@angular/core';
 import { GenreService } from '@core/services/genre.service';
 import { Genre } from '@core/models/genre.model';
 import { Icon } from '../icon/icon';
@@ -18,19 +30,22 @@ export type FiltersMediaType = 'movie' | 'tv';
   templateUrl: './filters-panel.html',
   styleUrl: './filters-panel.scss',
 })
-export class FiltersPanel implements OnInit {
+export class FiltersPanel implements OnInit, OnDestroy {
   private genreService = inject(GenreService);
 
+  title = input<string>('All');
+  filtersOpen = input<boolean>(true);
   mediaType = input.required<FiltersMediaType>();
   initialSort = input<string>('popularity.desc');
   initialGenres = input<string>('');
   initialYear = input<number | null>(null);
   initialRating = input<number | null>(null);
 
+  toggle = output<void>();
   apply = output<FiltersValue>();
   reset = output<void>();
+  close = output<void>();
 
-  isOpen = signal(false);
   genres = signal<Genre[]>([]);
   genresLoading = signal(true);
 
@@ -38,6 +53,15 @@ export class FiltersPanel implements OnInit {
   selectedGenres = signal<Set<number>>(new Set());
   selectedYear = signal<number | null>(null);
   selectedRating = signal<number | null>(null);
+
+  titleOffset = signal(0);
+  toggleOffset = signal(0);
+
+  private barRef = viewChild<ElementRef<HTMLDivElement>>('bar');
+  private titleRef = viewChild<ElementRef<HTMLDivElement>>('titleEl');
+  private toggleRef = viewChild<ElementRef<HTMLButtonElement>>('toggle');
+
+  private resizeObserver: ResizeObserver | null = null;
 
   readonly sortOptions = [
     { value: 'popularity.desc', label: 'Popularity ↓' },
@@ -85,6 +109,19 @@ export class FiltersPanel implements OnInit {
       this.selectedYear.set(this.initialYear());
       this.selectedRating.set(this.initialRating());
     });
+
+    effect(() => {
+      const isOpen = this.filtersOpen();
+      void isOpen;
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => this.recalcOffsets());
+      });
+    });
+
+    afterNextRender(() => {
+      this.setupResizeObserver();
+      this.recalcOffsets();
+    });
   }
 
   ngOnInit(): void {
@@ -102,12 +139,25 @@ export class FiltersPanel implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.resizeObserver?.disconnect();
+  }
+
   get sortList() {
     return this.mediaType() === 'movie' ? this.sortOptions : this.tvSortOptions;
   }
 
-  toggleOpen(): void {
-    this.isOpen.update((v) => !v);
+  get hasActiveFilters(): boolean {
+    return (
+      this.selectedGenres().size > 0 ||
+      this.selectedYear() !== null ||
+      this.selectedRating() !== null ||
+      this.selectedSort() !== 'popularity.desc'
+    );
+  }
+
+  onToggle(): void {
+    this.toggle.emit();
   }
 
   toggleGenre(id: number): void {
@@ -151,7 +201,7 @@ export class FiltersPanel implements OnInit {
       rating: this.selectedRating(),
     });
 
-    this.isOpen.set(false);
+    this.close.emit();
   }
 
   onReset(): void {
@@ -160,15 +210,56 @@ export class FiltersPanel implements OnInit {
     this.selectedYear.set(null);
     this.selectedRating.set(null);
     this.reset.emit();
-    this.isOpen.set(false);
+    this.close.emit();
   }
 
-  get hasActiveFilters(): boolean {
-    return (
-      this.selectedGenres().size > 0 ||
-      this.selectedYear() !== null ||
-      this.selectedRating() !== null ||
-      this.selectedSort() !== 'popularity.desc'
-    );
+  private setupResizeObserver(): void {
+    if (typeof window === 'undefined' || typeof ResizeObserver === 'undefined') {
+      return;
+    }
+
+    this.resizeObserver = new ResizeObserver(() => {
+      this.recalcOffsets();
+    });
+
+    const bar = this.barRef()?.nativeElement;
+    if (bar) {
+      this.resizeObserver.observe(bar);
+    }
+  }
+
+  private recalcOffsets(): void {
+    if (typeof window === 'undefined') return;
+
+    const bar = this.barRef()?.nativeElement;
+    const title = this.titleRef()?.nativeElement;
+    const toggle = this.toggleRef()?.nativeElement;
+
+    if (!bar || !title || !toggle) return;
+
+    if (this.filtersOpen()) {
+      this.titleOffset.set(0);
+      this.toggleOffset.set(0);
+      return;
+    }
+
+    const barRect = bar.getBoundingClientRect();
+    const titleRect = title.getBoundingClientRect();
+    const toggleRect = toggle.getBoundingClientRect();
+
+    const titleLeft = titleRect.left - barRect.left;
+    const toggleLeft = toggleRect.left - barRect.left;
+
+    const gap = 16;
+    const totalWidth = titleRect.width + toggleRect.width + gap;
+
+    const targetLeft = (barRect.width - totalWidth) / 2;
+
+    const titleShift = targetLeft - titleLeft;
+    const toggleTargetLeft = targetLeft + titleRect.width + gap;
+    const toggleShift = toggleTargetLeft - toggleLeft;
+
+    this.titleOffset.set(titleShift);
+    this.toggleOffset.set(toggleShift);
   }
 }

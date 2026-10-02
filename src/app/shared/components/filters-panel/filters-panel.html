@@ -1,83 +1,96 @@
-<div class="filters">
-  <button
-    type="button"
-    class="filters__toggle"
-    [class.filters__toggle--active]="hasActiveFilters"
-    (click)="toggleOpen()"
-    aria-label="Toggle filters"
+<div class="filters" [class.filters--open]="filtersOpen()">
+  <div class="filters__bar" #bar>
+    <div
+      class="filters__title"
+      #titleEl
+      [style.transform]="'translateX(' + titleOffset() + 'px)'"
+    >
+      {{ title() }}
+    </div>
+
+    <button
+      type="button"
+      class="filters__toggle"
+      #toggle
+      [style.transform]="'translateX(' + toggleOffset() + 'px)'"
+      [class.filters__toggle--active]="filtersOpen()"
+      [class.filters__toggle--has-active]="hasActiveFilters"
+      (click)="onToggle()"
+      aria-label="Toggle filters"
+    >
+      <app-icon name="filter" [size]="20" />
+      <span class="filters__toggle-text">
+        {{ filtersOpen() ? 'Hide filters' : 'Show filters' }}
+      </span>
+    </button>
+  </div>
+
+  <div
+    class="filters__panel"
+    [class.filters__panel--open]="filtersOpen()"
   >
-    <app-icon name="filter" [size]="20" />
-    <span class="filters__toggle-text">Filters</span>
-    @if (hasActiveFilters) {
-      <span class="filters__badge"></span>
-    }
-  </button>
+    <div class="filters__genres">
+      <div class="filters__label-block">Genres</div>
 
-  @if (isOpen()) {
-    <div class="filters__panel">
-      <div class="filters__row">
-        <label class="filters__label">
-          Sort by
-          <select
-            class="filters__select"
-            [value]="selectedSort()"
-            (change)="onSortChange($event)"
-          >
-            @for (opt of sortList; track opt.value) {
-              <option [value]="opt.value">{{ opt.label }}</option>
-            }
-          </select>
-        </label>
+      @if (genresLoading()) {
+        <div class="filters__genres-loading">Loading genres...</div>
+      } @else {
+        <div class="filters__chips">
+          @for (genre of genres(); track genre.id) {
+            <button
+              type="button"
+              class="filters__chip"
+              [class.filters__chip--active]="isGenreSelected(genre.id)"
+              (click)="toggleGenre(genre.id)"
+            >
+              {{ genre.name }}
+            </button>
+          }
+        </div>
+      }
+    </div>
 
-        <label class="filters__label">
-          Year
-          <select
-            class="filters__select"
-            [value]="selectedYear() ?? ''"
-            (change)="onYearChange($event)"
-          >
-            <option value="">Any</option>
-            @for (y of years; track y) {
-              <option [value]="y">{{ y }}</option>
-            }
-          </select>
-        </label>
+    <div class="filters__controls">
+      <label class="filters__label">
+        Sort by
+        <select
+          class="filters__select"
+          [value]="selectedSort()"
+          (change)="onSortChange($event)"
+        >
+          @for (opt of sortList; track opt.value) {
+            <option [value]="opt.value">{{ opt.label }}</option>
+          }
+        </select>
+      </label>
 
-        <label class="filters__label">
-          Rating
-          <select
-            class="filters__select"
-            [value]="selectedRating() ?? ''"
-            (change)="onRatingChange($event)"
-          >
-            <option value="">Any</option>
-            @for (opt of ratingOptions; track opt.value) {
-              <option [value]="opt.value">{{ opt.label }}</option>
-            }
-          </select>
-        </label>
-      </div>
+      <label class="filters__label">
+        Year
+        <select
+          class="filters__select"
+          [value]="selectedYear() ?? ''"
+          (change)="onYearChange($event)"
+        >
+          <option value="">Any</option>
+          @for (y of years; track y) {
+            <option [value]="y">{{ y }}</option>
+          }
+        </select>
+      </label>
 
-      <div class="filters__genres">
-        <div class="filters__label-block">Genres</div>
-
-        @if (genresLoading()) {
-          <div class="filters__genres-loading">Loading genres...</div>
-        } @else {
-          <div class="filters__chips">
-            @for (genre of genres(); track genre.id) {
-              <button
-                type="button"
-                class="filters__chip"
-                [class.filters__chip--active]="isGenreSelected(genre.id)"
-                (click)="toggleGenre(genre.id)"
-              >
-                {{ genre.name }}
-              </button>
-            }
-          </div>
-        }
-      </div>
+      <label class="filters__label">
+        Rating
+        <select
+          class="filters__select"
+          [value]="selectedRating() ?? ''"
+          (change)="onRatingChange($event)"
+        >
+          <option value="">Any</option>
+          @for (opt of ratingOptions; track opt.value) {
+            <option [value]="opt.value">{{ opt.label }}</option>
+          }
+        </select>
+      </label>
 
       <div class="filters__actions">
         <button
@@ -96,5 +109,5 @@
         </button>
       </div>
     </div>
-  }
+  </div>
 </div>
