@@ -14,6 +14,14 @@ export const routes: Routes = [
     loadChildren: () => import('./features/media/media.routes').then((m) => m.tvRoutes),
   },
   {
+    path: 'anime',
+    loadChildren: () => import('./features/media/media.routes').then((m) => m.animeRoutes),
+  },
+  {
+    path: 'cartoons',
+    loadChildren: () => import('./features/media/media.routes').then((m) => m.cartoonsRoutes),
+  },
+  {
     path: 'people',
     loadChildren: () => import('./features/people/people.routes').then((m) => m.peopleRoutes),
   },

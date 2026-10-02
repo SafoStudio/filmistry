@@ -2,7 +2,7 @@
   <app-filters-panel
     [title]="filterTitle()"
     [filtersOpen]="filtersOpen()"
-    [mediaType]="mediaType() === 'movie' ? 'movie' : 'tv'"
+    [mediaType]="activeMediaType() === 'movie' ? 'movie' : 'tv'"
     [initialSort]="filterSort()"
     [initialGenres]="filterGenres()"
     [initialYear]="filterYear()"
@@ -27,7 +27,7 @@
           class="movie-gallery__item"
           [style.--i]="i"
           [media]="item"
-          [mediaType]="mediaType()"
+          [mediaType]="activeMediaType()"
         />
       }
     </div>

@@ -19,4 +19,5 @@ export interface DiscoverParams {
   year?: number;
   rating?: number;
   country?: string;
+  language?: string;
 }

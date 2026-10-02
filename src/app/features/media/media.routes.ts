@@ -51,3 +51,33 @@ export const tvRoutes: Routes = [
     children: mediaChildren,
   },
 ];
+
+export const animeRoutes: Routes = [
+  {
+    path: '',
+    loadComponent: () => import('./pages/media-page/media-page').then((m) => m.MediaPage),
+    data: { mediaType: 'movie', preset: 'anime' },
+  },
+  {
+    path: ':id',
+    loadComponent: () =>
+      import('./pages/media-detail-page/media-detail-page').then((m) => m.MediaDetailPage),
+    data: { mediaType: 'tv' },
+    children: mediaChildren,
+  },
+];
+
+export const cartoonsRoutes: Routes = [
+  {
+    path: '',
+    loadComponent: () => import('./pages/media-page/media-page').then((m) => m.MediaPage),
+    data: { mediaType: 'movie', preset: 'cartoons' },
+  },
+  {
+    path: ':id',
+    loadComponent: () =>
+      import('./pages/media-detail-page/media-detail-page').then((m) => m.MediaDetailPage),
+    data: { mediaType: 'movie' },
+    children: mediaChildren,
+  },
+];

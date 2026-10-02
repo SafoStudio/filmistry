@@ -142,7 +142,11 @@ export class Header {
     sections: [
       {
         title: 'All anime',
-        links: [{ label: 'All anime', link: ['/anime'] }],
+        links: [
+          { label: 'All anime', link: ['/anime'] },
+          { label: 'Anime movies', link: ['/anime'], queryParams: { type: 'movie' } },
+          { label: 'Anime TV', link: ['/anime'], queryParams: { type: 'tv' } },
+        ],
       },
       {
         title: 'By year',
@@ -160,7 +164,11 @@ export class Header {
     sections: [
       {
         title: 'All cartoons',
-        links: [{ label: 'All cartoons', link: ['/cartoons'] }],
+        links: [
+          { label: 'All cartoons', link: ['/cartoons'] },
+          { label: 'Cartoon movies', link: ['/cartoons'], queryParams: { type: 'movie' } },
+          { label: 'Cartoon TV', link: ['/cartoons'], queryParams: { type: 'tv' } },
+        ],
       },
       {
         title: 'By year',

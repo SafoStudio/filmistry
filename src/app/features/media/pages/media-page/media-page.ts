@@ -16,6 +16,8 @@ interface MediaPageState {
   currentPage: number;
 }
 
+type Preset = 'anime' | 'cartoons' | null;
+
 @Component({
   selector: 'app-media-page',
   imports: [MediaCard, Pagination, Loader, FiltersPanel],
@@ -31,6 +33,9 @@ export class MediaPage implements OnInit, OnDestroy {
 
   mediaType = input.required<MediaType>();
 
+  preset = signal<Preset>(null);
+  activeMediaType = signal<MediaType>('movie');
+
   items = signal<Media[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
@@ -43,11 +48,22 @@ export class MediaPage implements OnInit, OnDestroy {
   filterSort = signal('popularity.desc');
   filterGenres = signal('');
   filterCountry = signal('');
+  filterLanguage = signal('');
   filterYear = signal<number | null>(null);
   filterRating = signal<number | null>(null);
 
   filterTitle = computed<string>(() => {
-    const isMovie = this.mediaType() === 'movie';
+    const p = this.preset();
+    const activeType = this.activeMediaType();
+
+    if (p === 'anime') {
+      return activeType === 'tv' ? 'Anime TV' : 'Anime Movies';
+    }
+    if (p === 'cartoons') {
+      return activeType === 'tv' ? 'Cartoon TV' : 'Cartoon Movies';
+    }
+
+    const isMovie = activeType === 'movie';
     const baseWord = isMovie ? 'movies' : 'TV shows';
     const genreMap = isMovie ? MOVIE_GENRES : TV_GENRES;
 
@@ -87,6 +103,7 @@ export class MediaPage implements OnInit, OnDestroy {
       this.filterSort() !== 'popularity.desc' ||
       !!this.filterGenres() ||
       !!this.filterCountry() ||
+      !!this.filterLanguage() ||
       this.filterYear() !== null ||
       this.filterRating() !== null,
   );
@@ -94,24 +111,50 @@ export class MediaPage implements OnInit, OnDestroy {
   private stateKey = '';
 
   ngOnInit(): void {
+    this.route.data.subscribe((data) => {
+      const presetFromData = (data['preset'] as Preset) ?? null;
+      this.preset.set(presetFromData);
+    });
+
     this.route.queryParamMap.subscribe((params) => {
       const page = Number(params.get('page')) || 1;
       const sort = params.get('sort') ?? 'popularity.desc';
       const genres = params.get('genres') ?? '';
       const country = params.get('country') ?? '';
+      const language = params.get('language') ?? '';
       const yearParam = params.get('year');
       const ratingParam = params.get('rating');
 
       const year = yearParam ? Number(yearParam) : null;
       const rating = ratingParam ? Number(ratingParam) : null;
 
-      this.filterSort.set(sort);
-      this.filterGenres.set(genres);
-      this.filterCountry.set(country);
-      this.filterYear.set(year);
-      this.filterRating.set(rating);
+      const p = this.preset();
 
-      this.stateKey = this.buildKey(page);
+      let activeType = this.mediaType();
+
+      if (p) {
+        const typeParam = params.get('type') as MediaType | null;
+        activeType = typeParam === 'tv' ? 'tv' : typeParam === 'movie' ? 'movie' : 'movie';
+
+        if (p === 'anime') {
+          this.filterGenres.set('16');
+          this.filterLanguage.set('ja');
+        } else if (p === 'cartoons') {
+          this.filterGenres.set('16');
+          this.filterLanguage.set('');
+        }
+      } else {
+        this.filterSort.set(sort);
+        this.filterGenres.set(genres);
+        this.filterCountry.set(country);
+        this.filterLanguage.set(language);
+        this.filterYear.set(year);
+        this.filterRating.set(rating);
+      }
+
+      this.activeMediaType.set(activeType);
+
+      this.stateKey = this.buildKey(activeType, page);
 
       const cached = this.navState.get<MediaPageState>(this.stateKey);
       if (cached && cached.data.items.length > 0) {
@@ -150,8 +193,18 @@ export class MediaPage implements OnInit, OnDestroy {
     );
   }
 
-  private buildKey(page: number): string {
-    const base = this.mediaType() === 'movie' ? '/movies' : '/tv';
+  private buildKey(activeType: MediaType, page: number): string {
+    const p = this.preset();
+
+    if (p) {
+      const base = `/${p}`;
+      const parts: string[] = [];
+      if (page > 1) parts.push(`page=${page}`);
+      parts.push(`type=${activeType}`);
+      return `${base}?${parts.join('&')}`;
+    }
+
+    const base = activeType === 'movie' ? '/movies' : '/tv';
     const parts: string[] = [];
 
     if (page > 1) parts.push(`page=${page}`);
@@ -166,26 +219,31 @@ export class MediaPage implements OnInit, OnDestroy {
 
   private loadPage(page: number): void {
     const isFirstLoad = this.items().length === 0;
+    const activeType = this.activeMediaType();
+    const p = this.preset();
 
-    const request$ = this.hasActiveFilters()
-      ? this.mediaType() === 'movie'
-        ? this.discoverService.discoverMovies({
-            page,
-            sort: this.filterSort() as any,
-            genres: this.filterGenres(),
-            year: this.filterYear() ?? undefined,
-            rating: this.filterRating() ?? undefined,
-            country: this.filterCountry() || undefined,
-          })
-        : this.discoverService.discoverTv({
-            page,
-            sort: this.filterSort() as any,
-            genres: this.filterGenres(),
-            year: this.filterYear() ?? undefined,
-            rating: this.filterRating() ?? undefined,
-            country: this.filterCountry() || undefined,
-          })
-      : this.mediaService.getList(this.mediaType(), page);
+    const request$ =
+      p || this.hasActiveFilters()
+        ? activeType === 'movie'
+          ? this.discoverService.discoverMovies({
+              page,
+              sort: this.filterSort() as any,
+              genres: this.filterGenres(),
+              year: this.filterYear() ?? undefined,
+              rating: this.filterRating() ?? undefined,
+              country: this.filterCountry() || undefined,
+              language: this.filterLanguage() || undefined,
+            })
+          : this.discoverService.discoverTv({
+              page,
+              sort: this.filterSort() as any,
+              genres: this.filterGenres(),
+              year: this.filterYear() ?? undefined,
+              rating: this.filterRating() ?? undefined,
+              country: this.filterCountry() || undefined,
+              language: this.filterLanguage() || undefined,
+            })
+        : this.mediaService.getList(activeType, page);
 
     if (isFirstLoad) {
       this.loading.set(true);
@@ -221,7 +279,7 @@ export class MediaPage implements OnInit, OnDestroy {
   }
 
   private applyError(): void {
-    this.error.set(`Failed to load ${this.mediaType() === 'movie' ? 'movies' : 'TV shows'}`);
+    this.error.set(`Failed to load ${this.activeMediaType() === 'movie' ? 'movies' : 'TV shows'}`);
     this.loading.set(false);
   }
 

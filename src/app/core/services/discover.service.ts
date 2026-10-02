@@ -30,6 +30,7 @@ export class DiscoverService {
     if (params.year) result['year'] = String(params.year);
     if (params.rating !== undefined) result['rating'] = String(params.rating);
     if (params.country) result['country'] = params.country;
+    if (params.language) result['language'] = params.language;
 
     return result;
   }
