@@ -48,6 +48,7 @@ export class Header {
       {
         title: 'By year',
         links: [
+          { label: '2026', link: ['/movies'], queryParams: { year: 2026 } },
           { label: '2025', link: ['/movies'], queryParams: { year: 2025 } },
           { label: '2024', link: ['/movies'], queryParams: { year: 2024 } },
           { label: '2023', link: ['/movies'], queryParams: { year: 2023 } },
@@ -102,6 +103,7 @@ export class Header {
       {
         title: 'By year',
         links: [
+          { label: '2026', link: ['/tv'], queryParams: { year: 2026 } },
           { label: '2025', link: ['/tv'], queryParams: { year: 2025 } },
           { label: '2024', link: ['/tv'], queryParams: { year: 2024 } },
           { label: '2023', link: ['/tv'], queryParams: { year: 2023 } },
@@ -155,6 +157,7 @@ export class Header {
       {
         title: 'By year',
         links: [
+          { label: '2026', link: ['/anime'], queryParams: { year: 2026 } },
           { label: '2025', link: ['/anime'], queryParams: { year: 2025 } },
           { label: '2024', link: ['/anime'], queryParams: { year: 2024 } },
           { label: '2023', link: ['/anime'], queryParams: { year: 2023 } },
@@ -178,6 +181,7 @@ export class Header {
       {
         title: 'By year',
         links: [
+          { label: '2026', link: ['/cartoons'], queryParams: { year: 2026 } },
           { label: '2025', link: ['/cartoons'], queryParams: { year: 2025 } },
           { label: '2024', link: ['/cartoons'], queryParams: { year: 2024 } },
           { label: '2023', link: ['/cartoons'], queryParams: { year: 2023 } },
