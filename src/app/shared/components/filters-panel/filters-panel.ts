@@ -113,6 +113,9 @@ export class FiltersPanel implements OnInit, OnDestroy {
     effect(() => {
       const isOpen = this.filtersOpen();
       void isOpen;
+
+      if (typeof window === 'undefined') return;
+
       requestAnimationFrame(() => {
         requestAnimationFrame(() => this.recalcOffsets());
       });
