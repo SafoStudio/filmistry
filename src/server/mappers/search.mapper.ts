@@ -64,7 +64,9 @@ export function toSearchResponseDto(
 
   for (const item of raw.results) {
     const dto = toResultDto(item, forced);
-    if (dto) results.push(dto);
+    if (dto && dto.posterUrl) {
+      results.push(dto);
+    }
   }
 
   return {
@@ -73,3 +75,5 @@ export function toSearchResponseDto(
     results,
   };
 }
+
+export type { TmdbSearchListRaw, ForcedMediaType };

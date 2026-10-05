@@ -2,13 +2,7 @@ import { Router } from 'express';
 import { tmdbFetch } from '../tmdb-client';
 import { handleApi } from '../api-helpers';
 import { DEFAULT_LANGUAGE } from '../constants';
-import { toSearchResponseDto } from '../mappers/search.mapper';
-
-interface TmdbSearchListRaw {
-  page: number;
-  total_pages: number;
-  results: any[];
-}
+import { toSearchResponseDto, TmdbSearchListRaw } from '../mappers/search.mapper';
 
 export const searchRouter = Router();
 
