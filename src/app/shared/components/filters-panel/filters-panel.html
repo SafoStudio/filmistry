@@ -55,11 +55,12 @@
         Sort by
         <select
           class="filters__select"
-          [value]="selectedSort()"
           (change)="onSortChange($event)"
         >
           @for (opt of sortList; track opt.value) {
-            <option [value]="opt.value">{{ opt.label }}</option>
+            <option [value]="opt.value" [selected]="selectedSort() === opt.value">
+              {{ opt.label }}
+            </option>
           }
         </select>
       </label>
@@ -68,12 +69,11 @@
         Year
         <select
           class="filters__select"
-          [value]="selectedYear() ?? ''"
           (change)="onYearChange($event)"
         >
-          <option value="">Any</option>
+          <option value="" [selected]="selectedYear() === null">Any</option>
           @for (y of years; track y) {
-            <option [value]="y">{{ y }}</option>
+            <option [value]="y" [selected]="selectedYear() === y">{{ y }}</option>
           }
         </select>
       </label>
@@ -82,12 +82,13 @@
         Rating
         <select
           class="filters__select"
-          [value]="selectedRating() ?? ''"
           (change)="onRatingChange($event)"
         >
-          <option value="">Any</option>
+          <option value="" [selected]="selectedRating() === null">Any</option>
           @for (opt of ratingOptions; track opt.value) {
-            <option [value]="opt.value">{{ opt.label }}</option>
+            <option [value]="opt.value" [selected]="selectedRating() === opt.value">
+              {{ opt.label }}
+            </option>
           }
         </select>
       </label>

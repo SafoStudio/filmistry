@@ -31,15 +31,10 @@
         (mouseenter)="onMenuEnter('movies')"
         (mouseleave)="onMenuLeave()"
       >
-        <a
-          routerLink="/movies"
-          routerLinkActive="header__link--active"
-          class="header__link"
-          (click)="closeMenu()"
-        >
+        <span class="header__link header__link--button">
           <span class="header__label">Movies</span>
           <app-icon name="film" [size]="28" />
-        </a>
+        </span>
 
         @if (activeMegaMenu() === 'movies') {
           <div
@@ -48,13 +43,13 @@
             (mouseleave)="onMenuLeave()"
           >
             <div class="header__mega-inner">
-              @for (section of movieMenu.sections; track section.title) {
+              @for (section of movieMenu.sections; track $index) {
                 <div class="header__mega-section">
                   @if (!section.hideTitle) {
                     <div class="header__mega-title">{{ section.title }}</div>
                   }
                   <div class="header__mega-links">
-                    @for (link of section.links; track link.label) {
+                    @for (link of section.links; track $index) {
                       <a
                         class="header__mega-link"
                         [routerLink]="link.link"
@@ -77,15 +72,10 @@
         (mouseenter)="onMenuEnter('tv')"
         (mouseleave)="onMenuLeave()"
       >
-        <a
-          routerLink="/tv"
-          routerLinkActive="header__link--active"
-          class="header__link"
-          (click)="closeMenu()"
-        >
+        <span class="header__link header__link--button">
           <span class="header__label">TV Shows</span>
           <app-icon name="tv" [size]="28" />
-        </a>
+        </span>
 
         @if (activeMegaMenu() === 'tv') {
           <div
@@ -94,13 +84,13 @@
             (mouseleave)="onMenuLeave()"
           >
             <div class="header__mega-inner">
-              @for (section of tvMenu.sections; track section.title) {
+              @for (section of tvMenu.sections; track $index) {
                 <div class="header__mega-section">
                   @if (!section.hideTitle) {
                     <div class="header__mega-title">{{ section.title }}</div>
                   }
                   <div class="header__mega-links">
-                    @for (link of section.links; track link.label) {
+                    @for (link of section.links; track $index) {
                       <a
                         class="header__mega-link"
                         [routerLink]="link.link"
@@ -123,15 +113,10 @@
         (mouseenter)="onMenuEnter('anime')"
         (mouseleave)="onMenuLeave()"
       >
-        <a
-          routerLink="/anime"
-          routerLinkActive="header__link--active"
-          class="header__link"
-          (click)="closeMenu()"
-        >
+        <span class="header__link header__link--button">
           <span class="header__label">Anime</span>
           <app-icon name="anime-eye" [size]="28" />
-        </a>
+        </span>
 
         @if (activeMegaMenu() === 'anime') {
           <div
@@ -140,13 +125,13 @@
             (mouseleave)="onMenuLeave()"
           >
             <div class="header__mega-inner">
-              @for (section of animeMenu.sections; track section.title) {
+              @for (section of animeMenu.sections; track $index) {
                 <div class="header__mega-section">
                   @if (!section.hideTitle) {
                     <div class="header__mega-title">{{ section.title }}</div>
                   }
                   <div class="header__mega-links">
-                    @for (link of section.links; track link.label) {
+                    @for (link of section.links; track $index) {
                       <a
                         class="header__mega-link"
                         [routerLink]="link.link"
@@ -169,15 +154,10 @@
         (mouseenter)="onMenuEnter('cartoons')"
         (mouseleave)="onMenuLeave()"
       >
-        <a
-          routerLink="/cartoons"
-          routerLinkActive="header__link--active"
-          class="header__link"
-          (click)="closeMenu()"
-        >
+        <span class="header__link header__link--button">
           <span class="header__label">Cartoons</span>
           <app-icon name="images" [size]="28" />
-        </a>
+        </span>
 
         @if (activeMegaMenu() === 'cartoons') {
           <div
@@ -186,13 +166,13 @@
             (mouseleave)="onMenuLeave()"
           >
             <div class="header__mega-inner">
-              @for (section of cartoonsMenu.sections; track section.title) {
+              @for (section of cartoonsMenu.sections; track $index) {
                 <div class="header__mega-section">
                   @if (!section.hideTitle) {
                     <div class="header__mega-title">{{ section.title }}</div>
                   }
                   <div class="header__mega-links">
-                    @for (link of section.links; track link.label) {
+                    @for (link of section.links; track $index) {
                       <a
                         class="header__mega-link"
                         [routerLink]="link.link"

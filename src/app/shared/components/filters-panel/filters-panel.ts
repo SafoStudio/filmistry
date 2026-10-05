@@ -5,6 +5,7 @@ import {
   output,
   signal,
   effect,
+  untracked,
   viewChild,
   ElementRef,
   OnInit,
@@ -93,21 +94,27 @@ export class FiltersPanel implements OnInit, OnDestroy {
 
   constructor() {
     effect(() => {
-      this.selectedSort.set(this.initialSort());
-
+      const sort = this.initialSort();
       const genreStr = this.initialGenres();
-      if (genreStr) {
-        const ids = genreStr
-          .split(',')
-          .map((s) => Number(s.trim()))
-          .filter((n) => Number.isFinite(n));
-        this.selectedGenres.set(new Set(ids));
-      } else {
-        this.selectedGenres.set(new Set());
-      }
+      const year = this.initialYear();
+      const rating = this.initialRating();
 
-      this.selectedYear.set(this.initialYear());
-      this.selectedRating.set(this.initialRating());
+      untracked(() => {
+        this.selectedSort.set(sort);
+
+        if (genreStr) {
+          const ids = genreStr
+            .split(',')
+            .map((s) => Number(s.trim()))
+            .filter((n) => Number.isFinite(n));
+          this.selectedGenres.set(new Set(ids));
+        } else {
+          this.selectedGenres.set(new Set());
+        }
+
+        this.selectedYear.set(year);
+        this.selectedRating.set(rating);
+      });
     });
 
     effect(() => {
