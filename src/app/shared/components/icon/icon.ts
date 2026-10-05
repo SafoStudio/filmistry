@@ -15,7 +15,8 @@ export type IconName =
   | 'film'
   | 'tv'
   | 'search'
-  | 'filter';
+  | 'filter'
+  | 'anime-eye';
 
 @Component({
   selector: 'app-icon',

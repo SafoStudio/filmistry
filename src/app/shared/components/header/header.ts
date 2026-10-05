@@ -14,6 +14,7 @@ interface MegaMenuLink {
 
 interface MegaMenuSection {
   title: string;
+  hideTitle?: boolean;
   links: MegaMenuLink[];
 }
 
@@ -41,6 +42,7 @@ export class Header {
     sections: [
       {
         title: 'All movies',
+        hideTitle: true,
         links: [{ label: 'All movies', link: ['/movies'] }],
       },
       {
@@ -94,6 +96,7 @@ export class Header {
     sections: [
       {
         title: 'All TV shows',
+        hideTitle: true,
         links: [{ label: 'All TV shows', link: ['/tv'] }],
       },
       {
@@ -142,6 +145,7 @@ export class Header {
     sections: [
       {
         title: 'All anime',
+        hideTitle: true,
         links: [
           { label: 'All anime', link: ['/anime'] },
           { label: 'Anime movies', link: ['/anime'], queryParams: { type: 'movie' } },
@@ -164,6 +168,7 @@ export class Header {
     sections: [
       {
         title: 'All cartoons',
+        hideTitle: true,
         links: [
           { label: 'All cartoons', link: ['/cartoons'] },
           { label: 'Cartoon movies', link: ['/cartoons'], queryParams: { type: 'movie' } },

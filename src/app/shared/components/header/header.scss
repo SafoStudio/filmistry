@@ -178,9 +178,10 @@
   position: absolute;
   top: 100%;
   left: 0;
-  right: 0;
-  background: var(--color-surface);
-  border-top: 1px solid var(--color-border);
+  min-width: 400px;
+  max-width: calc(100vw - 40px);
+  background: var(--color-megamenu);
+  border-top: 3px solid var(--color-border);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   z-index: 99;
   animation: megaSlideDown 0.25s ease both;
@@ -198,8 +199,6 @@
 }
 
 .header__mega-inner {
-  max-width: 1100px;
-  margin: 0 auto;
   padding: 20px 24px;
   display: flex;
   flex-direction: column;
@@ -207,11 +206,7 @@
 }
 
 .header__mega-section {
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--color-border);
-
   &:last-child {
-    border-bottom: none;
     padding-bottom: 0;
   }
 }

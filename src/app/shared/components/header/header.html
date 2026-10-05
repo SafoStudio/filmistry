@@ -40,6 +40,36 @@
           <span class="header__label">Movies</span>
           <app-icon name="film" [size]="28" />
         </a>
+
+        @if (activeMegaMenu() === 'movies') {
+          <div
+            class="header__mega"
+            (mouseenter)="onMenuEnter('movies')"
+            (mouseleave)="onMenuLeave()"
+          >
+            <div class="header__mega-inner">
+              @for (section of movieMenu.sections; track section.title) {
+                <div class="header__mega-section">
+                  @if (!section.hideTitle) {
+                    <div class="header__mega-title">{{ section.title }}</div>
+                  }
+                  <div class="header__mega-links">
+                    @for (link of section.links; track link.label) {
+                      <a
+                        class="header__mega-link"
+                        [routerLink]="link.link"
+                        [queryParams]="link.queryParams ?? {}"
+                        (click)="closeMenu()"
+                      >
+                        {{ link.label }}
+                      </a>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
       </div>
 
       <div
@@ -56,6 +86,36 @@
           <span class="header__label">TV Shows</span>
           <app-icon name="tv" [size]="28" />
         </a>
+
+        @if (activeMegaMenu() === 'tv') {
+          <div
+            class="header__mega"
+            (mouseenter)="onMenuEnter('tv')"
+            (mouseleave)="onMenuLeave()"
+          >
+            <div class="header__mega-inner">
+              @for (section of tvMenu.sections; track section.title) {
+                <div class="header__mega-section">
+                  @if (!section.hideTitle) {
+                    <div class="header__mega-title">{{ section.title }}</div>
+                  }
+                  <div class="header__mega-links">
+                    @for (link of section.links; track link.label) {
+                      <a
+                        class="header__mega-link"
+                        [routerLink]="link.link"
+                        [queryParams]="link.queryParams ?? {}"
+                        (click)="closeMenu()"
+                      >
+                        {{ link.label }}
+                      </a>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
       </div>
 
       <div
@@ -70,8 +130,38 @@
           (click)="closeMenu()"
         >
           <span class="header__label">Anime</span>
-          <app-icon name="star" [size]="28" />
+          <app-icon name="anime-eye" [size]="28" />
         </a>
+
+        @if (activeMegaMenu() === 'anime') {
+          <div
+            class="header__mega"
+            (mouseenter)="onMenuEnter('anime')"
+            (mouseleave)="onMenuLeave()"
+          >
+            <div class="header__mega-inner">
+              @for (section of animeMenu.sections; track section.title) {
+                <div class="header__mega-section">
+                  @if (!section.hideTitle) {
+                    <div class="header__mega-title">{{ section.title }}</div>
+                  }
+                  <div class="header__mega-links">
+                    @for (link of section.links; track link.label) {
+                      <a
+                        class="header__mega-link"
+                        [routerLink]="link.link"
+                        [queryParams]="link.queryParams ?? {}"
+                        (click)="closeMenu()"
+                      >
+                        {{ link.label }}
+                      </a>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
       </div>
 
       <div
@@ -88,6 +178,36 @@
           <span class="header__label">Cartoons</span>
           <app-icon name="images" [size]="28" />
         </a>
+
+        @if (activeMegaMenu() === 'cartoons') {
+          <div
+            class="header__mega"
+            (mouseenter)="onMenuEnter('cartoons')"
+            (mouseleave)="onMenuLeave()"
+          >
+            <div class="header__mega-inner">
+              @for (section of cartoonsMenu.sections; track section.title) {
+                <div class="header__mega-section">
+                  @if (!section.hideTitle) {
+                    <div class="header__mega-title">{{ section.title }}</div>
+                  }
+                  <div class="header__mega-links">
+                    @for (link of section.links; track link.label) {
+                      <a
+                        class="header__mega-link"
+                        [routerLink]="link.link"
+                        [queryParams]="link.queryParams ?? {}"
+                        (click)="closeMenu()"
+                      >
+                        {{ link.label }}
+                      </a>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
       </div>
 
       <a
@@ -106,94 +226,4 @@
       <app-theme-toggle />
     </div>
   </div>
-
-  @if (activeMegaMenu()) {
-    <div
-      class="header__mega"
-      (mouseenter)="onMenuEnter(activeMegaMenu())"
-      (mouseleave)="onMenuLeave()"
-    >
-      <div class="header__mega-inner">
-        @if (activeMegaMenu() === 'movies') {
-          @for (section of movieMenu.sections; track section.title) {
-            <div class="header__mega-section">
-              <div class="header__mega-title">{{ section.title }}</div>
-              <div class="header__mega-links">
-                @for (link of section.links; track link.label) {
-                  <a
-                    class="header__mega-link"
-                    [routerLink]="link.link"
-                    [queryParams]="link.queryParams ?? {}"
-                    (click)="closeMenu()"
-                  >
-                    {{ link.label }}
-                  </a>
-                }
-              </div>
-            </div>
-          }
-        }
-
-        @if (activeMegaMenu() === 'tv') {
-          @for (section of tvMenu.sections; track section.title) {
-            <div class="header__mega-section">
-              <div class="header__mega-title">{{ section.title }}</div>
-              <div class="header__mega-links">
-                @for (link of section.links; track link.label) {
-                  <a
-                    class="header__mega-link"
-                    [routerLink]="link.link"
-                    [queryParams]="link.queryParams ?? {}"
-                    (click)="closeMenu()"
-                  >
-                    {{ link.label }}
-                  </a>
-                }
-              </div>
-            </div>
-          }
-        }
-
-        @if (activeMegaMenu() === 'anime') {
-          @for (section of animeMenu.sections; track section.title) {
-            <div class="header__mega-section">
-              <div class="header__mega-title">{{ section.title }}</div>
-              <div class="header__mega-links">
-                @for (link of section.links; track link.label) {
-                  <a
-                    class="header__mega-link"
-                    [routerLink]="link.link"
-                    [queryParams]="link.queryParams ?? {}"
-                    (click)="closeMenu()"
-                  >
-                    {{ link.label }}
-                  </a>
-                }
-              </div>
-            </div>
-          }
-        }
-
-        @if (activeMegaMenu() === 'cartoons') {
-          @for (section of cartoonsMenu.sections; track section.title) {
-            <div class="header__mega-section">
-              <div class="header__mega-title">{{ section.title }}</div>
-              <div class="header__mega-links">
-                @for (link of section.links; track link.label) {
-                  <a
-                    class="header__mega-link"
-                    [routerLink]="link.link"
-                    [queryParams]="link.queryParams ?? {}"
-                    (click)="closeMenu()"
-                  >
-                    {{ link.label }}
-                  </a>
-                }
-              </div>
-            </div>
-          }
-        }
-      </div>
-    </div>
-  }
 </header>
