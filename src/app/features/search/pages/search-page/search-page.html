@@ -47,28 +47,33 @@
   } @else {
     <div class="search-page__grid">
       @for (result of results(); track result.mediaType + '-' + result.id) {
-        <a
-          class="search-page__card"
-          [class.search-page__card--person]="result.mediaType === 'person'"
-          [routerLink]="resultLink(result)"
-        >
-          @if (result.posterUrl) {
-            <img
-              class="search-page__poster"
-              [src]="result.posterUrl"
-              [alt]="result.title"
-              loading="lazy"
-            />
-          } @else {
-            <div class="search-page__poster search-page__poster--placeholder"></div>
-          }
-          <div class="search-page__info">
-            <span class="search-page__name">{{ result.title }}</span>
-            @if (result.releaseYear) {
-              <span class="search-page__year">{{ result.releaseYear }}</span>
+        @if (result.mediaType === 'person') {
+          <a
+            class="search-page__person"
+            [routerLink]="['/people', result.id]"
+          >
+            @if (result.posterUrl) {
+              <img
+                class="search-page__person-img"
+                [src]="result.posterUrl"
+                [alt]="result.title"
+                loading="lazy"
+              />
+            } @else {
+              <div class="search-page__person-img search-page__person-img--placeholder"></div>
             }
-          </div>
-        </a>
+            <span class="search-page__person-name">{{ result.title }}</span>
+          </a>
+        } @else {
+          <app-media-card
+            [media]="{
+          id: result.id,
+          title: result.title,
+          posterUrl: result.posterUrl
+        }"
+            [mediaType]="result.mediaType"
+          />
+        }
       }
     </div>
 

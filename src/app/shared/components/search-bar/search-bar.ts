@@ -71,8 +71,6 @@ export class SearchBar implements OnDestroy {
         const people: SearchResult[] = [];
 
         for (const r of res.results) {
-          if (!r.posterUrl) continue;
-
           if (r.mediaType === 'movie') movies.push(r);
           else if (r.mediaType === 'tv') tvs.push(r);
           else if (r.mediaType === 'person') people.push(r);

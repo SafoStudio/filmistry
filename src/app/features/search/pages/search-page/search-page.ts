@@ -5,6 +5,7 @@ import { NavigationStateService } from '@core/services/navigation-state.service'
 import { SearchResult } from '@core/models/search.model';
 import { Pagination } from '@shared/components/pagination/pagination';
 import { Loader } from '@shared/components/loader/loader';
+import { MediaCard } from '@features/media/components/media-card/media-card';
 
 type SearchTab = 'media' | 'movie' | 'tv' | 'person';
 
@@ -18,7 +19,7 @@ interface SearchPageState {
 
 @Component({
   selector: 'app-search-page',
-  imports: [RouterLink, Pagination, Loader],
+  imports: [RouterLink, Pagination, Loader, MediaCard],
   templateUrl: './search-page.html',
   styleUrl: './search-page.scss',
 })
@@ -119,8 +120,6 @@ export class SearchPage implements OnInit, OnDestroy {
         if (tab === 'media') {
           results = results.filter((r) => r.mediaType !== 'person');
         }
-
-        results = results.filter((r) => !!r.posterUrl);
 
         this.results.set(results);
         this.totalPages.set(data.totalPages);
