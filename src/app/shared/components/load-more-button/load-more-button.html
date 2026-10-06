@@ -1,0 +1,14 @@
+<button
+  type="button"
+  class="load-more"
+  [disabled]="loading() || disabled()"
+  [attr.aria-busy]="loading()"
+  (click)="onClick()"
+>
+  @if (loading()) {
+    <span class="load-more__spinner"></span>
+    Loading...
+  } @else {
+    Load more
+  }
+</button>

@@ -1,0 +1,44 @@
+@if (loading()) {
+  <p class="carousel__empty">Loading...</p>
+} @else if (items().length === 0) {
+  <p class="carousel__empty">{{ emptyMessage() }}</p>
+} @else {
+  <div
+    class="carousel__wrap"
+    [class.carousel__wrap--left]="canScrollLeft()"
+    [class.carousel__wrap--right]="canScrollRight()"
+  >
+    <div class="carousel__slider" #slider (scroll)="onScroll()">
+      @for (item of items(); track $index) {
+        <div class="carousel__item">
+          <ng-container
+            *ngTemplateOutlet="slideTemplate(); context: { $implicit: item }"
+          />
+        </div>
+      }
+    </div>
+  </div>
+
+  @if (hasNav()) {
+    <div class="carousel__nav">
+      <button
+        type="button"
+        class="carousel__btn carousel__btn--prev"
+        [disabled]="!canScrollLeft()"
+        (click)="scrollLeft()"
+        aria-label="Scroll left"
+      >
+        <app-icon name="chevron-left" [size]="22" />
+      </button>
+      <button
+        type="button"
+        class="carousel__btn carousel__btn--next"
+        [disabled]="!canScrollRight()"
+        (click)="scrollRight()"
+        aria-label="Scroll right"
+      >
+        <app-icon name="chevron-right" [size]="22" />
+      </button>
+    </div>
+  }
+}
