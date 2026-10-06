@@ -1,5 +1,14 @@
-import { Component, signal, HostListener, ChangeDetectionStrategy } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  Component,
+  signal,
+  computed,
+  inject,
+  HostListener,
+  ChangeDetectionStrategy,
+} from '@angular/core';
+import { RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { filter, map } from 'rxjs';
 import { ThemeToggle } from '../theme-toggle/theme-toggle';
 import { Icon } from '../icon/icon';
 import { SearchBar } from '@shared/components/search-bar/search-bar';
@@ -31,9 +40,24 @@ interface MegaMenu {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Header {
+  private router = inject(Router);
+
   menuOpen = signal(false);
   hidden = signal(false);
   activeMegaMenu = signal<MenuSection>(null);
+
+  private readonly currentUrl = toSignal(
+    this.router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+      map((e) => e.urlAfterRedirects),
+    ),
+    { initialValue: this.router.url },
+  );
+
+  isMoviesActive = computed(() => this.currentUrl().startsWith('/movies'));
+  isTvActive = computed(() => this.currentUrl().startsWith('/tv'));
+  isAnimeActive = computed(() => this.currentUrl().startsWith('/anime'));
+  isCartoonsActive = computed(() => this.currentUrl().startsWith('/cartoons'));
 
   private closeTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -82,7 +106,6 @@ export class Header {
           { label: 'Musical', link: ['/movies'], queryParams: { genres: '10402' } },
           { label: 'Adventure', link: ['/movies'], queryParams: { genres: '12' } },
           { label: 'Family', link: ['/movies'], queryParams: { genres: '10751' } },
-          { label: 'Sport', link: ['/movies'], queryParams: { genres: '99' } },
           { label: 'Thriller', link: ['/movies'], queryParams: { genres: '53' } },
           { label: 'Horror', link: ['/movies'], queryParams: { genres: '27' } },
           { label: 'Sci-Fi', link: ['/movies'], queryParams: { genres: '878' } },

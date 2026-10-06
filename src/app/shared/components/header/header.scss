@@ -20,13 +20,48 @@
 }
 
 .header__inner {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 16px;
   padding: 16px 18px;
   max-width: 1200px;
   margin: 0 auto;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 80px;
+    pointer-events: none;
+    z-index: 1;
+    border-radius: 4px;
+  }
+
+  &::before {
+    left: 0;
+    background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.35) 0%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+
+  &::after {
+    right: 0;
+    background: linear-gradient(
+      to left,
+      rgba(0, 0, 0, 0.35) 0%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+}
+
+.header__inner > * {
   position: relative;
+  z-index: 2;
 }
 
 .header__logo {
