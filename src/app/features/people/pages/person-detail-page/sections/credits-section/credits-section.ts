@@ -1,13 +1,12 @@
-import { Component, inject, input, signal, effect, viewChild, ElementRef } from '@angular/core';
+import { Component, inject, input, signal, effect } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PeopleService } from '@core/services/people.service';
 import { PersonCredit } from '@core/models/person-credits.model';
-import { Icon } from '@shared/components/icon/icon';
-import { Loader } from '@shared/components/loader/loader';
+import { CarouselComponent } from '@shared/components/carousel/carousel';
 
 @Component({
   selector: 'app-credits-section',
-  imports: [RouterLink, Icon, Loader],
+  imports: [RouterLink, CarouselComponent],
   templateUrl: './credits-section.html',
   styleUrl: './credits-section.scss',
 })
@@ -19,12 +18,6 @@ export class CreditsSection {
   credits = signal<PersonCredit[]>([]);
   loading = signal(true);
 
-  slider = viewChild<ElementRef<HTMLDivElement>>('slider');
-  canScrollLeft = signal(false);
-  canScrollRight = signal(false);
-
-  private readonly CARD_WIDTH = 162;
-
   constructor() {
     effect(() => {
       const personId = this.id();
@@ -33,37 +26,11 @@ export class CreditsSection {
           next: (data) => {
             this.credits.set(data.credits);
             this.loading.set(false);
-            setTimeout(() => this.updateArrows());
           },
           error: () => this.loading.set(false),
         });
       }
     });
-  }
-
-  scrollLeft(): void {
-    const el = this.slider()?.nativeElement;
-    if (!el) return;
-    el.scrollBy({ left: -this.CARD_WIDTH, behavior: 'smooth' });
-    setTimeout(() => this.updateArrows(), 350);
-  }
-
-  scrollRight(): void {
-    const el = this.slider()?.nativeElement;
-    if (!el) return;
-    el.scrollBy({ left: this.CARD_WIDTH, behavior: 'smooth' });
-    setTimeout(() => this.updateArrows(), 350);
-  }
-
-  onScroll(): void {
-    this.updateArrows();
-  }
-
-  private updateArrows(): void {
-    const el = this.slider()?.nativeElement;
-    if (!el) return;
-    this.canScrollLeft.set(el.scrollLeft > 0);
-    this.canScrollRight.set(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
   }
 
   detailLink(credit: PersonCredit): string[] {
