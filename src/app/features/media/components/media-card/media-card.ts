@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Media } from '@core/models/media.model';
 
@@ -7,6 +7,7 @@ import { Media } from '@core/models/media.model';
   imports: [RouterLink],
   templateUrl: './media-card.html',
   styleUrl: './media-card.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MediaCard {
   media = input.required<Media>();

@@ -25,12 +25,20 @@
       @for (item of items(); track item.id; let i = $index) {
         <app-media-card
           class="movie-gallery__item"
-          [style.--i]="i"
+          [style.--i]="i % 20"
           [media]="item"
           [mediaType]="activeMediaType()"
         />
       }
     </div>
+
+    @if (canLoadMore()) {
+      <app-load-more-button
+        class="load-more-wrapper"
+        [loading]="loadingMore()"
+        (loadMore)="loadMore()"
+      />
+    }
 
     <app-pagination
       [currentPage]="currentPage()"

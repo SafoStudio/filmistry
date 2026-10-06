@@ -7,6 +7,7 @@ import { Media } from '@core/models/media.model';
 import { MOVIE_GENRES, TV_GENRES, COUNTRIES } from '@core/constants/genres';
 import { MediaCard } from '../../components/media-card/media-card';
 import { Pagination } from '@shared/components/pagination/pagination';
+import { LoadMoreButton } from '@shared/components/load-more-button/load-more-button';
 import { Loader } from '@shared/components/loader/loader';
 import { FiltersPanel, FiltersValue } from '@shared/components/filters-panel/filters-panel';
 
@@ -20,7 +21,7 @@ type Preset = 'anime' | 'cartoons' | null;
 
 @Component({
   selector: 'app-media-page',
-  imports: [MediaCard, Pagination, Loader, FiltersPanel],
+  imports: [MediaCard, Pagination, LoadMoreButton, Loader, FiltersPanel],
   templateUrl: './media-page.html',
   styleUrl: './media-page.scss',
 })
@@ -38,6 +39,7 @@ export class MediaPage implements OnInit, OnDestroy {
 
   items = signal<Media[]>([]);
   loading = signal(true);
+  loadingMore = signal(false);
   error = signal<string | null>(null);
   currentPage = signal(1);
   totalPages = signal(1);
@@ -108,6 +110,8 @@ export class MediaPage implements OnInit, OnDestroy {
       this.filterRating() !== null,
   );
 
+  canLoadMore = computed<boolean>(() => this.currentPage() < this.totalPages());
+
   private stateKey = '';
 
   ngOnInit(): void {
@@ -173,7 +177,7 @@ export class MediaPage implements OnInit, OnDestroy {
       }
 
       this.currentPage.set(page);
-      this.loadPage(page);
+      this.loadPage(page, false);
     });
   }
 
@@ -217,8 +221,7 @@ export class MediaPage implements OnInit, OnDestroy {
     return parts.length > 0 ? `${base}?${parts.join('&')}` : base;
   }
 
-  private loadPage(page: number): void {
-    const isFirstLoad = this.items().length === 0;
+  private loadPage(page: number, append: boolean): void {
     const activeType = this.activeMediaType();
     const p = this.preset();
 
@@ -245,34 +248,41 @@ export class MediaPage implements OnInit, OnDestroy {
             })
         : this.mediaService.getList(activeType, page);
 
-    if (isFirstLoad) {
+    if (!append) {
       this.loading.set(true);
       this.error.set(null);
       request$.subscribe({
-        next: (response) => this.applyResponse(response),
+        next: (response) => this.applyResponse(response, false),
         error: () => this.applyError(),
       });
       return;
     }
 
-    this.isLeaving.set(true);
+    this.loadingMore.set(true);
 
-    setTimeout(() => {
-      request$.subscribe({
-        next: (response) => {
-          this.applyResponse(response);
-          requestAnimationFrame(() => this.isLeaving.set(false));
-        },
-        error: () => {
-          this.isLeaving.set(false);
-          this.applyError();
-        },
-      });
-    }, 260);
+    request$.subscribe({
+      next: (response) => {
+        this.applyResponse(response, true);
+        this.loadingMore.set(false);
+      },
+      error: () => {
+        this.loadingMore.set(false);
+        this.applyError();
+      },
+    });
   }
 
-  private applyResponse(response: { results: Media[]; totalPages: number }): void {
-    this.items.set(response.results);
+  private applyResponse(response: { results: Media[]; totalPages: number }, append: boolean): void {
+    if (append) {
+      this.items.update((current) => {
+        const existingIds = new Set(current.map((i) => i.id));
+        const newItems = response.results.filter((i) => !existingIds.has(i.id));
+        return [...current, ...newItems];
+      });
+    } else {
+      this.items.set(response.results);
+    }
+
     this.totalPages.set(response.totalPages);
     this.loading.set(false);
     this.error.set(null);
@@ -281,6 +291,7 @@ export class MediaPage implements OnInit, OnDestroy {
   private applyError(): void {
     this.error.set(`Failed to load ${this.activeMediaType() === 'movie' ? 'movies' : 'TV shows'}`);
     this.loading.set(false);
+    this.loadingMore.set(false);
   }
 
   toggleFilters(): void {
@@ -289,6 +300,13 @@ export class MediaPage implements OnInit, OnDestroy {
 
   closeFilters(): void {
     this.filtersOpen.set(false);
+  }
+
+  loadMore(): void {
+    if (this.loadingMore() || !this.canLoadMore()) return;
+    const nextPage = this.currentPage() + 1;
+    this.currentPage.set(nextPage);
+    this.loadPage(nextPage, true);
   }
 
   onPageChange(page: number): void {

@@ -1,63 +1,30 @@
 <div class="cast-list">
   <h2 class="title">Actors</h2>
 
-  @if (loading()) {
-    <app-loader />
-  } @else if (cast().length === 0) {
-    <p class="text-sms">
-      No credits available for this {{ mediaType() === 'movie' ? 'movie' : 'TV show' }}
-    </p>
-  } @else {
-    <div
-      class="actor-slider-wrap"
-      [class.actor-slider-wrap--left]="canScrollLeft()"
-      [class.actor-slider-wrap--right]="canScrollRight()"
-    >
-      <div class="actor-slider" #slider (scroll)="onScroll()">
-        @for (member of cast(); track member.id) {
-          @if (member.profileUrl) {
-            <a
-              class="actor-link"
-              [routerLink]="['/people', member.id]"
-            >
-              <div class="actor-box">
-                <img
-                  class="actor-image"
-                  [src]="member.profileUrl"
-                  [alt]="member.name"
-                />
-                <div class="actor-info">
-                  <p class="actor-name">{{ member.name }}</p>
-                  <p class="actor-role">
-                    Role: {{ member.character || 'minor' }}
-                  </p>
-                </div>
-              </div>
-            </a>
-          }
-        }
-      </div>
-    </div>
-
-    <div class="actor-nav-row">
-      <button
-        type="button"
-        class="actor-nav"
-        [disabled]="!canScrollLeft()"
-        (click)="scrollLeft()"
-        aria-label="Scroll left"
-      >
-        <app-icon name="chevron-left" [size]="22" />
-      </button>
-      <button
-        type="button"
-        class="actor-nav"
-        [disabled]="!canScrollRight()"
-        (click)="scrollRight()"
-        aria-label="Scroll right"
-      >
-        <app-icon name="chevron-right" [size]="22" />
-      </button>
-    </div>
-  }
+  <app-carousel
+    [items]="cast()"
+    [loading]="loading()"
+    [cardWidth]="155"
+    [emptyMessage]="'No credits available for this ' + (mediaType() === 'movie' ? 'movie' : 'TV show')"
+  >
+    <ng-template #slide let-member>
+      @if (member.profileUrl) {
+        <a class="actor-link" [routerLink]="['/people', member.id]">
+          <div class="actor-box">
+            <img
+              class="actor-image"
+              [src]="member.profileUrl"
+              [alt]="member.name"
+            />
+            <div class="actor-info">
+              <p class="actor-name">{{ member.name }}</p>
+              <p class="actor-role">
+                Role: {{ member.character || 'minor' }}
+              </p>
+            </div>
+          </div>
+        </a>
+      }
+    </ng-template>
+  </app-carousel>
 </div>
