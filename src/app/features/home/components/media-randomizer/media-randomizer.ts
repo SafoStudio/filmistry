@@ -1,4 +1,4 @@
-import { Component, inject, signal, effect, computed } from '@angular/core';
+import { Component, inject, signal, effect, computed, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MediaService } from '@core/services/media.service';
 import { TrendingItem } from '@core/models/trending.model';
@@ -12,6 +12,8 @@ import { Loader } from '@shared/components/loader/loader';
 })
 export class MediaRandomizer {
   private mediaService = inject(MediaService);
+
+  loaded = output<void>();
 
   trending = signal<TrendingItem[]>([]);
   loading = signal(true);
@@ -34,8 +36,12 @@ export class MediaRandomizer {
         next: (data) => {
           this.trending.set(data.results);
           this.loading.set(false);
+          this.loaded.emit();
         },
-        error: () => this.loading.set(false),
+        error: () => {
+          this.loading.set(false);
+          this.loaded.emit();
+        },
       });
     });
   }

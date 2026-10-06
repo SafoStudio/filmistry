@@ -122,14 +122,26 @@
 
 .trailer-bar__btn {
   width: 100px;
-  padding: 4px 8px;
+  padding: 6px 10px;
   border: none;
-  color: white;
-  font-size: 16px;
+  border-radius: 0;
+  color: var(--btn-color);
   font-family: 'Anta', sans-serif;
-  background: linear-gradient(to bottom, #33333570, #111);
+  background: linear-gradient(
+    to bottom,
+    var(--btn-gradient-top),
+    var(--btn-gradient-bottom)
+  );
+  box-shadow: inset 0 1px 2px var(--btn-shadow-top),
+  inset 0 -2px 4px var(--btn-shadow-bottom);
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition:
+    background 0.35s cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 0.35s cubic-bezier(0.22, 0.61, 0.36, 1),
+    opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &--prev {
     border-bottom-left-radius: 30px;
@@ -139,8 +151,14 @@
     border-bottom-right-radius: 30px;
   }
 
-  &:hover {
-    background: linear-gradient(to bottom, #09090975, #68696851);
+  &:hover:not(:disabled) {
+    box-shadow: inset 0 2px 4px var(--btn-shadow-top-hover),
+    inset 0 -1px 2px var(--btn-shadow-bottom-hover);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
   }
 }
 

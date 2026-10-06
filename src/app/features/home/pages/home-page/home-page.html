@@ -1,5 +1,12 @@
 <div class="container">
   <h1 class="visually-hidden">Filmistry — movies, TV shows, and people</h1>
-  <app-media-randomizer />
-  <app-movie-trailer-bar />
+
+  <div class="home-content" [class.home-content--hidden]="!isAllLoaded()">
+    <app-media-randomizer (loaded)="onChildLoaded()" />
+    <app-movie-trailer-bar (loaded)="onChildLoaded()" />
+  </div>
+
+  @if (!isAllLoaded()) {
+    <app-loader />
+  }
 </div>

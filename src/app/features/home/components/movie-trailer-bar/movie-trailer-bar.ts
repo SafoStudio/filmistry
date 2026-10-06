@@ -4,8 +4,7 @@ import {
   signal,
   effect,
   computed,
-  viewChild,
-  ElementRef,
+  output,
   afterNextRender,
   OnDestroy,
 } from '@angular/core';
@@ -13,16 +12,19 @@ import { MediaService } from '@core/services/media.service';
 import { TrendingItem } from '@core/models/trending.model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Loader } from '@shared/components/loader/loader';
+import { Icon } from '@shared/components/icon/icon';
 
 @Component({
   selector: 'app-movie-trailer-bar',
-  imports: [Loader],
+  imports: [Loader, Icon],
   templateUrl: './movie-trailer-bar.html',
   styleUrl: './movie-trailer-bar.scss',
 })
 export class MovieTrailerBar implements OnDestroy {
   private mediaService = inject(MediaService);
   private sanitizer = inject(DomSanitizer);
+
+  loaded = output<void>();
 
   items = signal<TrendingItem[]>([]);
   loading = signal(true);
@@ -51,8 +53,12 @@ export class MovieTrailerBar implements OnDestroy {
         next: (data) => {
           this.items.set(data.results);
           this.loading.set(false);
+          this.loaded.emit();
         },
-        error: () => this.loading.set(false),
+        error: () => {
+          this.loading.set(false);
+          this.loaded.emit();
+        },
       });
     });
 
@@ -112,9 +118,5 @@ export class MovieTrailerBar implements OnDestroy {
     this.isModalOpen.set(false);
     this.trailerUrl.set(null);
     this.startAuto();
-  }
-
-  yearOf(item: TrendingItem): string {
-    return '';
   }
 }
