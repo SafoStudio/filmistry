@@ -1,0 +1,104 @@
+<div
+  class="mobile-menu"
+  [class.mobile-menu--open]="open()"
+  (click)="onClose()"
+>
+  <aside
+    class="mobile-menu__panel"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="mobile-menu__header">
+      <a
+        class="mobile-menu__logo"
+        routerLink="/"
+        (click)="onClose()"
+      >
+        Filmistry
+      </a>
+      <button
+        type="button"
+        class="mobile-menu__close"
+        (click)="onClose()"
+        aria-label="Close menu"
+      >
+        <app-icon name="close" [size]="22" />
+      </button>
+    </div>
+
+    <div class="mobile-menu__search">
+      <div class="mobile-menu__search-wrap">
+        <app-icon name="search" [size]="18" />
+        <input
+          type="text"
+          class="mobile-menu__search-input"
+          placeholder="Search movies, TV shows, people..."
+          [value]="query()"
+          (input)="onQueryInput($event)"
+          (keydown.enter)="onSearchSubmit()"
+          autocomplete="off"
+        />
+        @if (query()) {
+          <button
+            type="button"
+            class="mobile-menu__search-clear"
+            (click)="clearQuery()"
+            aria-label="Clear search"
+          >
+            <app-icon name="close" [size]="16" />
+          </button>
+        }
+      </div>
+    </div>
+
+    <nav class="mobile-menu__nav">
+      @for (section of sections(); track section.title) {
+        @if (section.sections) {
+          <div class="mobile-menu__group">
+            <button
+              type="button"
+              class="mobile-menu__group-title"
+              [class.mobile-menu__group-title--open]="expanded() === section.title"
+              (click)="toggleExpand(section.title)"
+            >
+              <span>{{ section.title }}</span>
+              <app-icon name="chevron-right" [size]="20" />
+            </button>
+
+            @if (expanded() === section.title) {
+              <div class="mobile-menu__sub">
+                @for (sub of section.sections; track $index) {
+                  <div class="mobile-menu__sub-section">
+                    @if (!sub.hideTitle) {
+                      <div class="mobile-menu__sub-title">{{ sub.title }}</div>
+                    }
+                    <div class="mobile-menu__sub-links">
+                      @for (link of sub.links; track $index) {
+                        <a
+                          class="mobile-menu__sub-link"
+                          [routerLink]="link.link"
+                          [queryParams]="link.queryParams ?? {}"
+                          (click)="onClose()"
+                        >
+                          {{ link.label }}
+                        </a>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        } @else if (section.link) {
+          <a
+            class="mobile-menu__link"
+            [routerLink]="section.link"
+            routerLinkActive="mobile-menu__link--active"
+            (click)="onClose()"
+          >
+            {{ section.title }}
+          </a>
+        }
+      }
+    </nav>
+  </aside>
+</div>

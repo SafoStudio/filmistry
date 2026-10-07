@@ -1,7 +1,9 @@
-<header class="header" [class.header--hidden]="hidden()">
+<header
+  class="header"
+  [class.header--hidden]="hidden() && !menuOpen()"
+  [class.header--menu-open]="menuOpen()"
+>
   <div class="header__inner">
-    <a class="header__logo" routerLink="/" (click)="closeMenu()">Filmistry</a>
-
     <button
       type="button"
       class="header__burger"
@@ -13,6 +15,8 @@
       <span class="header__burger-line"></span>
       <span class="header__burger-line"></span>
     </button>
+
+    <a class="header__logo" routerLink="/" (click)="closeMenu()">Filmistry</a>
 
     <nav class="header__nav" [class.header__nav--open]="menuOpen()">
       <a
@@ -28,23 +32,22 @@
 
       <div
         class="header__link-wrap"
+        [class.header__link-wrap--open]="activeMegaMenu() === 'movies'"
         (mouseenter)="onMenuEnter('movies')"
         (mouseleave)="onMenuLeave()"
       >
-        <span
+        <button
+          type="button"
           class="header__link header__link--button"
           [class.header__link--active]="isMoviesActive()"
+          (click)="onMenuEnter('movies')"
         >
           <span class="header__label">Movies</span>
           <app-icon name="film" [size]="28" />
-        </span>
+        </button>
 
         @if (activeMegaMenu() === 'movies') {
-          <div
-            class="header__mega"
-            (mouseenter)="onMenuEnter('movies')"
-            (mouseleave)="onMenuLeave()"
-          >
+          <div class="header__mega">
             <div class="header__mega-inner">
               @for (section of movieMenu.sections; track $index) {
                 <div class="header__mega-section">
@@ -72,23 +75,22 @@
 
       <div
         class="header__link-wrap"
+        [class.header__link-wrap--open]="activeMegaMenu() === 'tv'"
         (mouseenter)="onMenuEnter('tv')"
         (mouseleave)="onMenuLeave()"
       >
-        <span
+        <button
+          type="button"
           class="header__link header__link--button"
           [class.header__link--active]="isTvActive()"
+          (click)="onMenuEnter('tv')"
         >
           <span class="header__label">TV Shows</span>
           <app-icon name="tv" [size]="28" />
-        </span>
+        </button>
 
         @if (activeMegaMenu() === 'tv') {
-          <div
-            class="header__mega"
-            (mouseenter)="onMenuEnter('tv')"
-            (mouseleave)="onMenuLeave()"
-          >
+          <div class="header__mega">
             <div class="header__mega-inner">
               @for (section of tvMenu.sections; track $index) {
                 <div class="header__mega-section">
@@ -116,23 +118,22 @@
 
       <div
         class="header__link-wrap"
+        [class.header__link-wrap--open]="activeMegaMenu() === 'anime'"
         (mouseenter)="onMenuEnter('anime')"
         (mouseleave)="onMenuLeave()"
       >
-        <span
+        <button
+          type="button"
           class="header__link header__link--button"
           [class.header__link--active]="isAnimeActive()"
+          (click)="onMenuEnter('anime')"
         >
           <span class="header__label">Anime</span>
           <app-icon name="anime-eye" [size]="28" />
-        </span>
+        </button>
 
         @if (activeMegaMenu() === 'anime') {
-          <div
-            class="header__mega"
-            (mouseenter)="onMenuEnter('anime')"
-            (mouseleave)="onMenuLeave()"
-          >
+          <div class="header__mega">
             <div class="header__mega-inner">
               @for (section of animeMenu.sections; track $index) {
                 <div class="header__mega-section">
@@ -160,23 +161,22 @@
 
       <div
         class="header__link-wrap"
+        [class.header__link-wrap--open]="activeMegaMenu() === 'cartoons'"
         (mouseenter)="onMenuEnter('cartoons')"
         (mouseleave)="onMenuLeave()"
       >
-        <span
+        <button
+          type="button"
           class="header__link header__link--button"
           [class.header__link--active]="isCartoonsActive()"
+          (click)="onMenuEnter('cartoons')"
         >
           <span class="header__label">Cartoons</span>
           <app-icon name="images" [size]="28" />
-        </span>
+        </button>
 
         @if (activeMegaMenu() === 'cartoons') {
-          <div
-            class="header__mega"
-            (mouseenter)="onMenuEnter('cartoons')"
-            (mouseleave)="onMenuLeave()"
-          >
+          <div class="header__mega">
             <div class="header__mega-inner">
               @for (section of cartoonsMenu.sections; track $index) {
                 <div class="header__mega-section">
@@ -218,4 +218,10 @@
       <app-theme-toggle />
     </div>
   </div>
+
+  <app-mobile-menu
+    [open]="menuOpen()"
+    [sections]="mobileSections"
+    (close)="closeMenu()"
+  />
 </header>

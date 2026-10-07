@@ -12,6 +12,7 @@ import { filter, map } from 'rxjs';
 import { ThemeToggle } from '../theme-toggle/theme-toggle';
 import { Icon } from '../icon/icon';
 import { SearchBar } from '@shared/components/search-bar/search-bar';
+import { MobileMenu, MobileMenuSection } from './mobile-menu/mobile-menu';
 
 type MenuSection = 'movies' | 'tv' | 'anime' | 'cartoons' | null;
 
@@ -34,7 +35,7 @@ interface MegaMenu {
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, RouterLinkActive, ThemeToggle, Icon, SearchBar],
+  imports: [RouterLink, RouterLinkActive, ThemeToggle, Icon, SearchBar, MobileMenu],
   templateUrl: './header.html',
   styleUrl: './header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -212,6 +213,15 @@ export class Header {
       },
     ],
   };
+
+  readonly mobileSections: MobileMenuSection[] = [
+    { title: 'Home', link: ['/'] },
+    { title: 'Movies', sections: this.movieMenu.sections },
+    { title: 'TV Shows', sections: this.tvMenu.sections },
+    { title: 'Anime', sections: this.animeMenu.sections },
+    { title: 'Cartoons', sections: this.cartoonsMenu.sections },
+    { title: 'Stars', link: ['/people'] },
+  ];
 
   @HostListener('window:scroll')
   onScroll(): void {
