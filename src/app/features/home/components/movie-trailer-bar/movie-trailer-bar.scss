@@ -3,31 +3,27 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 320px;
   margin: 20px auto 0;
   position: relative;
 }
 
 .trailer-bar__container {
   width: 100%;
+  max-width: min(1020px, 100%);
   overflow: hidden;
 }
 
 .trailer-bar__slides {
   display: flex;
   width: 100%;
-  gap: 0;
   transition: transform 0.5s ease;
 }
 
 .trailer-bar__slide {
-  flex: 0 0 100%;
+  flex: 1 1 0;
+  min-width: 0;
   margin: 0;
   padding: 0;
-
-  & + & {
-    margin-left: -10px;
-  }
 }
 
 .trailer-bar__overlay {
@@ -57,22 +53,21 @@
 }
 
 .trailer-bar__box {
-  width: 318px;
-  height: 260px;
+  width: 100%;
+  aspect-ratio: 318 / 260;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   background-image: url('/img/kadr.png');
-  background-size: 312px 246px;
+  background-size: 100% 96%;
   background-position: center;
   background-blend-mode: multiply;
   background-repeat: no-repeat;
-  margin: 0 auto;
 }
 
 .trailer-bar__img {
-  width: 300px;
+  width: 96%;
   border-radius: 8px;
   display: block;
 }
@@ -80,13 +75,13 @@
 .trailer-bar__name {
   position: absolute;
   width: 80%;
-  left: 8px;
-  bottom: 45px;
+  left: 2%;
+  bottom: 16%;
   color: bisque;
   background: linear-gradient(to right, #111111, rgba(17, 17, 17, 0));
-  padding: 2px 6px;
+  padding: 4px 8px;
   border-bottom-left-radius: 8px;
-  font-size: 16px;
+  font-size: clamp(12px, 2vw, 16px);
   font-weight: 400;
   text-shadow: 1px 0 3px #161616;
   margin: 0;
@@ -99,10 +94,10 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 80px;
-  height: 80px;
+  width: clamp(48px, 12vw, 80px);
+  height: clamp(48px, 12vw, 80px);
   background: url('/img/play.png') no-repeat center center;
-  background-size: 80px 80px;
+  background-size: contain;
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
@@ -121,7 +116,7 @@
 }
 
 .trailer-bar__btn {
-  width: 100px;
+  width: clamp(80px, 20vw, 100px);
   padding: 6px 10px;
   border: none;
   border-radius: 0;
@@ -205,33 +200,5 @@
 
   &:hover {
     background: rgba(255, 255, 255, 0.3);
-  }
-}
-
-@media screen and (min-width: 768px) {
-  .trailer-bar {
-    max-width: 640px;
-  }
-
-  .trailer-bar__container {
-    width: 624px;
-  }
-
-  .trailer-bar__slide {
-    flex: 0 0 50%;
-  }
-}
-
-@media screen and (min-width: 1440px) {
-  .trailer-bar {
-    max-width: 960px;
-  }
-
-  .trailer-bar__container {
-    width: 960px;
-  }
-
-  .trailer-bar__slide {
-    flex: 0 0 33.3333%;
   }
 }

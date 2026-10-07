@@ -7,6 +7,7 @@ import {
   output,
   afterNextRender,
   OnDestroy,
+  HostListener,
 } from '@angular/core';
 import { MediaService } from '@core/services/media.service';
 import { TrendingItem } from '@core/models/trending.model';
@@ -29,6 +30,7 @@ export class MovieTrailerBar implements OnDestroy {
   items = signal<TrendingItem[]>([]);
   loading = signal(true);
   currentIndex = signal(0);
+  visibleCount = signal(1);
 
   trailerUrl = signal<SafeResourceUrl | null>(null);
   isModalOpen = signal(false);
@@ -38,10 +40,13 @@ export class MovieTrailerBar implements OnDestroy {
 
   visibleItems = computed(() => {
     const all = this.items();
+    const count = this.visibleCount();
     if (all.length === 0) return [];
+    if (all.length <= count) return all;
+
     const start = this.currentIndex();
     const result: TrendingItem[] = [];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < count; i++) {
       result.push(all[(start + i) % all.length]);
     }
     return result;
@@ -63,12 +68,31 @@ export class MovieTrailerBar implements OnDestroy {
     });
 
     afterNextRender(() => {
+      this.updateVisibleCount();
       this.startAuto();
     });
   }
 
   ngOnDestroy(): void {
     this.stopAuto();
+  }
+
+  @HostListener('window:resize')
+  onResize(): void {
+    this.updateVisibleCount();
+  }
+
+  private updateVisibleCount(): void {
+    if (typeof window === 'undefined') return;
+    const w = window.innerWidth;
+
+    if (w < 600) {
+      this.visibleCount.set(1);
+    } else if (w < 1000) {
+      this.visibleCount.set(2);
+    } else {
+      this.visibleCount.set(3);
+    }
   }
 
   private startAuto(): void {

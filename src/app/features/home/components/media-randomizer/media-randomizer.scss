@@ -9,6 +9,7 @@ $poster-title-text-color: bisque;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
   margin-top: 14px;
 }
 
@@ -21,12 +22,13 @@ $poster-title-text-color: bisque;
 
 .poster-box {
   position: relative;
+  width: 100%;
+  max-width: min(1020px, 100%);
 }
 
 .poster {
   width: 100%;
   height: auto;
-  max-width: 355px;
   border-radius: 8px;
   border: 2px solid $poster-border-color;
   filter: grayscale(100%);
@@ -37,8 +39,8 @@ $poster-title-text-color: bisque;
   position: absolute;
   bottom: 5px;
   right: 5px;
-  padding: 8px;
-  font-size: 14px;
+  padding: 8px 12px;
+  font-size: clamp(12px, 2vw, 16px);
   font-weight: normal;
   color: $poster-title-text-color;
   background-color: $poster-title-bg-color;
@@ -50,32 +52,10 @@ $poster-title-text-color: bisque;
 }
 
 @media screen and (min-width: 768px) {
-  .poster-box {
-    width: 748px;
-    height: 425px;
-  }
-
-  .poster {
-    max-width: 748px;
-    filter: grayscale(100%);
-  }
-
   .poster-title {
-    right: 5px;
-    font-size: 34px;
+    font-size: clamp(20px, 3vw, 34px);
     font-weight: bold;
     color: $text-color;
     background-color: transparent;
-  }
-}
-
-@media screen and (min-width: 1440px) {
-  .poster-box {
-    width: 1020px;
-    height: 578px;
-  }
-
-  .poster {
-    max-width: 1020px;
   }
 }
