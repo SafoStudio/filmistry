@@ -44,6 +44,14 @@ export interface TmdbMediaDetailRaw {
     name: string;
     poster_path: string | null;
   } | null;
+  seasons?: Array<{
+    id: number;
+    season_number: number;
+    name: string;
+    poster_path: string | null;
+    air_date: string | null;
+    episode_count: number;
+  }>;
 }
 
 const MAX_RECOMMENDATIONS = 12;
@@ -94,5 +102,14 @@ export function toMediaDetailDto(raw: TmdbMediaDetailRaw): MediaDetailDto {
           posterUrl: buildUrl(raw.belongs_to_collection.poster_path, POSTER_SIZE),
         }
       : null,
+    seasons:
+      raw.seasons?.map((s) => ({
+        id: s.id,
+        seasonNumber: s.season_number,
+        name: s.name,
+        posterUrl: buildUrl(s.poster_path, POSTER_SIZE),
+        airDate: s.air_date ?? null,
+        episodeCount: s.episode_count ?? 0,
+      })) ?? [],
   };
 }

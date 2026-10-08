@@ -7,6 +7,7 @@ import { toMediaDetailDto, TmdbMediaDetailRaw } from '../mappers/media-detail.ma
 import { toMediaCreditsDto, TmdbMediaCreditsRaw } from '../mappers/media-credits.mapper';
 import { toMediaImagesDto, TmdbMediaImagesRaw } from '../mappers/media-images.mapper';
 import { toMediaReviewsDto, TmdbMediaReviewsRaw } from '../mappers/media-reviews.mapper';
+import { TmdbSeasonDetailRaw, toTvSeasonDetailDto } from '../mappers/tv-season.mapper';
 
 export const tvRouter = Router();
 
@@ -69,5 +70,20 @@ tvRouter.get(
       language: lang,
     });
     return toMediaReviewsDto(raw);
+  }),
+);
+
+tvRouter.get(
+  '/:id/season/:seasonNumber',
+  handleApi(async (req) => {
+    const id = req.params['id'];
+    const seasonNumber = req.params['seasonNumber'];
+    const lang = (req.query['lang'] as string) || DEFAULT_LANGUAGE;
+
+    const raw = await tmdbFetch<TmdbSeasonDetailRaw>(`/tv/${id}/season/${seasonNumber}`, {
+      language: lang,
+    });
+
+    return toTvSeasonDetailDto(raw);
   }),
 );

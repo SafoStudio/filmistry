@@ -1,4 +1,5 @@
 import { MediaListItemDto } from './media.dto';
+import { TvSeasonListItemDto } from './tv-season.dto';
 
 export interface CollectionLinkDto {
   id: number;
@@ -19,4 +20,5 @@ export interface MediaDetailDto {
   trailerKey: string | null;
   recommendations: MediaListItemDto[];
   belongsToCollection: CollectionLinkDto | null;
+  seasons: TvSeasonListItemDto[];
 }
