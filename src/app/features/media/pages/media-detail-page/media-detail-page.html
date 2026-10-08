@@ -98,6 +98,10 @@
     />
   }
 
+  @if (m.seasons.length > 0) {
+    <app-seasons-section [items]="m.seasons" [tvId]="id()" />
+  }
+
   @if (isTrailerOpen() && trailerUrl(); as url) {
     <div class="trailer-modal" (click)="closeTrailer()">
       <div class="trailer-modal__content" (click)="$event.stopPropagation()">

@@ -12,6 +12,7 @@ import { Icon } from '@shared/components/icon/icon';
 import { Loader } from '@shared/components/loader/loader';
 import { PageCurl } from '@shared/components/page-curl/page-curl';
 import { RecommendationsSection } from './sections/recommendations/recommendations';
+import { SeasonsSection } from '@features/media/pages/media-detail-page/sections/seasons/seasons';
 
 type DetailSection = 'cast' | 'gallery' | 'reviews' | null;
 
@@ -21,7 +22,16 @@ interface MediaDetailState {
 
 @Component({
   selector: 'app-media-detail-page',
-  imports: [RouterOutlet, RatingBar, Icon, Loader, PageCurl, RecommendationsSection, RouterLink],
+  imports: [
+    RouterOutlet,
+    RatingBar,
+    Icon,
+    Loader,
+    PageCurl,
+    RecommendationsSection,
+    RouterLink,
+    SeasonsSection,
+  ],
   templateUrl: './media-detail-page.html',
   styleUrl: './media-detail-page.scss',
 })

@@ -1,0 +1,37 @@
+<section class="seasons">
+  <h2 class="seasons__title">Seasons</h2>
+
+  @if (items().length === 0) {
+    <p class="seasons__empty">No seasons available</p>
+  } @else {
+    <div class="seasons__grid">
+      @for (season of items(); track season.seasonNumber) {
+        <a
+          class="seasons__card"
+          [routerLink]="['/tv', tvId(), 'season', season.seasonNumber]"
+        >
+          <div class="seasons__poster">
+            @if (season.posterUrl) {
+              <img [src]="season.posterUrl" [alt]="season.name" loading="lazy" />
+            } @else {
+              <div class="seasons__poster-placeholder">{{ season.name }}</div>
+            }
+
+            <div class="seasons__overlay">
+              <span class="seasons__name">{{ season.name }}</span>
+              <div class="seasons__meta">
+                @if (season.airDate) {
+                  <span class="seasons__year">{{ season.airDate.slice(0, 4) }}</span>
+                }
+                <span class="seasons__count">
+                  {{ season.episodeCount }}
+                  {{ season.episodeCount === 1 ? 'episode' : 'episodes' }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </a>
+      }
+    </div>
+  }
+</section>

@@ -1,0 +1,123 @@
+.seasons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1020px;
+  margin: 24px auto 0;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.seasons__title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 16px;
+  align-self: flex-start;
+}
+
+.seasons__empty {
+  color: var(--color-text-muted);
+  padding: 16px 0;
+}
+
+.seasons__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(140px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+@media screen and (min-width: 568px) {
+  .seasons__grid {
+    grid-template-columns: repeat(3, minmax(140px, 1fr));
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .seasons__grid {
+    grid-template-columns: repeat(4, minmax(140px, 1fr));
+    gap: 18px;
+  }
+}
+
+@media screen and (min-width: 1100px) {
+  .seasons__grid {
+    grid-template-columns: repeat(5, minmax(140px, 1fr));
+    gap: 20px;
+  }
+}
+
+.seasons__card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+}
+
+.seasons__poster {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--color-surface);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.seasons__poster-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 8px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.seasons__overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 32px 10px 10px;
+  color: #eee;
+  background: linear-gradient(
+    to top,
+    rgba(17, 17, 17, 0.95) 0%,
+    rgba(17, 17, 17, 0.85) 25%,
+    rgba(17, 17, 17, 0) 100%
+  );
+}
+
+.seasons__name {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.seasons__meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.seasons__year,
+.seasons__count {
+  font-size: 12px;
+}
