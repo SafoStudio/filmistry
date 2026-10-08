@@ -41,34 +41,46 @@
         </div>
 
         <div class="addInfo fade-item" style="--i: 4">
-          <div class="linkBox" [class.linkBox--active]="activeSection() === 'cast'">
-            <button type="button" class="linkPage" (click)="toggleSection('cast')" aria-label="Cast">
-              <app-icon name="users" [size]="22" />
+          <div class="addInfo__left">
+            <div class="linkBox" [class.linkBox--active]="activeSection() === 'cast'">
+              <button type="button" class="linkPage" (click)="toggleSection('cast')" aria-label="Cast">
+                <app-icon name="users" [size]="22" />
+              </button>
+            </div>
+            <div class="linkBox" [class.linkBox--active]="activeSection() === 'reviews'">
+              <button type="button" class="linkPage" (click)="toggleSection('reviews')" aria-label="Reviews">
+                <app-icon name="comments" [size]="22" />
+              </button>
+            </div>
+            <div class="linkBox" [class.linkBox--active]="activeSection() === 'gallery'">
+              <button type="button" class="linkPage" (click)="toggleSection('gallery')" aria-label="Gallery">
+                <app-icon name="images" [size]="22" />
+              </button>
+            </div>
+            <button
+              type="button"
+              class="button"
+              [class.button--disabled]="!hasTrailer()"
+              [disabled]="!hasTrailer()"
+              (click)="openTrailer()"
+              [attr.aria-label]="hasTrailer() ? 'Play trailer' : 'Trailer not available'"
+            >
+              <app-icon name="play" [size]="32" />
+              @if (!hasTrailer()) {
+                <span class="button__tooltip">Trailer not available</span>
+              }
             </button>
           </div>
-          <div class="linkBox" [class.linkBox--active]="activeSection() === 'reviews'">
-            <button type="button" class="linkPage" (click)="toggleSection('reviews')" aria-label="Reviews">
-              <app-icon name="comments" [size]="22" />
-            </button>
-          </div>
-          <div class="linkBox" [class.linkBox--active]="activeSection() === 'gallery'">
-            <button type="button" class="linkPage" (click)="toggleSection('gallery')" aria-label="Gallery">
-              <app-icon name="images" [size]="22" />
-            </button>
-          </div>
-          <button
-            type="button"
-            class="button"
-            [class.button--disabled]="!hasTrailer()"
-            [disabled]="!hasTrailer()"
-            (click)="openTrailer()"
-            [attr.aria-label]="hasTrailer() ? 'Play trailer' : 'Trailer not available'"
-          >
-            <app-icon name="play" [size]="32" />
-            @if (!hasTrailer()) {
-              <span class="button__tooltip">Trailer not available</span>
-            }
-          </button>
+
+          @if (m.belongsToCollection; as col) {
+            <a
+              class="addInfo__collection"
+              [routerLink]="['/collection', col.id]"
+            >
+              <span class="addInfo__collection-label">Collection</span>
+              <span class="addInfo__collection-name">{{ col.name }}</span>
+            </a>
+          }
         </div>
       </div>
     </div>

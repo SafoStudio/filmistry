@@ -25,5 +25,6 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'people', renderMode: RenderMode.Server },
   { path: 'people/:id', renderMode: RenderMode.Server },
   { path: 'search', renderMode: RenderMode.Server },
+  { path: 'collection/:id', renderMode: RenderMode.Server },
   { path: '**', renderMode: RenderMode.Server },
 ];

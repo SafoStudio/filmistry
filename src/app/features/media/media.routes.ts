@@ -81,3 +81,11 @@ export const cartoonsRoutes: Routes = [
     children: mediaChildren,
   },
 ];
+
+export const collectionRoutes: Routes = [
+  {
+    path: ':id',
+    loadComponent: () =>
+      import('./pages/collection-page/collection-page').then((m) => m.CollectionPage),
+  },
+];

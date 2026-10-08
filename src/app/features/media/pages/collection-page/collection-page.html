@@ -1,0 +1,25 @@
+<div class="collection">
+  @if (loading()) {
+    <app-loader />
+  } @else if (error()) {
+    <p class="collection__error">{{ error() }}</p>
+  } @else if (collection(); as c) {
+    <div
+      class="collection__hero"
+      [style.backgroundImage]="c.backdropUrl ? 'url(' + c.backdropUrl + ')' : 'none'"
+    >
+      <app-page-curl (close)="goBack()" />
+
+      <div class="collection__hero-content">
+        <h1 class="collection__title">{{ c.name }}</h1>
+        <p class="collection__overview">{{ c.overview }}</p>
+      </div>
+    </div>
+
+    <div class="collection__parts">
+      @for (part of c.parts; track part.id) {
+        <app-media-card [media]="part" mediaType="movie" />
+      }
+    </div>
+  }
+</div>

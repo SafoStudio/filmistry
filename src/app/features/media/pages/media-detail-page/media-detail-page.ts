@@ -1,6 +1,6 @@
 import { Component, inject, signal, effect, computed, input, OnDestroy } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
+import { RouterOutlet, Router, NavigationEnd, RouterLink } from '@angular/router';
 import { Location } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
@@ -21,7 +21,7 @@ interface MediaDetailState {
 
 @Component({
   selector: 'app-media-detail-page',
-  imports: [RouterOutlet, RatingBar, Icon, Loader, PageCurl, RecommendationsSection],
+  imports: [RouterOutlet, RatingBar, Icon, Loader, PageCurl, RecommendationsSection, RouterLink],
   templateUrl: './media-detail-page.html',
   styleUrl: './media-detail-page.scss',
 })

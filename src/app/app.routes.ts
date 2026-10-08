@@ -29,5 +29,9 @@ export const routes: Routes = [
     path: 'search',
     loadChildren: () => import('./features/search/search.routes').then((m) => m.searchRoutes),
   },
+  {
+    path: 'collection',
+    loadChildren: () => import('./features/media/media.routes').then((m) => m.collectionRoutes),
+  },
   { path: '**', redirectTo: '' },
 ];
