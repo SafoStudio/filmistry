@@ -1,5 +1,5 @@
 import { Component, inject, signal, effect, input } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { CollectionService } from '@core/services/collection.service';
 import { Collection } from '@core/models/collection.model';
@@ -23,6 +23,7 @@ export class CollectionPage {
   collection = signal<Collection | null>(null);
   loading = signal(true);
   error = signal<string | null>(null);
+  isClosing = signal(false);
 
   constructor() {
     effect(() => {
@@ -46,7 +47,21 @@ export class CollectionPage {
     });
   }
 
-  goBack(): void {
+  closeDetail(): void {
+    if (this.isClosing()) return;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reducedMotion) {
+      this.goBack();
+      return;
+    }
+
+    this.isClosing.set(true);
+    setTimeout(() => this.goBack(), 700);
+  }
+
+  private goBack(): void {
     if (typeof window !== 'undefined' && window.history.length > 1) {
       this.location.back();
     } else {

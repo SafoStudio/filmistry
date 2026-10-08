@@ -6,9 +6,13 @@
   } @else if (collection(); as c) {
     <div
       class="collection__hero"
+      [class.collection__hero--closing]="isClosing()"
       [style.backgroundImage]="c.backdropUrl ? 'url(' + c.backdropUrl + ')' : 'none'"
     >
-      <app-page-curl (close)="goBack()" />
+      <app-page-curl
+        [closing]="isClosing()"
+        (close)="closeDetail()"
+      />
 
       <div class="collection__hero-content">
         <h1 class="collection__title">{{ c.name }}</h1>
