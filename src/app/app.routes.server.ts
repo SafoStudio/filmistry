@@ -26,5 +26,6 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'people/:id', renderMode: RenderMode.Server },
   { path: 'search', renderMode: RenderMode.Server },
   { path: 'collection/:id', renderMode: RenderMode.Server },
+  { path: 'tv/:id/season/:seasonNumber', renderMode: RenderMode.Server },
   { path: '**', renderMode: RenderMode.Server },
 ];

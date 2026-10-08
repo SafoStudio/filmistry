@@ -1,0 +1,64 @@
+<div class="season">
+  @if (loading()) {
+    <app-loader />
+  } @else if (error()) {
+    <p class="season__error">{{ error() }}</p>
+  } @else if (season(); as s) {
+    <section
+      class="season__hero"
+      [class.season__hero--closing]="isClosing()"
+      [style.backgroundImage]="s.episodes[0]?.stillUrl ? 'url(' + s.episodes[0].stillUrl + ')' : 'none'"
+    >
+      <app-page-curl
+        [closing]="isClosing()"
+        (close)="closeDetail()"
+      />
+
+      <div class="season__card">
+        <div class="season__poster">
+          @if (s.posterUrl) {
+            <img [src]="s.posterUrl" [alt]="s.name" />
+          }
+        </div>
+
+        <div class="season__info">
+          <h1 class="season__title">{{ s.name }}</h1>
+          @if (s.airDate) {
+            <p class="season__air-date">{{ s.airDate }}</p>
+          }
+          <p class="season__count">
+            {{ s.episodeCount }} {{ s.episodeCount === 1 ? 'episode' : 'episodes' }}
+          </p>
+          <p class="season__overview">{{ s.overview }}</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="season__episodes">
+      @for (ep of s.episodes; track ep.id) {
+        <article class="episode">
+          @if (ep.stillUrl) {
+            <img
+              class="episode__still"
+              [src]="ep.stillUrl"
+              [alt]="ep.name"
+              loading="lazy"
+            />
+          }
+          <div class="episode__info">
+            <div class="episode__header">
+              <span class="episode__number">E{{ ep.episodeNumber }}</span>
+              <h3 class="episode__name">{{ ep.name }}</h3>
+            </div>
+            @if (ep.airDate) {
+              <p class="episode__air-date">{{ ep.airDate }}</p>
+            }
+            @if (ep.overview) {
+              <p class="episode__overview">{{ ep.overview }}</p>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  }
+</div>

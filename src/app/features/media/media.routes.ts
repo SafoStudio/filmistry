@@ -44,6 +44,11 @@ export const tvRoutes: Routes = [
     data: { mediaType: 'tv' },
   },
   {
+    path: ':id/season/:seasonNumber',
+    loadComponent: () =>
+      import('./pages/tv-season-page/tv-season-page').then((m) => m.TvSeasonPage),
+  },
+  {
     path: ':id',
     loadComponent: () =>
       import('./pages/media-detail-page/media-detail-page').then((m) => m.MediaDetailPage),
@@ -89,3 +94,4 @@ export const collectionRoutes: Routes = [
       import('./pages/collection-page/collection-page').then((m) => m.CollectionPage),
   },
 ];
+
