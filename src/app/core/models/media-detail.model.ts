@@ -1,4 +1,5 @@
 import { Media } from './media.model';
+import { TvSeasonListItem } from '@core/models/tv-season.model';
 
 export interface CollectionLink {
   id: number;
@@ -19,4 +20,5 @@ export interface MediaDetail {
   trailerKey: string | null;
   recommendations: Media[];
   belongsToCollection: CollectionLink | null;
+  seasons: TvSeasonListItem[];
 }

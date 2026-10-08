@@ -9,6 +9,7 @@ import { MediaCredits } from '../models/media-credits.model';
 import { MediaImages } from '../models/media-images.model';
 import { MediaReviews } from '../models/media-reviews.model';
 import { Trending } from '../models/trending.model';
+import { TvSeasonDetail } from '@core/models/tv-season.model';
 
 export type MediaType = 'movie' | 'tv';
 
@@ -60,5 +61,13 @@ export class MediaService {
     return this.http.get<Trending>('/api/trending/day', {
       params: { lang },
     });
+  }
+
+  getSeasonDetail(
+    tvId: string,
+    seasonNumber: number,
+    lang: string = 'en-US',
+  ): Observable<TvSeasonDetail> {
+    return this.tvService.getSeasonDetail(tvId, seasonNumber, lang);
   }
 }

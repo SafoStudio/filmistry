@@ -6,6 +6,7 @@ import { MediaDetail } from '../models/media-detail.model';
 import { MediaCredits } from '../models/media-credits.model';
 import { MediaImages } from '../models/media-images.model';
 import { MediaReviews } from '../models/media-reviews.model';
+import { TvSeasonDetail } from '@core/models/tv-season.model';
 
 @Service()
 export class TvService {
@@ -36,6 +37,16 @@ export class TvService {
 
   getReviews(id: string, lang: string = 'en-US'): Observable<MediaReviews> {
     return this.http.get<MediaReviews>(`${this.apiUrl}/${id}/reviews`, {
+      params: { lang },
+    });
+  }
+
+  getSeasonDetail(
+    tvId: string,
+    seasonNumber: number,
+    lang: string = 'en-US',
+  ): Observable<TvSeasonDetail> {
+    return this.http.get<TvSeasonDetail>(`${this.apiUrl}/${tvId}/season/${seasonNumber}`, {
       params: { lang },
     });
   }
