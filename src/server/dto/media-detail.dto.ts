@@ -1,5 +1,11 @@
 import { MediaListItemDto } from './media.dto';
 
+export interface CollectionLinkDto {
+  id: number;
+  name: string;
+  posterUrl: string | null;
+}
+
 export interface MediaDetailDto {
   id: number;
   title: string;
@@ -12,4 +18,5 @@ export interface MediaDetailDto {
   genres: string[];
   trailerKey: string | null;
   recommendations: MediaListItemDto[];
+  belongsToCollection: CollectionLinkDto | null;
 }

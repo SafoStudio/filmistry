@@ -39,6 +39,11 @@ export interface TmdbMediaDetailRaw {
   recommendations?: {
     results: TmdbRecommendationRaw[];
   };
+  belongs_to_collection?: {
+    id: number;
+    name: string;
+    poster_path: string | null;
+  } | null;
 }
 
 const MAX_RECOMMENDATIONS = 12;
@@ -82,5 +87,12 @@ export function toMediaDetailDto(raw: TmdbMediaDetailRaw): MediaDetailDto {
         .filter((r) => r.poster_path)
         .slice(0, MAX_RECOMMENDATIONS)
         .map(toRecommendationDto) ?? [],
+    belongsToCollection: raw.belongs_to_collection
+      ? {
+          id: raw.belongs_to_collection.id,
+          name: raw.belongs_to_collection.name,
+          posterUrl: buildUrl(raw.belongs_to_collection.poster_path, POSTER_SIZE),
+        }
+      : null,
   };
 }
