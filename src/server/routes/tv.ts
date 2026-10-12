@@ -8,6 +8,7 @@ import { toMediaCreditsDto, TmdbMediaCreditsRaw } from '../mappers/media-credits
 import { toMediaImagesDto, TmdbMediaImagesRaw } from '../mappers/media-images.mapper';
 import { toMediaReviewsDto, TmdbMediaReviewsRaw } from '../mappers/media-reviews.mapper';
 import { TmdbSeasonDetailRaw, toTvSeasonDetailDto } from '../mappers/tv-season.mapper';
+import { toExternalIdsDto, TmdbExternalIdsRaw } from '../mappers/external-ids.mapper';
 
 export const tvRouter = Router();
 
@@ -85,5 +86,14 @@ tvRouter.get(
     });
 
     return toTvSeasonDetailDto(raw);
+  }),
+);
+
+tvRouter.get(
+  '/:id/external_ids',
+  handleApi(async (req) => {
+    const id = req.params['id'];
+    const raw = await tmdbFetch<TmdbExternalIdsRaw>(`/tv/${id}/external_ids`);
+    return toExternalIdsDto(raw);
   }),
 );

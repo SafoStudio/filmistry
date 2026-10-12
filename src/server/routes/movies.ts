@@ -7,6 +7,7 @@ import { toMediaDetailDto, TmdbMediaDetailRaw } from '../mappers/media-detail.ma
 import { toMediaCreditsDto, TmdbMediaCreditsRaw } from '../mappers/media-credits.mapper';
 import { toMediaImagesDto, TmdbMediaImagesRaw } from '../mappers/media-images.mapper';
 import { toMediaReviewsDto, TmdbMediaReviewsRaw } from '../mappers/media-reviews.mapper';
+import { toExternalIdsDto, TmdbExternalIdsRaw } from '../mappers/external-ids.mapper';
 
 export const moviesRouter = Router();
 
@@ -69,5 +70,14 @@ moviesRouter.get(
       language: lang,
     });
     return toMediaReviewsDto(raw);
+  }),
+);
+
+moviesRouter.get(
+  '/:id/external_ids',
+  handleApi(async (req) => {
+    const id = req.params['id'];
+    const raw = await tmdbFetch<TmdbExternalIdsRaw>(`/movie/${id}/external_ids`);
+    return toExternalIdsDto(raw);
   }),
 );

@@ -5,6 +5,7 @@ import { DEFAULT_LANGUAGE } from '../constants';
 import { toPersonListDto } from '../mappers/person.mapper';
 import { toPersonDetailDto, TmdbPersonDetailRaw } from '../mappers/person-detail.mapper';
 import { toPersonCreditsDto, TmdbPersonCreditsRaw } from '../mappers/person-credits.mapper';
+import { toPersonExternalIdsDto, TmdbPersonExternalIdsRaw } from '../mappers/external-ids.mapper';
 
 interface TmdbPersonListRaw {
   results: any[];
@@ -44,5 +45,14 @@ peopleRouter.get(
       language: lang,
     });
     return toPersonCreditsDto(raw);
+  }),
+);
+
+peopleRouter.get(
+  '/:id/external_ids',
+  handleApi(async (req) => {
+    const id = req.params['id'];
+    const raw = await tmdbFetch<TmdbPersonExternalIdsRaw>(`/person/${id}/external_ids`);
+    return toPersonExternalIdsDto(raw);
   }),
 );
