@@ -1,4 +1,13 @@
-import { Component, inject, signal, effect, computed, input, OnDestroy } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  effect,
+  computed,
+  input,
+  OnDestroy,
+  HostListener,
+} from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RouterOutlet, Router, NavigationEnd, RouterLink } from '@angular/router';
 import { Location } from '@angular/common';
@@ -102,9 +111,14 @@ export class MediaDetailPage implements OnDestroy {
       this.isClosing.set(false);
       this.tryLoad(itemId, type);
     });
+
+    effect(() => {
+      document.body.style.overflow = this.isTrailerOpen() ? 'hidden' : '';
+    });
   }
 
   ngOnDestroy(): void {
+    document.body.style.overflow = '';
     const currentItem = this.item();
     if (!currentItem) return;
 
@@ -113,6 +127,13 @@ export class MediaDetailPage implements OnDestroy {
       { item: currentItem, externalIds: this.externalIds() },
       window.scrollY,
     );
+  }
+
+  @HostListener('document:keydown.escape')
+  handleEscape(): void {
+    if (this.isTrailerOpen()) {
+      this.closeTrailer();
+    }
   }
 
   private tryLoad(id: string, mediaType: MediaType): void {
@@ -139,6 +160,7 @@ export class MediaDetailPage implements OnDestroy {
     this.loading.set(true);
     this.error.set(null);
     this.externalIds.set(null);
+    this.isTrailerOpen.set(false);
 
     this.mediaService.getDetail(mediaType, id).subscribe({
       next: (data) => {
