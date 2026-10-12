@@ -3,27 +3,85 @@
 } @else if (totalSlides() === 0) {
   <p class="no-images">No Images</p>
 } @else {
-  <section class="container">
-    <h2 class="title">Gallery</h2>
-    <div>
-      <p class="counter-img">{{ counter() }}</p>
+  <section class="polaroid">
+    <h2 class="polaroid__title">Gallery</h2>
 
+    <div class="polaroid__stack">
       @for (item of images(); track $index) {
-        <div class="gallery-list" [class.active]="$index === currentSlide()">
-          <img
-            class="gallery-img"
-            [src]="item.url"
-            [alt]="'Backdrop ' + $index"
-          />
-        </div>
+        @if ($index >= currentSlide() - 1 && $index <= currentSlide() + 1) {
+          <div
+            class="polaroid__card"
+            [class.polaroid__card--active]="$index === currentSlide()"
+            [class.polaroid__card--prev]="$index < currentSlide()"
+            [class.polaroid__card--next]="$index > currentSlide()"
+            (click)="$index === currentSlide() ? openLightbox() : goTo($index)"
+          >
+            <img [src]="item.url" [alt]="'Backdrop ' + $index" />
+          </div>
+        }
       }
+    </div>
 
-      <button type="button" class="gallery-left-btn" (click)="prev()">
+    <div class="polaroid__footer">
+      <button
+        type="button"
+        class="polaroid__nav polaroid__nav--prev"
+        (click)="prev()"
+        aria-label="Previous image"
+      >
         <app-icon name="chevron-left" [size]="22" />
       </button>
-      <button type="button" class="gallery-right-btn" (click)="next()">
+
+      <span class="polaroid__counter">{{ counter() }}</span>
+
+      <button
+        type="button"
+        class="polaroid__nav polaroid__nav--next"
+        (click)="next()"
+        aria-label="Next image"
+      >
         <app-icon name="chevron-right" [size]="22" />
       </button>
     </div>
   </section>
+
+  @if (isLightboxOpen() && images()[currentSlide()]; as current) {
+    <div class="lightbox" (click)="closeLightbox()">
+      <button
+        type="button"
+        class="lightbox__close"
+        (click)="closeLightbox(); $event.stopPropagation()"
+        aria-label="Close"
+      >
+        <app-icon name="close" [size]="24" />
+      </button>
+
+      <button
+        type="button"
+        class="lightbox__nav lightbox__nav--prev"
+        (click)="lightboxPrev(); $event.stopPropagation()"
+        aria-label="Previous image"
+      >
+        <app-icon name="chevron-left" [size]="28" />
+      </button>
+
+      <img
+        class="lightbox__img"
+        [src]="current.url"
+        [alt]="'Backdrop ' + currentSlide()"
+        (click)="$event.stopPropagation()"
+      />
+
+      <button
+        type="button"
+        class="lightbox__nav lightbox__nav--next"
+        (click)="lightboxNext(); $event.stopPropagation()"
+        aria-label="Next image"
+      >
+        <app-icon name="chevron-right" [size]="28" />
+      </button>
+
+      <span class="lightbox__counter">{{ counter() }}</span>
+    </div>
+  }
 }
