@@ -10,6 +10,7 @@ import { MediaImages } from '../models/media-images.model';
 import { MediaReviews } from '../models/media-reviews.model';
 import { Trending } from '../models/trending.model';
 import { TvSeasonDetail } from '@core/models/tv-season.model';
+import { ExternalIds } from '../models/external-ids.model';
 
 export type MediaType = 'movie' | 'tv';
 
@@ -69,5 +70,11 @@ export class MediaService {
     lang: string = 'en-US',
   ): Observable<TvSeasonDetail> {
     return this.tvService.getSeasonDetail(tvId, seasonNumber, lang);
+  }
+
+  getExternalIds(mediaType: MediaType, id: string): Observable<ExternalIds> {
+    return mediaType === 'movie'
+      ? this.movieService.getExternalIds(id)
+      : this.tvService.getExternalIds(id);
   }
 }

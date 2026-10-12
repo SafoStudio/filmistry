@@ -1,0 +1,30 @@
+@if (links().length > 0) {
+  <ul class="externalLinks">
+    @for (link of links(); track link.key) {
+      <li class="externalLinks__item">
+        <a
+          class="externalLinks__link"
+          [href]="link.url"
+          target="_blank"
+          rel="noopener noreferrer"
+          [attr.aria-label]="link.label"
+          [title]="link.label"
+        >
+          @if (link.key === 'imdb') {
+            <app-icon
+              [name]="link.icon"
+              [size]="64"
+              [height]="22"
+              viewBox="0 0 64 22"
+            />
+          } @else {
+            <app-icon
+              [name]="link.icon"
+              [size]="22"
+            />
+          }
+        </a>
+      </li>
+    }
+  </ul>
+}

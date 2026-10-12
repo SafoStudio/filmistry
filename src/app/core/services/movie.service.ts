@@ -6,6 +6,7 @@ import { MediaDetail } from '../models/media-detail.model';
 import { MediaCredits } from '../models/media-credits.model';
 import { MediaImages } from '../models/media-images.model';
 import { MediaReviews } from '../models/media-reviews.model';
+import { ExternalIds } from '../models/external-ids.model';
 
 @Service()
 export class MovieService {
@@ -38,5 +39,9 @@ export class MovieService {
     return this.http.get<MediaReviews>(`${this.apiUrl}/${id}/reviews`, {
       params: { lang },
     });
+  }
+
+  getExternalIds(id: string): Observable<ExternalIds> {
+    return this.http.get<ExternalIds>(`${this.apiUrl}/${id}/external_ids`);
   }
 }

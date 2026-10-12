@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { PersonList } from '../models/person.model';
 import { PersonDetail } from '../models/person-detail.model';
 import { PersonCredits } from '../models/person-credits.model';
+import { ExternalIds } from '../models/external-ids.model';
 
 @Service()
 export class PeopleService {
@@ -26,5 +27,9 @@ export class PeopleService {
     return this.http.get<PersonCredits>(`${this.apiUrl}/${id}/credits`, {
       params: { lang },
     });
+  }
+
+  getExternalIds(id: string): Observable<ExternalIds> {
+    return this.http.get<ExternalIds>(`${this.apiUrl}/${id}/external_ids`);
   }
 }
