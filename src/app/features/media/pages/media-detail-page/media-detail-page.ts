@@ -13,11 +13,14 @@ import { Loader } from '@shared/components/loader/loader';
 import { PageCurl } from '@shared/components/page-curl/page-curl';
 import { RecommendationsSection } from './sections/recommendations/recommendations';
 import { SeasonsSection } from '@features/media/pages/media-detail-page/sections/seasons/seasons';
+import { ExternalLinks } from '@shared/components/external-links/external-links';
+import { ExternalIds } from '@core/models/external-ids.model';
 
 type DetailSection = 'cast' | 'gallery' | 'reviews' | null;
 
 interface MediaDetailState {
   item: MediaDetail;
+  externalIds: ExternalIds | null;
 }
 
 @Component({
@@ -31,6 +34,7 @@ interface MediaDetailState {
     RecommendationsSection,
     RouterLink,
     SeasonsSection,
+    ExternalLinks,
   ],
   templateUrl: './media-detail-page.html',
   styleUrl: './media-detail-page.scss',
@@ -50,10 +54,13 @@ export class MediaDetailPage implements OnDestroy {
   error = signal<string | null>(null);
   isTrailerOpen = signal(false);
   isClosing = signal(false);
+  externalIds = signal<ExternalIds | null>(null);
 
   hasTrailer = computed<boolean>(() => !!this.item()?.trailerKey);
 
   private stateKey = '';
+  private lastLoadedId: string | null = null;
+  private lastLoadedType: MediaType | null = null;
 
   private readonly url = toSignal(
     this.router.events.pipe(
@@ -85,10 +92,15 @@ export class MediaDetailPage implements OnDestroy {
     effect(() => {
       const itemId = this.id();
       const type = this.mediaType();
-      if (itemId && type) {
-        this.isClosing.set(false);
-        this.tryLoad(itemId, type);
-      }
+      if (!itemId || !type) return;
+
+      if (this.lastLoadedId === itemId && this.lastLoadedType === type) return;
+
+      this.lastLoadedId = itemId;
+      this.lastLoadedType = type;
+
+      this.isClosing.set(false);
+      this.tryLoad(itemId, type);
     });
   }
 
@@ -96,7 +108,11 @@ export class MediaDetailPage implements OnDestroy {
     const currentItem = this.item();
     if (!currentItem) return;
 
-    this.navState.save<MediaDetailState>(this.stateKey, { item: currentItem }, window.scrollY);
+    this.navState.save<MediaDetailState>(
+      this.stateKey,
+      { item: currentItem, externalIds: this.externalIds() },
+      window.scrollY,
+    );
   }
 
   private tryLoad(id: string, mediaType: MediaType): void {
@@ -106,6 +122,7 @@ export class MediaDetailPage implements OnDestroy {
 
     if (cached) {
       this.item.set(cached.data.item);
+      this.externalIds.set(cached.data.externalIds ?? null);
       this.loading.set(false);
       this.error.set(null);
 
@@ -121,6 +138,8 @@ export class MediaDetailPage implements OnDestroy {
   private load(id: string, mediaType: MediaType): void {
     this.loading.set(true);
     this.error.set(null);
+    this.externalIds.set(null);
+
     this.mediaService.getDetail(mediaType, id).subscribe({
       next: (data) => {
         this.item.set(data);
@@ -130,6 +149,11 @@ export class MediaDetailPage implements OnDestroy {
         this.error.set(`Failed to load ${mediaType === 'movie' ? 'movie' : 'TV show'} details`);
         this.loading.set(false);
       },
+    });
+
+    this.mediaService.getExternalIds(mediaType, id).subscribe({
+      next: (ids) => this.externalIds.set(ids),
+      error: () => this.externalIds.set(null),
     });
   }
 

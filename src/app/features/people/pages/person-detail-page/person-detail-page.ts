@@ -18,14 +18,17 @@ import { Loader } from '@shared/components/loader/loader';
 import { PageCurl } from '@shared/components/page-curl/page-curl';
 import { Icon } from '@shared/components/icon/icon';
 import { CreditsSection } from './sections/credits-section/credits-section';
+import { ExternalLinks } from '@shared/components/external-links/external-links';
+import { ExternalIds } from '@core/models/external-ids.model';
 
 interface PersonDetailState {
   person: PersonDetail;
+  externalIds: ExternalIds | null;
 }
 
 @Component({
   selector: 'app-person-detail-page',
-  imports: [Loader, PageCurl, Icon, CreditsSection],
+  imports: [Loader, PageCurl, Icon, CreditsSection, ExternalLinks],
   templateUrl: './person-detail-page.html',
   styleUrl: './person-detail-page.scss',
 })
@@ -43,6 +46,7 @@ export class PersonDetailPage implements OnDestroy {
   isClosing = signal(false);
   isBioExpanded = signal(false);
   isBioOverflowing = signal(false);
+  externalIds = signal<ExternalIds | null>(null);
 
   bioRef = viewChild<ElementRef<HTMLParagraphElement>>('bio');
   leftColRef = viewChild<ElementRef<HTMLDivElement>>('leftCol');
@@ -67,7 +71,11 @@ export class PersonDetailPage implements OnDestroy {
     const currentPerson = this.person();
     if (!currentPerson) return;
 
-    this.navState.save<PersonDetailState>(this.stateKey, { person: currentPerson }, window.scrollY);
+    this.navState.save<PersonDetailState>(
+      this.stateKey,
+      { person: currentPerson, externalIds: this.externalIds() },
+      window.scrollY,
+    );
   }
 
   private tryLoad(id: string): void {
@@ -77,6 +85,7 @@ export class PersonDetailPage implements OnDestroy {
 
     if (cached) {
       this.person.set(cached.data.person);
+      this.externalIds.set(cached.data.externalIds ?? null);
       this.loading.set(false);
       this.error.set(null);
 
@@ -93,6 +102,8 @@ export class PersonDetailPage implements OnDestroy {
   private load(id: string): void {
     this.loading.set(true);
     this.error.set(null);
+    this.externalIds.set(null);
+
     this.peopleService.getDetail(id).subscribe({
       next: (data) => {
         this.person.set(data);
@@ -103,6 +114,11 @@ export class PersonDetailPage implements OnDestroy {
         this.error.set('Failed to load person details');
         this.loading.set(false);
       },
+    });
+
+    this.peopleService.getExternalIds(id).subscribe({
+      next: (ids) => this.externalIds.set(ids),
+      error: () => this.externalIds.set(null),
     });
   }
 

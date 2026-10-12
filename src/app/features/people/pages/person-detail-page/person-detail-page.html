@@ -36,6 +36,14 @@
           <p class="person__meta">
             Place of Birth: {{ p.placeOfBirth || 'on planet earth' }}
           </p>
+
+          @if (externalIds(); as ids) {
+            <app-external-links
+              class="person__links"
+              [ids]="ids"
+              kind="person"
+            />
+          }
         </div>
 
         <div class="person__right">
