@@ -60,17 +60,22 @@
                 loading="lazy"
               />
             } @else {
-              <div class="search-page__person-img search-page__person-img--placeholder"></div>
+              <div class="search-page__person-img search-page__person-img--placeholder">
+                {{ result.title }}
+              </div>
             }
-            <span class="search-page__person-name">{{ result.title }}</span>
+
+            <div class="search-page__person-overlay">
+              <span class="search-page__person-name">{{ result.title }}</span>
+            </div>
           </a>
         } @else {
           <app-media-card
             [media]="{
-          id: result.id,
-          title: result.title,
-          posterUrl: result.posterUrl
-        }"
+              id: result.id,
+              title: result.title,
+              posterUrl: result.posterUrl
+            }"
             [mediaType]="result.mediaType"
           />
         }
