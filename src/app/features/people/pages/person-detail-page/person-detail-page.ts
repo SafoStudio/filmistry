@@ -6,14 +6,15 @@ import {
   input,
   viewChild,
   ElementRef,
-  afterNextRender,
+  afterRenderEffect,
   OnDestroy,
 } from '@angular/core';
 import { Location } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { PeopleService } from '@core/services/people.service';
 import { NavigationStateService } from '@core/services/navigation-state.service';
 import { PersonDetail } from '@core/models/person-detail.model';
+import { PersonCredit } from '@core/models/person-credits.model';
 import { Loader } from '@shared/components/loader/loader';
 import { PageCurl } from '@shared/components/page-curl/page-curl';
 import { Icon } from '@shared/components/icon/icon';
@@ -28,7 +29,7 @@ interface PersonDetailState {
 
 @Component({
   selector: 'app-person-detail-page',
-  imports: [Loader, PageCurl, Icon, CreditsSection, ExternalLinks],
+  imports: [Loader, PageCurl, Icon, CreditsSection, ExternalLinks, RouterLink],
   templateUrl: './person-detail-page.html',
   styleUrl: './person-detail-page.scss',
 })
@@ -47,11 +48,13 @@ export class PersonDetailPage implements OnDestroy {
   isBioExpanded = signal(false);
   isBioOverflowing = signal(false);
   externalIds = signal<ExternalIds | null>(null);
+  topCredits = signal<PersonCredit[]>([]);
 
   bioRef = viewChild<ElementRef<HTMLParagraphElement>>('bio');
   leftColRef = viewChild<ElementRef<HTMLDivElement>>('leftCol');
 
   private stateKey = '';
+  private resizeObserver: ResizeObserver | null = null;
 
   constructor() {
     effect(() => {
@@ -62,19 +65,31 @@ export class PersonDetailPage implements OnDestroy {
       }
     });
 
-    afterNextRender(() => {
-      this.checkBioOverflow();
+    afterRenderEffect(() => {
+      const bio = this.bioRef();
+      const leftCol = this.leftColRef();
+      if (bio && leftCol) {
+        this.checkBioOverflow();
+      }
+    });
+
+    afterRenderEffect(() => {
+      this.setupResizeObserver();
     });
   }
 
   ngOnDestroy(): void {
+    this.resizeObserver?.disconnect();
+
     const currentPerson = this.person();
     if (!currentPerson) return;
+
+    const scrollTop = typeof window !== 'undefined' ? window.scrollY : 0;
 
     this.navState.save<PersonDetailState>(
       this.stateKey,
       { person: currentPerson, externalIds: this.externalIds() },
-      window.scrollY,
+      scrollTop,
     );
   }
 
@@ -89,10 +104,11 @@ export class PersonDetailPage implements OnDestroy {
       this.loading.set(false);
       this.error.set(null);
 
-      requestAnimationFrame(() => {
-        window.scrollTo({ top: cached.scrollTop, behavior: 'instant' });
-        setTimeout(() => this.checkBioOverflow());
-      });
+      if (typeof window !== 'undefined') {
+        requestAnimationFrame(() => {
+          window.scrollTo({ top: cached.scrollTop, behavior: 'instant' });
+        });
+      }
       return;
     }
 
@@ -103,12 +119,12 @@ export class PersonDetailPage implements OnDestroy {
     this.loading.set(true);
     this.error.set(null);
     this.externalIds.set(null);
+    this.topCredits.set([]);
 
     this.peopleService.getDetail(id).subscribe({
       next: (data) => {
         this.person.set(data);
         this.loading.set(false);
-        setTimeout(() => this.checkBioOverflow());
       },
       error: () => {
         this.error.set('Failed to load person details');
@@ -120,9 +136,33 @@ export class PersonDetailPage implements OnDestroy {
       next: (ids) => this.externalIds.set(ids),
       error: () => this.externalIds.set(null),
     });
+
+    this.peopleService.getCredits(id).subscribe({
+      next: (data) => {
+        const top = data.credits.filter((c) => !!c.posterUrl).slice(0, 5);
+        this.topCredits.set(top);
+      },
+      error: () => this.topCredits.set([]),
+    });
   }
 
-  private checkBioOverflow(): void {
+  private setupResizeObserver(): void {
+    if (typeof ResizeObserver === 'undefined') return;
+
+    const leftCol = this.leftColRef()?.nativeElement;
+    if (!leftCol) return;
+
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+
+    this.resizeObserver = new ResizeObserver(() => {
+      this.checkBioOverflow();
+    });
+    this.resizeObserver.observe(leftCol);
+  }
+
+  checkBioOverflow(): void {
     const bio = this.bioRef()?.nativeElement;
     const leftCol = this.leftColRef()?.nativeElement;
     if (!bio || !leftCol) return;
@@ -148,7 +188,12 @@ export class PersonDetailPage implements OnDestroy {
 
   toggleBio(): void {
     this.isBioExpanded.update((v) => !v);
-    setTimeout(() => this.checkBioOverflow());
+  }
+
+  creditLink(credit: PersonCredit): string[] {
+    return credit.mediaType === 'movie'
+      ? ['/movies', String(credit.id)]
+      : ['/tv', String(credit.id)];
   }
 
   closeDetail(): void {

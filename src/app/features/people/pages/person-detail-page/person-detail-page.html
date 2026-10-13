@@ -47,24 +47,52 @@
         </div>
 
         <div class="person__right">
-          <p
-            class="person__biography"
-            #bio
-            [class.person__biography--clipped]="isBioOverflowing() && !isBioExpanded()"
-          >
-            {{ p.biography || 'No biography available.' }}
-          </p>
-
-          @if (isBioOverflowing()) {
-            <button
-              type="button"
-              class="person__bio-toggle"
-              [class.person__bio-toggle--rotated]="isBioExpanded()"
-              (click)="toggleBio()"
-              aria-label="Toggle biography"
+          @if (p.biography) {
+            <p
+              class="person__biography"
+              #bio
+              [class.person__biography--clipped]="isBioOverflowing() && !isBioExpanded()"
             >
-              <app-icon name="chevron-left" [size]="20" />
-            </button>
+              {{ p.biography }}
+            </p>
+
+            @if (isBioOverflowing()) {
+              <button
+                type="button"
+                class="person__bio-toggle"
+                [class.person__bio-toggle--rotated]="isBioExpanded()"
+                (click)="toggleBio()"
+                aria-label="Toggle biography"
+              >
+                <app-icon name="chevron-left" [size]="20" />
+              </button>
+            }
+          } @else {
+            <div class="person__known-for">
+              <div class="person__known-for-inner">
+                <p class="person__known-for-text">
+                  Biography is not available,<br />
+                  but known for:
+                </p>
+
+                @if (topCredits().length > 0) {
+                  <ul class="person__known-for-list">
+                    @for (credit of topCredits(); track credit.mediaType + '-' + credit.id) {
+                      <li class="person__known-for-item">
+                        <a
+                          class="person__known-for-link"
+                          [routerLink]="creditLink(credit)"
+                        >
+                          {{ credit.title }}
+                        </a>
+                      </li>
+                    }
+                  </ul>
+                } @else {
+                  <p class="person__known-for-empty">No information available yet.</p>
+                }
+              </div>
+            </div>
           }
         </div>
       </div>
