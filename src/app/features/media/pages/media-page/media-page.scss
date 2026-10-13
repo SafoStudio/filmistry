@@ -17,6 +17,15 @@
   }
 }
 
+.media-page__empty {
+  text-align: center;
+  padding: 60px 16px;
+  font-size: 16px;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
 .load-more-wrapper {
   display: flex;
   justify-content: center;

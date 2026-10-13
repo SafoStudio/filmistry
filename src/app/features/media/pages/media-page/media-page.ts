@@ -115,6 +115,8 @@ export class MediaPage implements OnInit, OnDestroy {
 
   canLoadMore = computed<boolean>(() => this.currentPage() < this.totalPages());
 
+  isEmpty = computed<boolean>(() => !this.loading() && !this.error() && this.items().length === 0);
+
   private stateKey = '';
 
   ngOnInit(): void {

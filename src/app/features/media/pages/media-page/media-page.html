@@ -17,6 +17,8 @@
     <p class="status status--error">{{ error() }}</p>
   } @else if (loading() && items().length === 0) {
     <app-loader />
+  } @else if (isEmpty()) {
+    <p class="media-page__empty">No results</p>
   } @else {
     <div
       class="movie-gallery"
