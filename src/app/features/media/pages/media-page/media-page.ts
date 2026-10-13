@@ -44,15 +44,16 @@ export class MediaPage implements OnInit, OnDestroy {
   currentPage = signal(1);
   totalPages = signal(1);
   isLeaving = signal(false);
-
   filtersOpen = signal(true);
-
   filterSort = signal('popularity.desc');
   filterGenres = signal('');
   filterCountry = signal('');
   filterLanguage = signal('');
   filterYear = signal<number | null>(null);
   filterRating = signal<number | null>(null);
+
+  presetGenres = signal('');
+  presetLanguage = signal('');
 
   filterTitle = computed<string>(() => {
     const p = this.preset();
@@ -100,7 +101,7 @@ export class MediaPage implements OnInit, OnDestroy {
     return `${parts.join(' ')} ${baseWord}`;
   });
 
-  hasActiveFilters = computed<boolean>(
+  hasUserActiveFilters = computed<boolean>(
     () =>
       this.filterSort() !== 'popularity.desc' ||
       !!this.filterGenres() ||
@@ -109,6 +110,8 @@ export class MediaPage implements OnInit, OnDestroy {
       this.filterYear() !== null ||
       this.filterRating() !== null,
   );
+
+  private needsDiscover = computed<boolean>(() => !!this.preset() || this.hasUserActiveFilters());
 
   canLoadMore = computed<boolean>(() => this.currentPage() < this.totalPages());
 
@@ -136,24 +139,27 @@ export class MediaPage implements OnInit, OnDestroy {
 
       let activeType = this.mediaType();
 
+      if (p === 'anime') {
+        this.presetGenres.set('16');
+        this.presetLanguage.set('ja');
+      } else if (p === 'cartoons') {
+        this.presetGenres.set('16');
+        this.presetLanguage.set('');
+      } else {
+        this.presetGenres.set('');
+        this.presetLanguage.set('');
+      }
+
+      this.filterSort.set(sort);
+      this.filterGenres.set(genres);
+      this.filterCountry.set(p ? '' : country);
+      this.filterLanguage.set(language);
+      this.filterYear.set(year);
+      this.filterRating.set(rating);
+
       if (p) {
         const typeParam = params.get('type') as MediaType | null;
         activeType = typeParam === 'tv' ? 'tv' : typeParam === 'movie' ? 'movie' : 'movie';
-
-        if (p === 'anime') {
-          this.filterGenres.set('16');
-          this.filterLanguage.set('ja');
-        } else if (p === 'cartoons') {
-          this.filterGenres.set('16');
-          this.filterLanguage.set('');
-        }
-      } else {
-        this.filterSort.set(sort);
-        this.filterGenres.set(genres);
-        this.filterCountry.set(country);
-        this.filterLanguage.set(language);
-        this.filterYear.set(year);
-        this.filterRating.set(rating);
       }
 
       this.activeMediaType.set(activeType);
@@ -205,6 +211,10 @@ export class MediaPage implements OnInit, OnDestroy {
       const parts: string[] = [];
       if (page > 1) parts.push(`page=${page}`);
       parts.push(`type=${activeType}`);
+      if (this.filterSort() !== 'popularity.desc') parts.push(`sort=${this.filterSort()}`);
+      if (this.filterGenres()) parts.push(`genres=${this.filterGenres()}`);
+      if (this.filterYear() !== null) parts.push(`year=${this.filterYear()}`);
+      if (this.filterRating() !== null) parts.push(`rating=${this.filterRating()}`);
       return `${base}?${parts.join('&')}`;
     }
 
@@ -221,32 +231,39 @@ export class MediaPage implements OnInit, OnDestroy {
     return parts.length > 0 ? `${base}?${parts.join('&')}` : base;
   }
 
+  private buildGenresParam(): string {
+    const user = this.filterGenres();
+    const preset = this.presetGenres();
+
+    if (!preset) return user;
+    if (!user) return preset;
+    return `${preset},${user}`;
+  }
+
   private loadPage(page: number, append: boolean): void {
     const activeType = this.activeMediaType();
-    const p = this.preset();
 
-    const request$ =
-      p || this.hasActiveFilters()
-        ? activeType === 'movie'
-          ? this.discoverService.discoverMovies({
-              page,
-              sort: this.filterSort() as any,
-              genres: this.filterGenres(),
-              year: this.filterYear() ?? undefined,
-              rating: this.filterRating() ?? undefined,
-              country: this.filterCountry() || undefined,
-              language: this.filterLanguage() || undefined,
-            })
-          : this.discoverService.discoverTv({
-              page,
-              sort: this.filterSort() as any,
-              genres: this.filterGenres(),
-              year: this.filterYear() ?? undefined,
-              rating: this.filterRating() ?? undefined,
-              country: this.filterCountry() || undefined,
-              language: this.filterLanguage() || undefined,
-            })
-        : this.mediaService.getList(activeType, page);
+    const request$ = this.needsDiscover()
+      ? activeType === 'movie'
+        ? this.discoverService.discoverMovies({
+            page,
+            sort: this.filterSort() as any,
+            genres: this.buildGenresParam(),
+            year: this.filterYear() ?? undefined,
+            rating: this.filterRating() ?? undefined,
+            country: this.preset() ? undefined : this.filterCountry() || undefined,
+            language: this.presetLanguage() || this.filterLanguage() || undefined,
+          })
+        : this.discoverService.discoverTv({
+            page,
+            sort: this.filterSort() as any,
+            genres: this.buildGenresParam(),
+            year: this.filterYear() ?? undefined,
+            rating: this.filterRating() ?? undefined,
+            country: this.preset() ? undefined : this.filterCountry() || undefined,
+            language: this.presetLanguage() || this.filterLanguage() || undefined,
+          })
+      : this.mediaService.getList(activeType, page);
 
     if (!append) {
       this.loading.set(true);
