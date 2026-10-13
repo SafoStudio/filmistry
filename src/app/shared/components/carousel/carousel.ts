@@ -38,6 +38,8 @@ export class CarouselComponent {
       const items = this.items();
       if (items.length === 0) return;
 
+      if (typeof window === 'undefined') return;
+
       queueMicrotask(() => {
         requestAnimationFrame(() => {
           requestAnimationFrame(() => this.updateArrows());
