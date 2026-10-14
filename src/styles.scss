@@ -11,6 +11,16 @@ body {
   height: 100%;
 }
 
+html {
+  scrollbar-gutter: stable;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 body {
   background: var(--color-bg);
   color: var(--color-text);
