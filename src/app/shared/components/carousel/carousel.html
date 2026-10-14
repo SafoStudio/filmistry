@@ -1,5 +1,5 @@
 @if (loading()) {
-  <p class="carousel__empty">Loading...</p>
+  <app-loader />
 } @else if (items().length === 0) {
   <p class="carousel__empty">{{ emptyMessage() }}</p>
 } @else {

@@ -12,6 +12,9 @@ $background-color: rgba(69, 78, 83, 0.6);
   border-radius: $border-radius;
   position: relative;
   overflow: hidden;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.25),
+    0 10px 28px rgba(0, 0, 0, 0.15);
   transition:
     transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
     opacity 0.7s ease;
@@ -60,6 +63,7 @@ $background-color: rgba(69, 78, 83, 0.6);
       height: 100%;
       object-fit: cover;
       display: block;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
   }
 }
@@ -128,7 +132,9 @@ $background-color: rgba(69, 78, 83, 0.6);
   display: inline-block;
   padding: 4px 8px;
   border-radius: 6px;
-  box-shadow: inset 0px 0px 8px rgba(8, 8, 8, 0.6);
+  box-shadow:
+    inset 0 0 8px rgba(8, 8, 8, 0.6),
+    0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .genresBox p {
@@ -188,11 +194,13 @@ $background-color: rgba(69, 78, 83, 0.6);
   color: var(--color-text);
   font-size: 13px;
   text-decoration: none;
-  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: border-color 0.2s, color 0.2s, background 0.2s, box-shadow 0.2s;
 
   &:hover {
     border-color: var(--color-accent);
     color: var(--color-accent);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -220,7 +228,8 @@ $background-color: rgba(69, 78, 83, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+  transition: background 0.2s, box-shadow 0.2s;
 
   &::before {
     content: '';
@@ -242,6 +251,7 @@ $background-color: rgba(69, 78, 83, 0.6);
   &--active {
     background-color: #d4a017;
     border-color: #d4a017;
+    box-shadow: 0 3px 12px rgba(212, 160, 23, 0.35);
   }
 }
 
@@ -280,18 +290,22 @@ $background-color: rgba(69, 78, 83, 0.6);
   justify-content: center;
   cursor: pointer;
   font-size: 20px;
-  transition: background 0.2s;
+  box-shadow: 0 3px 10px rgba(200, 20, 20, 0.3);
+  transition: background 0.2s, box-shadow 0.2s;
 
   &:hover {
     background-color: #cc0000;
+    box-shadow: 0 4px 14px rgba(200, 20, 20, 0.45);
   }
 
   &--disabled {
     background-color: #444;
     cursor: not-allowed;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 
     &:hover {
       background-color: #444;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
     }
   }
 }
@@ -312,6 +326,7 @@ $background-color: rgba(69, 78, 83, 0.6);
   transition: opacity 0.2s, visibility 0.2s;
   pointer-events: none;
   z-index: 10;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
 
   &::after {
     content: '';
@@ -332,6 +347,7 @@ $background-color: rgba(69, 78, 83, 0.6);
 .sections {
   background: var(--color-bg);
   margin-top: 24px;
+  padding: 8px 0;
 }
 
 .sections--enter {
@@ -345,23 +361,6 @@ $background-color: rgba(69, 78, 83, 0.6);
   to {
     opacity: 1;
   }
-}
-
-.trailer-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 2000;
-  background: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  animation: trailerIn 0.25s ease both;
-}
-
-@keyframes trailerIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 .trailer-modal {
@@ -386,6 +385,8 @@ $background-color: rgba(69, 78, 83, 0.6);
   width: 100%;
   max-width: 960px;
   aspect-ratio: 16 / 9;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
 }
 
 .trailer-modal__content iframe {
@@ -410,9 +411,12 @@ $background-color: rgba(69, 78, 83, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  transition: background 0.2s, box-shadow 0.2s;
 
   &:hover {
     background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
   }
 }
 

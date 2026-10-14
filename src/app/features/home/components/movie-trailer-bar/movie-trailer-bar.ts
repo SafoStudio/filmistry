@@ -67,6 +67,11 @@ export class MovieTrailerBar implements OnDestroy {
       });
     });
 
+    effect(() => {
+      if (typeof document === 'undefined') return;
+      document.body.style.overflow = this.isModalOpen() ? 'hidden' : '';
+    });
+
     afterNextRender(() => {
       this.updateVisibleCount();
       this.startAuto();
@@ -75,6 +80,16 @@ export class MovieTrailerBar implements OnDestroy {
 
   ngOnDestroy(): void {
     this.stopAuto();
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = '';
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  handleEscape(): void {
+    if (this.isModalOpen()) {
+      this.closeTrailer();
+    }
   }
 
   @HostListener('window:resize')

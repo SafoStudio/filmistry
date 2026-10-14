@@ -2,6 +2,8 @@
   @if (loading()) {
     <app-loader />
   } @else {
+    <h2 class="trailer-bar__title">Trending trailers today</h2>
+
     <div class="trailer-bar__container">
       <div class="trailer-bar__slides">
         @for (item of visibleItems(); track item.id) {
@@ -12,15 +14,18 @@
             >
               <div class="trailer-bar__box">
                 @if (item.backdropUrl) {
-                  <img
-                    class="trailer-bar__img"
-                    [src]="item.backdropUrl"
-                    [alt]="item.title"
-                  />
+                  <div class="trailer-bar__frame">
+                    <img
+                      class="trailer-bar__img"
+                      [src]="item.backdropUrl"
+                      [alt]="item.title"
+                    />
+                    <div class="trailer-bar__dim"></div>
+                    <div class="trailer-bar__play"></div>
+                  </div>
                 }
                 <h3 class="trailer-bar__name">{{ item.title }}</h3>
               </div>
-              <div class="trailer-bar__play"></div>
             </div>
           </div>
         }

@@ -24,6 +24,20 @@ $poster-title-text-color: bisque;
   position: relative;
   width: 100%;
   max-width: min(1020px, 100%);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 6% 4%;
+    z-index: -1;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(0, 0, 0, 0.55) 0%,
+      rgba(0, 0, 0, 0) 70%
+    );
+    filter: blur(24px);
+    pointer-events: none;
+  }
 }
 
 .poster {
@@ -33,6 +47,23 @@ $poster-title-text-color: bisque;
   border: 2px solid $poster-border-color;
   filter: grayscale(100%);
   display: block;
+
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.6),
+    0 20px 40px rgba(0, 0, 0, 0.45),
+    inset 0 0 20px rgba(0, 0, 0, 0.4);
+
+  transition:
+    box-shadow 0.4s cubic-bezier(0.22, 0.61, 0.36, 1),
+    filter 0.4s ease;
+
+  &:hover {
+    filter: grayscale(60%);
+    box-shadow:
+      0 12px 28px rgba(0, 0, 0, 0.7),
+      0 28px 60px rgba(0, 0, 0, 0.55),
+      inset 0 0 24px rgba(0, 0, 0, 0.5);
+  }
 }
 
 .poster-title {
@@ -45,6 +76,9 @@ $poster-title-text-color: bisque;
   color: $poster-title-text-color;
   background-color: $poster-title-bg-color;
   border-radius: 15px;
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.55),
+    0 8px 18px rgba(0, 0, 0, 0.35);
 
   p {
     margin: 0;
@@ -52,10 +86,39 @@ $poster-title-text-color: bisque;
 }
 
 @media screen and (min-width: 768px) {
+  .poster-box::before {
+    inset: 8% 6%;
+    filter: blur(40px);
+  }
+
+  .poster {
+    box-shadow:
+      0 12px 28px rgba(0, 0, 0, 0.65),
+      0 28px 56px rgba(0, 0, 0, 0.5),
+      inset 0 0 24px rgba(0, 0, 0, 0.45);
+  }
+
+  .poster:hover {
+    box-shadow:
+      0 16px 36px rgba(0, 0, 0, 0.75),
+      0 36px 72px rgba(0, 0, 0, 0.6),
+      inset 0 0 28px rgba(0, 0, 0, 0.55);
+  }
+
   .poster-title {
     font-size: clamp(20px, 3vw, 34px);
     font-weight: bold;
     color: $text-color;
     background-color: transparent;
+    text-shadow:
+      0 2px 6px rgba(0, 0, 0, 0.8),
+      0 4px 14px rgba(0, 0, 0, 0.6);
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .poster {
+    transition: none;
   }
 }

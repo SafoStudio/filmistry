@@ -11,10 +11,11 @@ import {
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { Icon } from '../icon/icon';
+import { Loader } from '@shared/components/loader/loader';
 
 @Component({
   selector: 'app-carousel',
-  imports: [NgTemplateOutlet, Icon],
+  imports: [NgTemplateOutlet, Icon, Loader],
   templateUrl: './carousel.html',
   styleUrl: './carousel.scss',
 })

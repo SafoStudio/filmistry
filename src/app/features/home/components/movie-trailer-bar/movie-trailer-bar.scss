@@ -7,6 +7,16 @@
   position: relative;
 }
 
+.trailer-bar__title {
+  margin: 0 0 16px;
+  font-size: clamp(16px, 2vw, 22px);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--color-accent);
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.45);
+}
+
 .trailer-bar__container {
   width: 100%;
   max-width: min(1020px, 100%);
@@ -30,26 +40,7 @@
   position: relative;
   width: 100%;
   cursor: pointer;
-  overflow: hidden;
   border-radius: 8px;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    background-color: rgba(5, 5, 5, 0.5);
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-    border-radius: 8px;
-  }
-
-  &:hover::after {
-    opacity: 1;
-  }
 }
 
 .trailer-bar__box {
@@ -66,10 +57,44 @@
   background-repeat: no-repeat;
 }
 
-.trailer-bar__img {
+.trailer-bar__frame {
+  position: relative;
   width: 96%;
   border-radius: 8px;
+  overflow: hidden;
   display: block;
+}
+
+.trailer-bar__img {
+  width: 100%;
+  border-radius: 8px;
+  display: block;
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.45),
+    0 10px 22px rgba(0, 0, 0, 0.3),
+    inset 0 0 12px rgba(0, 0, 0, 0.25);
+  transition: box-shadow 0.35s ease;
+}
+
+.trailer-bar__frame:hover .trailer-bar__img {
+  box-shadow:
+    0 6px 14px rgba(0, 0, 0, 0.55),
+    0 14px 30px rgba(0, 0, 0, 0.4),
+    inset 0 0 14px rgba(0, 0, 0, 0.3);
+}
+
+.trailer-bar__dim {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(5, 5, 5, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  border-radius: 8px;
+}
+
+.trailer-bar__frame:hover .trailer-bar__dim {
+  opacity: 1;
 }
 
 .trailer-bar__name {
@@ -83,7 +108,9 @@
   border-bottom-left-radius: 8px;
   font-size: clamp(12px, 2vw, 16px);
   font-weight: 400;
-  text-shadow: 1px 0 3px #161616;
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.7),
+    0 0 8px rgba(0, 0, 0, 0.4);
   margin: 0;
   pointer-events: none;
   z-index: 2;
@@ -102,9 +129,10 @@
   transition: opacity 0.3s ease;
   pointer-events: none;
   z-index: 3;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
 }
 
-.trailer-bar__overlay:hover .trailer-bar__play {
+.trailer-bar__frame:hover .trailer-bar__play {
   opacity: 1;
 }
 
@@ -112,7 +140,7 @@
   display: flex;
   justify-content: center;
   gap: 8px;
-  margin-top: 8px;
+  margin-top: 12px;
 }
 
 .trailer-bar__btn {
@@ -127,8 +155,9 @@
     var(--btn-gradient-top),
     var(--btn-gradient-bottom)
   );
-  box-shadow: inset 0 1px 2px var(--btn-shadow-top),
-  inset 0 -2px 4px var(--btn-shadow-bottom);
+  box-shadow:
+    inset 0 1px 2px var(--btn-shadow-top),
+    inset 0 -2px 4px var(--btn-shadow-bottom);
   cursor: pointer;
   transition:
     background 0.35s cubic-bezier(0.22, 0.61, 0.36, 1),
@@ -147,8 +176,9 @@
   }
 
   &:hover:not(:disabled) {
-    box-shadow: inset 0 2px 4px var(--btn-shadow-top-hover),
-    inset 0 -1px 2px var(--btn-shadow-bottom-hover);
+    box-shadow:
+      inset 0 2px 4px var(--btn-shadow-top-hover),
+      inset 0 -1px 2px var(--btn-shadow-bottom-hover);
   }
 
   &:disabled {
@@ -160,12 +190,18 @@
 .trailer-bar__modal {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.85);
+  background: #000;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 2000;
   padding: 16px;
+  animation: trailerBarIn 0.25s ease both;
+}
+
+@keyframes trailerBarIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .trailer-bar__modal-content {
@@ -173,6 +209,10 @@
   width: 100%;
   max-width: 960px;
   aspect-ratio: 16 / 9;
+  box-shadow:
+    0 14px 40px rgba(0, 0, 0, 0.6),
+    0 28px 70px rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
 }
 
 .trailer-bar__modal-content iframe {
@@ -197,8 +237,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
     background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trailer-bar__img,
+  .trailer-bar__dim,
+  .trailer-bar__play,
+  .trailer-bar__btn,
+  .trailer-bar__modal,
+  .trailer-bar__modal-close {
+    transition: none !important;
+    animation: none !important;
   }
 }
