@@ -1,0 +1,37 @@
+<div class="lightbox" (click)="close()">
+  <button
+    type="button"
+    class="lightbox__close"
+    (click)="close(); $event.stopPropagation()"
+    aria-label="Close"
+  >
+    <app-icon name="close" [size]="24" />
+  </button>
+
+  <button
+    type="button"
+    class="lightbox__nav lightbox__nav--prev"
+    (click)="prev(); $event.stopPropagation()"
+    aria-label="Previous"
+  >
+    <app-icon name="chevron-left" [size]="28" />
+  </button>
+
+  <img
+    class="lightbox__img"
+    [src]="currentUrl()"
+    [alt]="'Image ' + currentIndex()"
+    (click)="$event.stopPropagation()"
+  />
+
+  <button
+    type="button"
+    class="lightbox__nav lightbox__nav--next"
+    (click)="next(); $event.stopPropagation()"
+    aria-label="Next"
+  >
+    <app-icon name="chevron-right" [size]="28" />
+  </button>
+
+  <span class="lightbox__counter">{{ counter() }}</span>
+</div>

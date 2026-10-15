@@ -1,8 +1,9 @@
-import { Component, computed, effect, inject, input, signal, HostListener } from '@angular/core';
+import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { MediaService, MediaType } from '@core/services/media.service';
 import { MediaImage } from '@core/models/media-images.model';
 import { Icon } from '@shared/components/icon/icon';
 import { Loader } from '@shared/components/loader/loader';
+import { LightboxService } from '@features/media/pages/media-detail-page/sections/gallery/lightbox/lightbox.service';
 
 @Component({
   selector: 'app-gallery-section',
@@ -12,6 +13,7 @@ import { Loader } from '@shared/components/loader/loader';
 })
 export class GallerySection {
   private mediaService = inject(MediaService);
+  private lightbox = inject(LightboxService);
 
   id = input.required<string>();
   mediaType = input.required<MediaType>();
@@ -19,7 +21,6 @@ export class GallerySection {
   images = signal<MediaImage[]>([]);
   loading = signal(true);
   currentSlide = signal(0);
-  isLightboxOpen = signal(false);
 
   totalSlides = computed(() => this.images().length);
   counter = computed(() => `${this.currentSlide() + 1} of ${this.totalSlides()}`);
@@ -41,7 +42,6 @@ export class GallerySection {
       this.loading.set(true);
       this.images.set([]);
       this.currentSlide.set(0);
-      this.isLightboxOpen.set(false);
 
       this.mediaService.getImages(type, itemId).subscribe({
         next: (data) => {
@@ -51,17 +51,6 @@ export class GallerySection {
         error: () => this.loading.set(false),
       });
     });
-
-    effect(() => {
-      document.body.style.overflow = this.isLightboxOpen() ? 'hidden' : '';
-    });
-  }
-
-  @HostListener('document:keydown.escape')
-  handleEscape(): void {
-    if (this.isLightboxOpen()) {
-      this.closeLightbox();
-    }
   }
 
   next(): void {
@@ -84,18 +73,9 @@ export class GallerySection {
 
   openLightbox(): void {
     if (this.totalSlides() === 0) return;
-    this.isLightboxOpen.set(true);
-  }
-
-  closeLightbox(): void {
-    this.isLightboxOpen.set(false);
-  }
-
-  lightboxNext(): void {
-    this.next();
-  }
-
-  lightboxPrev(): void {
-    this.prev();
+    this.lightbox.open({
+      images: this.images().map((img) => img.url),
+      startIndex: this.currentSlide(),
+    });
   }
 }

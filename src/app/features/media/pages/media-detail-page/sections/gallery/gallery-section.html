@@ -23,65 +23,15 @@
     </div>
 
     <div class="polaroid__footer">
-      <button
-        type="button"
-        class="polaroid__nav polaroid__nav--prev"
-        (click)="prev()"
-        aria-label="Previous image"
-      >
+      <button type="button" class="polaroid__nav polaroid__nav--prev" (click)="prev()" aria-label="Previous">
         <app-icon name="chevron-left" [size]="22" />
       </button>
 
       <span class="polaroid__counter">{{ counter() }}</span>
 
-      <button
-        type="button"
-        class="polaroid__nav polaroid__nav--next"
-        (click)="next()"
-        aria-label="Next image"
-      >
+      <button type="button" class="polaroid__nav polaroid__nav--next" (click)="next()" aria-label="Next">
         <app-icon name="chevron-right" [size]="22" />
       </button>
     </div>
   </section>
-
-  @if (isLightboxOpen() && images()[currentSlide()]; as current) {
-    <div class="lightbox" (click)="closeLightbox()">
-      <button
-        type="button"
-        class="lightbox__close"
-        (click)="closeLightbox(); $event.stopPropagation()"
-        aria-label="Close"
-      >
-        <app-icon name="close" [size]="24" />
-      </button>
-
-      <button
-        type="button"
-        class="lightbox__nav lightbox__nav--prev"
-        (click)="lightboxPrev(); $event.stopPropagation()"
-        aria-label="Previous image"
-      >
-        <app-icon name="chevron-left" [size]="28" />
-      </button>
-
-      <img
-        class="lightbox__img"
-        [src]="current.url"
-        [alt]="'Backdrop ' + currentSlide()"
-        (click)="$event.stopPropagation()"
-      />
-
-      <button
-        type="button"
-        class="lightbox__nav lightbox__nav--next"
-        (click)="lightboxNext(); $event.stopPropagation()"
-        aria-label="Next image"
-      >
-        <app-icon name="chevron-right" [size]="28" />
-      </button>
-
-      <span class="lightbox__counter">{{ counter() }}</span>
-    </div>
-  }
 }
