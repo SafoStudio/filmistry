@@ -1,4 +1,5 @@
 export interface MediaImageDto {
+  path: string;
   url: string;
   width: number;
   height: number;

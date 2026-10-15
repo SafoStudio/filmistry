@@ -1,7 +1,7 @@
 import { InjectionToken } from '@angular/core';
 
 export interface LightboxData {
-  images: string[];
+  paths: string[];
   startIndex: number;
 }
 

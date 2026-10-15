@@ -3,7 +3,7 @@ import { MediaService, MediaType } from '@core/services/media.service';
 import { MediaImage } from '@core/models/media-images.model';
 import { Icon } from '@shared/components/icon/icon';
 import { Loader } from '@shared/components/loader/loader';
-import { LightboxService } from '@features/media/pages/media-detail-page/sections/gallery/lightbox/lightbox.service';
+import { LightboxService } from './lightbox/lightbox.service';
 
 @Component({
   selector: 'app-gallery-section',
@@ -74,7 +74,7 @@ export class GallerySection {
   openLightbox(): void {
     if (this.totalSlides() === 0) return;
     this.lightbox.open({
-      images: this.images().map((img) => img.url),
+      paths: this.images().map((img) => img.path),
       startIndex: this.currentSlide(),
     });
   }

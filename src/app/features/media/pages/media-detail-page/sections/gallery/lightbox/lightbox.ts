@@ -10,6 +10,9 @@ import { LightboxService } from './lightbox.service';
 import { LIGHTBOX_DATA, LightboxData } from './lightbox.tokens';
 import { Icon } from '@shared/components/icon/icon';
 
+const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p';
+const LIGHTBOX_SIZE = 'w1280';
+
 @Component({
   selector: 'app-lightbox',
   imports: [Icon],
@@ -21,12 +24,14 @@ export class Lightbox {
   private lightboxService = inject(LightboxService);
   private data = inject<LightboxData>(LIGHTBOX_DATA);
 
-  images = signal<string[]>(this.data.images);
+  paths = signal<string[]>(this.data.paths);
   currentIndex = signal(this.data.startIndex);
 
-  totalSlides = computed(() => this.images().length);
+  totalSlides = computed(() => this.paths().length);
   counter = computed(() => `${this.currentIndex() + 1} of ${this.totalSlides()}`);
-  currentUrl = computed(() => this.images()[this.currentIndex()]);
+  currentUrl = computed(
+    () => `${TMDB_IMAGE_BASE_URL}/${LIGHTBOX_SIZE}${this.paths()[this.currentIndex()]}`,
+  );
 
   @HostListener('document:keydown.escape')
   onEscape(): void {

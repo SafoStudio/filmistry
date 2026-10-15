@@ -16,6 +16,7 @@ const MAX_BACKDROPS = 20;
 export function toMediaImagesDto(raw: TmdbMediaImagesRaw): MediaImagesDto {
   return {
     backdrops: raw.backdrops.slice(0, MAX_BACKDROPS).map((img): MediaImageDto => ({
+      path: img.file_path,
       url: `${TMDB_IMAGE_BASE_URL}/${GALLERY_SIZE}${img.file_path}`,
       width: img.width,
       height: img.height,
