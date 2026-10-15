@@ -32,10 +32,6 @@ export class PeoplePage implements OnInit, OnDestroy {
       this.people.set(cached.data.people);
       this.loading.set(false);
       this.error.set(null);
-
-      requestAnimationFrame(() => {
-        window.scrollTo({ top: cached.scrollTop, behavior: 'instant' });
-      });
       return;
     }
 
@@ -45,7 +41,7 @@ export class PeoplePage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.people().length === 0) return;
 
-    this.navState.save<PeoplePageState>(this.stateKey, { people: this.people() }, window.scrollY);
+    this.navState.save<PeoplePageState>(this.stateKey, { people: this.people() });
   }
 
   private load(): void {

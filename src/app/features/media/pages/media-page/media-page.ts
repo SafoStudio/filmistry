@@ -175,12 +175,6 @@ export class MediaPage implements OnInit, OnDestroy {
         this.currentPage.set(cached.data.currentPage);
         this.loading.set(false);
         this.error.set(null);
-
-        if (typeof window !== 'undefined') {
-          requestAnimationFrame(() => {
-            window.scrollTo({ top: cached.scrollTop, behavior: 'instant' });
-          });
-        }
         return;
       }
 
@@ -192,17 +186,11 @@ export class MediaPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.items().length === 0) return;
 
-    const scrollTop = typeof window !== 'undefined' ? window.scrollY : 0;
-
-    this.navState.save<MediaPageState>(
-      this.stateKey,
-      {
-        items: this.items(),
-        totalPages: this.totalPages(),
-        currentPage: this.currentPage(),
-      },
-      scrollTop,
-    );
+    this.navState.save<MediaPageState>(this.stateKey, {
+      items: this.items(),
+      totalPages: this.totalPages(),
+      currentPage: this.currentPage(),
+    });
   }
 
   private buildKey(activeType: MediaType, page: number): string {

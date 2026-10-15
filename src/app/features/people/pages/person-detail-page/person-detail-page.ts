@@ -84,13 +84,10 @@ export class PersonDetailPage implements OnDestroy {
     const currentPerson = this.person();
     if (!currentPerson) return;
 
-    const scrollTop = typeof window !== 'undefined' ? window.scrollY : 0;
-
-    this.navState.save<PersonDetailState>(
-      this.stateKey,
-      { person: currentPerson, externalIds: this.externalIds() },
-      scrollTop,
-    );
+    this.navState.save<PersonDetailState>(this.stateKey, {
+      person: currentPerson,
+      externalIds: this.externalIds(),
+    });
   }
 
   private tryLoad(id: string): void {
@@ -103,12 +100,6 @@ export class PersonDetailPage implements OnDestroy {
       this.externalIds.set(cached.data.externalIds ?? null);
       this.loading.set(false);
       this.error.set(null);
-
-      if (typeof window !== 'undefined') {
-        requestAnimationFrame(() => {
-          window.scrollTo({ top: cached.scrollTop, behavior: 'instant' });
-        });
-      }
       return;
     }
 

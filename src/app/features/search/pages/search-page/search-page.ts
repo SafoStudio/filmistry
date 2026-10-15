@@ -57,12 +57,6 @@ export class SearchPage implements OnInit, OnDestroy {
         this.totalPages.set(cached.data.totalPages);
         this.loading.set(false);
         this.error.set(null);
-
-        if (typeof window !== 'undefined') {
-          requestAnimationFrame(() => {
-            window.scrollTo({ top: cached.scrollTop, behavior: 'instant' });
-          });
-        }
         return;
       }
 
@@ -80,19 +74,13 @@ export class SearchPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.results().length === 0) return;
 
-    const scrollTop = typeof window !== 'undefined' ? window.scrollY : 0;
-
-    this.navState.save<SearchPageState>(
-      this.stateKey,
-      {
-        query: this.query(),
-        tab: this.tab(),
-        results: this.results(),
-        totalPages: this.totalPages(),
-        currentPage: this.currentPage(),
-      },
-      scrollTop,
-    );
+    this.navState.save<SearchPageState>(this.stateKey, {
+      query: this.query(),
+      tab: this.tab(),
+      results: this.results(),
+      totalPages: this.totalPages(),
+      currentPage: this.currentPage(),
+    });
   }
 
   private buildKey(q: string, tab: SearchTab, page: number): string {

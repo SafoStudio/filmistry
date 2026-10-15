@@ -190,7 +190,7 @@ $background-color: rgba(69, 78, 83, 0.6);
   padding: 8px 14px;
   border: 1px solid var(--color-border);
   border-radius: 20px;
-  background: transparent;
+  background: var(--color-surface);
   color: var(--color-text);
   font-size: 13px;
   text-decoration: none;

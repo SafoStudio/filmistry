@@ -9,7 +9,7 @@ import {
 import { RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
-import { ThemeToggle } from '../theme-toggle/theme-toggle';
+import { ThemeToggle } from '@shared/components/header/theme-toggle/theme-toggle';
 import { Icon } from '../icon/icon';
 import { SearchBar } from '@shared/components/search-bar/search-bar';
 import { MobileMenu, MobileMenuSection } from './mobile-menu/mobile-menu';

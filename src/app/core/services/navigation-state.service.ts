@@ -1,8 +1,7 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 interface PageState<T = unknown> {
   data: T;
-  scrollTop: number;
   timestamp: number;
 }
 
@@ -13,7 +12,7 @@ const MAX_ENTRIES = 20;
 export class NavigationStateService {
   private readonly cache = new Map<string, PageState>();
 
-  save<T>(url: string, data: T, scrollTop: number): void {
+  save<T>(url: string, data: T): void {
     if (this.cache.size >= MAX_ENTRIES) {
       const firstKey = this.cache.keys().next().value;
       if (firstKey !== undefined) {
@@ -23,7 +22,6 @@ export class NavigationStateService {
 
     this.cache.set(url, {
       data,
-      scrollTop,
       timestamp: Date.now(),
     });
   }

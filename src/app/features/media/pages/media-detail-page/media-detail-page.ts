@@ -16,7 +16,7 @@ import { filter, map } from 'rxjs';
 import { MediaService, MediaType } from '@core/services/media.service';
 import { NavigationStateService } from '@core/services/navigation-state.service';
 import { MediaDetail } from '@core/models/media-detail.model';
-import { RatingBar } from '@shared/components/rating-bar/rating-bar';
+import { RatingBar } from '@features/media/components/rating-bar/rating-bar';
 import { Icon } from '@shared/components/icon/icon';
 import { Loader } from '@shared/components/loader/loader';
 import { PageCurl } from '@shared/components/page-curl/page-curl';
@@ -122,11 +122,10 @@ export class MediaDetailPage implements OnDestroy {
     const currentItem = this.item();
     if (!currentItem) return;
 
-    this.navState.save<MediaDetailState>(
-      this.stateKey,
-      { item: currentItem, externalIds: this.externalIds() },
-      window.scrollY,
-    );
+    this.navState.save<MediaDetailState>(this.stateKey, {
+      item: currentItem,
+      externalIds: this.externalIds(),
+    });
   }
 
   @HostListener('document:keydown.escape')
@@ -146,10 +145,6 @@ export class MediaDetailPage implements OnDestroy {
       this.externalIds.set(cached.data.externalIds ?? null);
       this.loading.set(false);
       this.error.set(null);
-
-      requestAnimationFrame(() => {
-        window.scrollTo({ top: cached.scrollTop, behavior: 'instant' });
-      });
       return;
     }
 
