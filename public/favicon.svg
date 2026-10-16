@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Cinema dark shield background with golden glow border -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#121214" stroke="#d4a017" stroke-width="2.5"/>
+  
+  <!-- Clapperboard top strip (slightly angled for cinema slate motion) -->
+  <g>
+    <!-- Top bar container -->
+    <rect x="10" y="10" width="44" height="12" rx="2.5" fill="#202024" stroke="#d4a017" stroke-width="1.8"/>
+    <!-- Diagonal cinema stripes in warm amber gold -->
+    <clipPath id="clapperClip">
+      <rect x="10" y="10" width="44" height="12" rx="2.5"/>
+    </clipPath>
+    <g clip-path="url(#clapperClip)">
+      <polygon points="11,10 17,10 12,22 6,22" fill="#f5c518"/>
+      <polygon points="21,10 27,10 22,22 16,22" fill="#f5c518"/>
+      <polygon points="31,10 37,10 32,22 26,22" fill="#f5c518"/>
+      <polygon points="41,10 47,10 42,22 36,22" fill="#f5c518"/>
+      <polygon points="51,10 57,10 52,22 46,22" fill="#f5c518"/>
+    </g>
+  </g>
+
+  <!-- Lower slate body -->
+  <rect x="10" y="22" width="44" height="32" rx="3" fill="#1a1816" stroke="#d4a017" stroke-width="1.8"/>
+
+  <!-- Film strip perforations on sides -->
+  <rect x="13" y="26" width="3" height="4" rx="0.8" fill="#d4a017" opacity="0.6"/>
+  <rect x="13" y="36" width="3" height="4" rx="0.8" fill="#d4a017" opacity="0.6"/>
+  <rect x="13" y="46" width="3" height="4" rx="0.8" fill="#d4a017" opacity="0.6"/>
+  
+  <rect x="48" y="26" width="3" height="4" rx="0.8" fill="#d4a017" opacity="0.6"/>
+  <rect x="48" y="36" width="3" height="4" rx="0.8" fill="#d4a017" opacity="0.6"/>
+  <rect x="48" y="46" width="3" height="4" rx="0.8" fill="#d4a017" opacity="0.6"/>
+
+  <!-- Golden Play Symbol in center -->
+  <polygon points="27,29 42,38 27,47" fill="#f5c518"/>
+</svg>
