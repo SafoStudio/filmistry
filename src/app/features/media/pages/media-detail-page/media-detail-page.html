@@ -13,8 +13,8 @@
       (close)="closeDetail()"
     />
 
-    <div class="movieCard movieCard--visible">
-      <div class="posterImage fade-item" style="--i: 0">
+    <div class="movieCard movieCard--visible" #cardRef>
+      <div class="posterImage fade-item" style="--i: 0" #posterCol>
         @if (m.posterUrl) {
           <img [src]="m.posterUrl" [alt]="m.title" />
         }
@@ -22,31 +22,54 @@
 
       <div class="description">
         <div class="info">
-          <div class="titleBox fade-item" style="--i: 1">
-            <h1>{{ m.title }}</h1>
-          </div>
-
-          <div class="ratingBox fade-item" style="--i: 2">
-            <app-rating-bar [rating]="m.voteAverage" />
-            <p class="releaseYear">
-              {{ m.releaseYear }}
-              <span class="releaseYearText">release year</span>
-            </p>
-            <div class="genresBox">
-              <p>{{ m.genres.join(', ') }}</p>
+          <div class="info__header" #infoHeader>
+            <div class="titleBox fade-item" style="--i: 1">
+              <h1>{{ m.title }}</h1>
             </div>
+
+            <div class="ratingBox fade-item" style="--i: 2">
+              <app-rating-bar [rating]="m.voteAverage" />
+              <p class="releaseYear">
+                {{ m.releaseYear }}
+                <span class="releaseYearText">release year</span>
+              </p>
+              <div class="genresBox">
+                <p>{{ m.genres.join(', ') }}</p>
+              </div>
+            </div>
+
+            @if (externalIds(); as ids) {
+              <app-external-links
+                class="mediaDetail__links fade-item"
+                style="--i: 5"
+                [ids]="ids"
+                [kind]="mediaType()"
+              />
+            }
           </div>
 
-          @if (externalIds(); as ids) {
-            <app-external-links
-              class="mediaDetail__links fade-item"
-              style="--i: 5"
-              [ids]="ids"
-              [kind]="mediaType()"
-            />
-          }
+          @if (m.overview) {
+            <p
+              class="overview fade-item"
+              #overview
+              [class.overview--clipped]="isOverviewOverflowing() && !isOverviewExpanded()"
+              style="--i: 3"
+            >
+              {{ m.overview }}
+            </p>
 
-          <p class="overview fade-item" style="--i: 3">{{ m.overview }}</p>
+            @if (isOverviewOverflowing()) {
+              <button
+                type="button"
+                class="overview-toggle"
+                [class.overview-toggle--rotated]="isOverviewExpanded()"
+                (click)="toggleOverview()"
+                aria-label="Toggle overview"
+              >
+                <app-icon name="chevron-left" [size]="20" />
+              </button>
+            }
+          }
         </div>
 
         <div class="addInfo fade-item" style="--i: 4">

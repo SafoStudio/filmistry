@@ -82,6 +82,12 @@ $background-color: rgba(69, 78, 83, 0.6);
   display: flex;
   flex-direction: column;
   gap: 12px;
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
 }
 
 .titleBox {
@@ -148,16 +154,54 @@ $background-color: rgba(69, 78, 83, 0.6);
   font-weight: 400;
   text-shadow: 1px 2px 2px rgb(3, 3, 3);
   width: 100%;
-  max-height: 180px;
-  overflow-y: auto;
   margin: 0;
   padding: 0 4px;
   font-size: clamp(13px, 1.5vw, 15px);
   line-height: 1.5;
+  position: relative;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
 
-  @media screen and (min-width: 768px) {
-    max-height: none;
-    overflow-y: visible;
+  &--clipped {
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(51, 51, 53, 0.6) 60%,
+        rgba(51, 51, 53, 0.95) 100%
+      );
+      pointer-events: none;
+    }
+  }
+}
+
+.overview-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin: 0 auto;
+  border: none;
+  background: transparent;
+  color: $text-color;
+  cursor: pointer;
+  transition: transform 0.4s ease, color 0.2s ease;
+  transform: rotate(-90deg);
+
+  &:hover {
+    color: #fff;
+  }
+
+  &--rotated {
+    transform: rotate(90deg);
   }
 }
 

@@ -5,6 +5,9 @@ import {
   effect,
   computed,
   input,
+  viewChild,
+  ElementRef,
+  afterRenderEffect,
   OnDestroy,
   HostListener,
 } from '@angular/core';
@@ -65,6 +68,16 @@ export class MediaDetailPage implements OnDestroy {
   isClosing = signal(false);
   externalIds = signal<ExternalIds | null>(null);
 
+  isOverviewExpanded = signal(false);
+  isOverviewOverflowing = signal(false);
+
+  overviewRef = viewChild<ElementRef<HTMLParagraphElement>>('overview');
+  posterColRef = viewChild<ElementRef<HTMLDivElement>>('posterCol');
+  infoHeaderRef = viewChild<ElementRef<HTMLDivElement>>('infoHeader');
+  cardRef = viewChild<ElementRef<HTMLDivElement>>('cardRef');
+
+  private resizeObserver: ResizeObserver | null = null;
+
   hasTrailer = computed<boolean>(() => !!this.item()?.trailerKey);
 
   private stateKey = '';
@@ -109,15 +122,28 @@ export class MediaDetailPage implements OnDestroy {
       this.lastLoadedType = type;
 
       this.isClosing.set(false);
+      this.isOverviewExpanded.set(false);
       this.tryLoad(itemId, type);
     });
 
     effect(() => {
       document.body.style.overflow = this.isTrailerOpen() ? 'hidden' : '';
     });
+
+    afterRenderEffect(() => {
+      const overview = this.overviewRef();
+      if (overview) {
+        this.checkOverviewOverflow();
+      }
+    });
+
+    afterRenderEffect(() => {
+      this.setupResizeObserver();
+    });
   }
 
   ngOnDestroy(): void {
+    this.resizeObserver?.disconnect();
     document.body.style.overflow = '';
     const currentItem = this.item();
     if (!currentItem) return;
@@ -206,6 +232,59 @@ export class MediaDetailPage implements OnDestroy {
 
     this.isClosing.set(true);
     setTimeout(() => this.goBack(hasHistory), 700);
+  }
+
+  private setupResizeObserver(): void {
+    if (typeof ResizeObserver === 'undefined') return;
+
+    const card = this.cardRef()?.nativeElement;
+    if (!card) return;
+
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+
+    this.resizeObserver = new ResizeObserver(() => {
+      this.checkOverviewOverflow();
+    });
+    this.resizeObserver.observe(card);
+  }
+
+  checkOverviewOverflow(): void {
+    const overview = this.overviewRef()?.nativeElement;
+    if (!overview) return;
+
+    if (this.isOverviewExpanded()) {
+      overview.style.maxHeight = `${overview.scrollHeight}px`;
+      this.isOverviewOverflowing.set(true);
+      return;
+    }
+
+    overview.style.maxHeight = 'none';
+    const overviewHeight = overview.scrollHeight;
+
+    const posterCol = this.posterColRef()?.nativeElement;
+    const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 768;
+
+    let targetHeight = 140;
+
+    if (isDesktop && posterCol && posterCol.offsetHeight > 100) {
+      const infoHeader = this.infoHeaderRef()?.nativeElement;
+      const headerHeight = infoHeader ? infoHeader.offsetHeight : 140;
+      targetHeight = Math.max(150, Math.min(260, posterCol.offsetHeight - headerHeight - 60));
+    }
+
+    if (overviewHeight > targetHeight + 15) {
+      overview.style.maxHeight = `${targetHeight}px`;
+      this.isOverviewOverflowing.set(true);
+    } else {
+      overview.style.maxHeight = 'none';
+      this.isOverviewOverflowing.set(false);
+    }
+  }
+
+  toggleOverview(): void {
+    this.isOverviewExpanded.update((v) => !v);
   }
 
   private goBack(hasHistory: boolean): void {

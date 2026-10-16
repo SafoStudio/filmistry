@@ -56,9 +56,9 @@ $text-color: bisque;
 
 .person__photo {
   width: 100%;
-  max-width: 240px;
+  max-width: 300px;
   height: auto;
-  border-radius: 8px;
+  border-radius: 4px;
   display: block;
   filter: grayscale(0.9) sepia(0.25) contrast(1.1) brightness(0.95);
   transition: filter 0.4s ease;
