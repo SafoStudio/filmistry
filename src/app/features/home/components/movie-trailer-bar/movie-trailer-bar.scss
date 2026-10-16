@@ -26,7 +26,11 @@
 .trailer-bar__slides {
   display: flex;
   width: 100%;
-  transition: transform 0.5s ease;
+  transition: opacity 0.25s ease;
+
+  &--fading {
+    opacity: 0.3;
+  }
 }
 
 .trailer-bar__slide {
@@ -60,13 +64,17 @@
 .trailer-bar__frame {
   position: relative;
   width: 96%;
+  aspect-ratio: 16 / 9;
   border-radius: 8px;
   overflow: hidden;
   display: block;
+  background-color: #1a1a1d;
 }
 
 .trailer-bar__img {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: 8px;
   display: block;
   box-shadow:
@@ -247,6 +255,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .trailer-bar__slides,
   .trailer-bar__img,
   .trailer-bar__dim,
   .trailer-bar__play,

@@ -5,7 +5,10 @@
     <h2 class="trailer-bar__title">Trending trailers today</h2>
 
     <div class="trailer-bar__container">
-      <div class="trailer-bar__slides">
+      <div
+        class="trailer-bar__slides"
+        [class.trailer-bar__slides--fading]="isFading()"
+      >
         @for (item of visibleItems(); track item.id) {
           <div class="trailer-bar__slide">
             <div
@@ -35,7 +38,7 @@
         <button
           type="button"
           class="trailer-bar__btn trailer-bar__btn--prev"
-          (click)="prev()"
+          (click)="onUserPrev()"
           aria-label="Previous"
         >
           <app-icon name="chevron-left" [size]="22" />
@@ -43,7 +46,7 @@
         <button
           type="button"
           class="trailer-bar__btn trailer-bar__btn--next"
-          (click)="next()"
+          (click)="onUserNext()"
           aria-label="Next"
         >
           <app-icon name="chevron-right" [size]="22" />
